@@ -9,6 +9,7 @@
 /.env
 /.idea
 /core/cache/*.php
+/core/cache/wrt*
 /lib/**
 GIT.sublime-project
 GIT.sublime-workspace
