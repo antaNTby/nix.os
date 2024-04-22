@@ -1,6 +1,14 @@
 # Specify filepatterns you want git to ignore.
-GIT.sublime-workspace
-GIT.sublime-project
+
+*.gz
+*.log
+*.rar
+*.zip
+*.ZIP
+.idea
+/.env
+/.idea
 /core/cache/*.php
 /lib/**
-.idea
+GIT.sublime-project
+GIT.sublime-workspace
