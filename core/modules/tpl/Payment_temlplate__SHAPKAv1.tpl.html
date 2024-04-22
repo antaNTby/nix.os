@@ -1,0 +1,29 @@
+<div style="padding-bottom:5px;">
+<table class="headblock">
+    {* <caption>table title and/or explanatory text</caption> *}
+{*     <thead>
+        <tr>
+            <th>header</th>
+        </tr>
+    </thead> *}
+    <tbody>
+        <tr>
+            <td class="logocell" rowspan=4><img style="width: 90px; height: 90px;" src="{$pm_logo}" /></td>
+
+            <td align="left" style="padding-left: 50px; font-size: 1.5em; font-weight:bold; color:#ee0000;">{$seller.company_name}</td>
+            <td align="right" style="padding-right: 50px; font-size: 1.5em; font-weight:bold; color:#444;">УНП {$seller.company_unp}</td>
+
+            <td rowspan=4 class="barcodecell"><barcode class="barcode" code="{$smarty.const.CONF_SHOP_URL}/index.php?do=invoice_new_proc&moduleID={$moduleID}&orderID={$orderID}" type="QR" class="barcode" size="0.9" /></td>
+        </tr>
+        <tr>
+            {* <td>data [2-1]</td> *} <td class="reqcell" colspan=2>{$seller.company_adress|replace:"\r\n":"<br>"}</td>{*  <td>data [2-6]</td> *}
+        </tr>
+        <tr>
+            {* <td>data [3-1]</td> *} <td class="reqcell" colspan=2>{$seller.company_bank|replace:"\r\n":"<br>"}</td>{*  <td>data [3-6]</td> *}
+        </tr>
+        <tr>
+            {* <td>data [4-1]</td> *} <td class="reqcell" colspan=2>{$seller.company_contacts|replace:"\r\n":"<br>"}</td>{*  <td>data [4-6]</td> *}
+        </tr>
+    </tbody>
+</table>
+</div>

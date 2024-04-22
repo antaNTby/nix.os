@@ -1,0 +1,46 @@
+{* antaNT64 таблица товаров без скидок и стоимости доставки для счета на оплату *}
+<table cellSpacing="0" cellPadding="2" border="1" class="defaultwidth">
+    <thead>
+        <tr>
+            <th class="nw" align="center" width="0%">№</th>
+            <th class="nw" align="center" width="1%">Наименование*</th>
+            <th class="nw" align="center">
+                Ед.
+                <br />
+                изм.
+            </th>
+            <th class="nw" align="center">Кол-во</th>
+            <th class="nw" align="center" width="25%">
+                Гарантийный срок,
+                <br />
+                (мес)
+            </th>
+            <th class="nw" align="center" width="25%">
+                S/N
+                <br />
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {section name=i loop=$order_content}
+        <tr>
+            <td class="nw" align="center">{$smarty.section.i.iteration}</td>
+            <td class="pw" align="left" width="1%">{$order_content[i].name}</td>
+            <td class="nw" align="center">{$order_content[i].itemUnit}</td>
+            <td class="nw" align="center">{$order_content[i].Quantity}</td>
+            {assign var="qnt" value="`$order_content[i].Quantity`"}
+            <td class="nw" align="left" width="25%" style="padding-left:0;padding-right: 20mm; padding-bottom: 0">
+&nbsp;
+            </td>
+            <td class="nw" align="left" width="25%" style="padding-left:0;padding-right: 90mm; padding-bottom: 0">
+                <ol style="list-style-type:decimal-leading-zero;">
+                    {section name=jj loop=$qnt}
+                    <li style="font-size:3mm;">&nbsp;</li>
+                    {/section}
+                </ul>
+            </td>
+            <br>
+        </tr>
+        {/section}
+    </tbody>
+</table>

@@ -1,0 +1,118 @@
+<div class="mt-2 mb-0 d-grid gap-1 col-12 mx-auto">
+
+
+
+
+    <a class="btn btn-secondary btn-sm" aria-current="page" href="{$smarty.const.ADMIN_FILE}"><i class="bi bi-gear"></i> Admin </a>
+
+{* ######################################################     *}
+{if $admin_sub_dpt eq "custord_custlist.tpl.html"}
+<div class="p-3 mb-4 rounded border border-secondary bg-body bg-opacity-50">
+    <form name="custlistLeftForm" method="GET" id="custlistLeftForm" action="" role="form">
+        <input type="hidden" name="dpt" value="custord">
+        <input type="hidden" name="sub" value="custlist">
+        <input type="hidden" name="search" value="1">
+        <h5>Фильтр {$smarty.const.ADMIN_CUSTOMERS}</h5>
+        <div class="mb-4">
+            <label class="form-label" for="customer_aka">Customer ID|aka</label>
+            <input type="text" name="customer_aka" value='{$customer_aka}' class="form-control">
+        </div>
+        <div class="mb-4">
+            <label class="form-label" for="login">{$smarty.const.ADMIN_CUSTOMER_LOGIN}</label>
+            <input type="text" name="login" value='{$login}' class="form-control">
+        </div>
+        <div class="mb-4">
+            <label class="form-label" for="first_name">{$smarty.const.ADMIN_CUSTOMER_FIRST_NAME}</label>
+            <input type="text" name="first_name" value='{$first_name}' class="form-control input-sm" size="25">
+        </div>
+        <div class="mb-4">
+            <label class="form-label" for="last_name">{$smarty.const.ADMIN_CUSTOMER_LAST_NAME}</label>
+            <input type="text" name="last_name" value='{$last_name}' class="form-control input-sm" size="25">
+        </div>
+        <div class="mb-4">
+            <label class="form-label" for="email">{$smarty.const.ADMIN_CUSTOMER_EMAIL}</label>
+            <input type="text" name="email" value='{$email}' class="form-control input-sm" size="25" placeholder="Email">
+        </div>
+        <div class="mb-4">
+            <label class="form-label" for="groupID">{$smarty.const.ADMIN_CUSTOMER_GROUP_NAME}</label>
+            <select name="groupID" class="form-select">
+                <option value='0'>
+                    {$smarty.const.STRING_ANY}
+                </option>
+                {section name=i loop=$customer_groups}
+                <option value='{$customer_groups[i].custgroupID}' {if $groupID==$customer_groups[i].custgroupID} selected {/if}> {$customer_groups[i].custgroup_name} </option> {/section}
+            </select>
+        </div>
+
+        <div class="mb-3">
+                    <label class="form-label" for="fActState">{$smarty.const.STRING_MODULE_STATUS}</label>
+                    <select name="fActState" class="form-select">
+                        <option value='-1' {if $ActState eq -1} selected="selected" {/if}> {$smarty.const.STRING_ANY_M} </option> <option value='1' {if $ActState eq 1} selected="selected" {/if}> {$smarty.const.STR_ACTIVATED} </option> <option value='0' {if $ActState eq 0 && $ActState ne '' } selected="selected" {/if}> {$smarty.const.STR_NOTACTIVATED} </option>
+                    </select>
+        </div>
+
+
+         <div class="mt-3 mb-1 d-grid gap-2 d-md-flex justify-content-center">
+                            <button type="submit" class="btn btn-primary btn-lg" onclick="document.getElementById('custlistLeftForm').submit();return false;">Поиск</button>
+        </div>
+
+    </form>
+</div>
+{/if} {* $admin_sub_dpt eq "custord_custlist.tpl.html" *}
+
+{* ######################################################     *}
+{if $admin_sub_dpt eq "custord_orders.tpl.html"}
+
+{include file="admin/custord_orders_filter_form.tpl.html"}
+
+{/if} {* {if $admin_sub_dpt eq "custord_orders.tpl.html"} *}
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+{* ######################################################     *}
+{* ######################################################     *}
+{* ######################################################     *}
+
+<div class="accordion accordion-flush" id="antMenuAccordeon">
+    {section name=dpt_index loop=$antMenu|@count}
+    {assign var="myMenu" value=$antMenu[dpt_index]}
+    <div class="accordion-item mt-2">
+        <h2 class="accordion-header" id="heading_{$myMenu.dpt_id}">
+            <button class="accordion-button fs-4 text-light fw-lighter text-uppercase bg-dark bg-gradient bg-opacity-75" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_{$myMenu.dpt_id}" aria-expanded="{if $current_dpt eq $myMenu.dpt_id}true{else}false{/if}" aria-controls="collapse_{$myMenu.dpt_id}">
+                {$myMenu.dpt_name} <sub class="ps-2 fw-lighter text-dark text-opacity-25">{$myMenu.dpt_id}</sub>
+            </button>
+        </h2>
+        <div id="collapse_{$myMenu.dpt_id}" class="accordion-collapse collapse{if $current_dpt eq $myMenu.dpt_id} show{/if}" aria-labelledby="heading_{$myMenu.dpt_id}" data-bs-parent="#antMenuAccordeon">
+            <div class="accordion-body">
+                <div class="d-grid gap-1 col-12 mx-auto">
+                    {assign var="mySubMenu" value=$myMenu}
+                    {section name=sub_index loop=$mySubMenu.sub_count}
+
+{if $mySubMenu.sub_id[sub_index] eq "custlist"}
+{assign var="myHrefMod" value="&groupID=0&fActState=-1&search=1"}
+{* {elseif $mySubMenu.sub_id[sub_index] eq "new_orders"}
+{assign var="myHrefMod" value="&search=1&order_search_type=2&checkbox_order_status_2=1&checkbox_order_status_3=1&checkbox_order_status_7=1"} *}
+{else}
+{assign var="myHrefMod" value=""}
+{/if}
+                    {if $current_sub eq $mySubMenu.sub_id[sub_index]}
+                    <a class="btn btn-danger text-wrap text-start text-xl-center" href="{$mySubMenu.sub_href[sub_index]}{$myHrefMod}" role="button">{$mySubMenu.sub_name[sub_index]} <sub class="ps-2 fw-lighter text-dark text-opacity-25">{$mySubMenu.sub_id[sub_index]}</sub></a>
+                    {else}
+                    <a class="btn btn-light text-wrap text-start text-xl-center" href="{$mySubMenu.sub_href[sub_index]}{$myHrefMod}" role="button">{$mySubMenu.sub_name[sub_index]} <sub class="ps-2 fw-lighter text-dark text-opacity-25">{$mySubMenu.sub_id[sub_index]}</sub></a>
+                    {/if}
+                    {/section}</div>
+            </div>
+        </div>
+    </div>
+    {/section}
+</div>

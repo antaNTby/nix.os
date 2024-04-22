@@ -1,0 +1,15 @@
+<div class="container-fluid bg-gradient" id="mainSearchBox">
+    <div class="d-flex py-1">
+        <form class="w-100 mx-0 mx-lg-5" id="adminSearchForm" role="search" action="index.php" method="get">
+            {section name=sert loop=$searchstrings}
+            <input type="hidden" name='search_string_{$smarty.section.sert.index}' value='{$searchstrings[sert]}'> {/section}
+            <div class="input-group">
+                <button class="btn btn-outline-danger" type="button" role="button" value="search" id="search-button-reset" onclick="onClearClick('input#searchstring')"><i class="bi bi-x-lg"></i></button>
+                <input type="text" class="form-control" name="searchstring" id="searchstring" placeholder="поиск Товар Категория Заказ" value="{$searchstring}" aria-label="Main Search String">
+                <button class="btn btn-primary" type="submit" value="search" id="search-button-main"><i class="bi bi-search"></i> <span class="d-none d-md-inline">Товар</span></button>
+                <button class="btn btn-secondary" type="submit" value="search" id="search-button-main"><i class="bi bi-search"></i> <span class="d-none d-md-inline">Категория</span></button>
+                <button class="btn btn-danger" type="submit" value="search" id="search-button-main"><i class="bi bi-search"></i> <span class="d-none d-md-inline">Заказ</span></button>
+            </div>
+        </form>
+    </div>
+</div>

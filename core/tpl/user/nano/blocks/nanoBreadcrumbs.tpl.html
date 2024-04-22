@@ -1,0 +1,29 @@
+<nav class="my-1 d-flex flex-column-inverse flex-md-row-inverse justify-content-start justify-content-md-end" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="mb-0 p-1 breadcrumb text-small lh-1">
+                    <li class="breadcrumb-item"><a class="text-decoration-none" href="{$smarty.const.CONF_FULL_SHOP_URL}">{$smarty.const.LINK_TO_HOMEPAGE} <i class="bi bi-house-fill"></i></a></li>
+{section name=i loop=$product_category_path}
+{if $smarty.const.CONF_MOD_REWRITE eq 1}
+{assign var="_href" value="category_`$product_category_path[i].categoryID`.html"}
+{else}
+{assign var="_href" value="index.php?categoryID=`$product_category_path[i].categoryID`"}
+{/if}
+{if $product_category_path[i].categoryID != 1}
+{if $main_content_template eq "category.tpl.html" and $smarty.section.i.last}
+                    <li class="breadcrumb-item active" aria-current="page">{$product_category_path[i].name}</li>
+{else}
+                    <li class="breadcrumb-item"><a href="{$_href}">{$product_category_path[i].name}</a></li>
+{/if}
+{/if}
+{/section}
+{if ($isadmin eq "yes")}
+{if $smarty.const.SITE_URL eq "wwww.nix.by"}
+                    <li class="ms-2"><a class="text-decoration-none text-danger font-monospace" href="http:\\nixminsk.by\{$_href}">nixminsk.by <i class="bi bi-arrow-left-right"></i></a></li>
+{else}
+                    <li class="ms-2"><a class="text-decoration-none text-danger font-monospace" href="http:\\nix.by\{$_href}">nix.by <i class="bi bi-arrow-left-right"></i></a></li>
+{/if}
+{/if}
+            </ol>
+        </nav>
+
+
+{* {$product_category_path|@debug} *}

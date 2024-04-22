@@ -1,0 +1,32 @@
+{* шаблон формы подтверждения/активации регистрации *}
+<div class="card text-center w-50 mx-auto mt-5">
+    <div class="card-header">{$smarty.const.REGACTIVATION}</div>
+    <div class="card-body">
+        {if !$smarty.get.order2}
+        {if $ActOk}{$smarty.const.REGCONFIRM_SUCCESS}
+        {else}
+        {if $ActErr}<div class="alert alert-danger">{$smarty.const.REGCONFIRM_WRONG_ACTCODE}</div>{/if}
+        {if $NoAct}<div class="alert alert-danger">{$smarty.const.REGCONFIRM_NOTACTIVATED}</div>{/if}
+        <form method="get" id="nubm4form" role="form"><input type="hidden" name="act_customer" value="1">
+            <div class="form-group">
+                <label for="act_code">{$smarty.const.REGCONFIRM_TYPE_CODE}</label>
+                <input type="text" class="form-control" name="act_code" id="act_code" value="{$ActCode}">
+            </div>
+            <button type="submit" class="btn btn-primary">{$smarty.const.ACTIVATE_BUTTON}</button>
+        </form>
+        {/if}
+        {else}
+        {if $smarty.const.CONF_ENABLE_REGCONFIRMATION}
+        <form method="get" id="nubm4form" role="form">
+            <input type="hidden" name="order2" value="{$smarty.get.order2}">
+            <input type="hidden" name="act_customer" value="1">
+            {if $ActErr}<div class="alert alert-danger">{$smarty.const.REGCONFIRM_WRONG_ACTCODE}</div>{/if}
+            {if $NoAct}<div class="alert alert-danger">{$smarty.const.REGCONFIRM_NOTACTIVATED}</div>{/if}
+            <div class="form-group">
+                <label for="act_code">{$smarty.const.REGCONFIRM_TYPE_CODE}</label>
+                <input type="text" class="form-control" name="act_code" id="act_code" value="{$ActCode}">
+            </div>
+            <button type="submit" class="btn btn-primary">{$smarty.const.ACTIVATE_BUTTON}</button></form>
+        {/if}
+        {/if}</div>
+</div>

@@ -1,0 +1,390 @@
+/*@import "fonts/ptsans/stylesheet.css";*/
+
+body {
+    /*padding: 0.25mm;*/
+    padding: 0;
+    margin: 0;
+    font-size: 2.50mm;
+    color: #000;
+    font-style: normal;
+    font-family: ptsans;
+    background-color: #ffffff;
+    text-align: left;
+}
+
+span.fa,
+p.fa,
+i.fa {
+    font-family: fontawesome;
+    color: #11f;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    text-align: center;
+    font-family: ptsans;
+    font-weight: bold;
+    /*font-style: oblique;*/
+    padding:0;
+    margin:0;
+    /*margin-bottom:10px;*/
+}
+
+h1.small,
+h2.small,
+h3.small,
+h4.small {
+    text-align: center;
+    font-family: ptsansnarrow;
+    font-weight: bold;
+    font-style: oblique;
+    font-size: 0.8em;
+    padding:0;
+    margin:0;
+    /*margin-top:-10px;*/
+    /*margin-bottom:10px;*/
+}
+
+em{
+    font-style: oblique;
+}
+
+strong,
+b {
+    font-family: ptsans;
+    font-weight: bold;
+    /*font-style: oblique;*/
+}
+
+form {
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+}
+
+td {
+    /*font-family: ptsans;*/
+    font-size: 2.50mm;
+}
+
+a {
+    font-size: 5.00mm;
+    color: #eee;
+    visibility:screenonly;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #999;
+    text-decoration: underline;
+}
+
+a img {
+    border: none;
+}
+
+div {
+    font-size: 2.50mm;
+}
+
+p {
+    /*font-family: ptsans;*/
+    font-size: 2.50mm;
+    margin: 0;
+    padding: 0;
+}
+
+.big {
+    /*font-family: ptsans;*/
+    font-size: 4.00mm;
+}
+
+td.small {
+    font-family: ptsansnarrow;
+    font-size: 2.00mm;
+}
+
+.nw {
+    white-space: nowrap;
+}
+
+.pw {
+    white-space: pre-wrap;
+}
+
+.semi-compact {
+    line-height: 1.20;
+    font-size: 2.50mm;
+    font-family: ptsansnarrow;
+}
+
+.compact {
+    line-height: 1.00;
+    font-size: 2.50mm;
+    font-family: ptsansnarrow;
+}
+
+.ultra-compact {
+    line-height: 0.90;
+    font-size: 2.00mm;
+    font-family: ptsansnarrow;
+}
+
+.banner {
+    border: 0.1mm solid #5a77a1;
+    background-color: #f0f2ff;
+    border-radius: 2mm;
+    background-clip: border-box;
+    padding: 2.50mm;
+}
+
+table {
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+    border-collapse: collapse;
+}
+
+table.headblock {
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+    border-collapse: collapse;
+    border: none;
+    margin-bottom: 5.00mm;
+}
+
+tr td.name {
+    color: #333;
+    /*font-family: ptsans;*/
+    font-family: ptsansnarrow;
+    font-size: 2.50mm;
+    padding: 1px 4px;
+    line-height: 1.1;
+}
+
+table.defaultwidth {
+    width: 800;
+    border-collapse: collapse;
+    border: none;
+    line-height: 1.1;
+}
+
+td {
+    vertical-align: top;
+    /*border: 1px solid orange*/
+}
+
+/*table.producttable {
+    border: 2px solid #5a77a1;
+    border-left: hidden;
+    border-right: hidden;
+}*/
+
+table.producttable td,
+table.producttable th {
+    vertical-align: middle;
+    border: 1px solid #5a77a1;
+    color: #333;
+}
+
+table.producttable thead th {
+    background-color: #eaf2ff;
+    color: #5a77a1;
+    text-align: center;
+    line-height: 1.1;
+    font-size: 2.50mm;
+}
+
+table.producttable tbody tr td.nw {
+    line-height: 3mm;
+    font-size: 2.50mm;
+}
+
+table.producttable thead tr th {
+    line-height: 3mm;
+    font-size: 3mm;
+}
+
+table.producttable tfoot tr th {
+    line-height: 3mm;
+    font-size: 3mm;
+    color: #444;
+}
+
+.barcode {
+    padding: 0;
+    padding-right: 5mm;
+    /*margin: 0;*/
+    vertical-align: middle;
+    color: #ff0000;
+    /*margin-left:-5mm;*/
+}
+
+table.headblock {
+    width: 190mm;
+    /*font-size: 2.50mm;*/
+    line-height: 1.1;
+    color: #444;
+    border-collapse: collapse;
+}
+
+table.footblock {
+    /*width: 800;*/
+    font-size: 2.00mm;
+    line-height: 1.1;
+    color: #444;
+}
+
+td.barcodecell {
+    text-align: left;
+    vertical-align: bottom;
+    padding: 0;
+    /*margin: 0;*/
+}
+
+td.logocell {
+    text-align: center;
+    vertical-align: bottom;
+    padding: 0;
+}
+
+td.reqcell {
+    font-family: ptsansnarrow;
+    text-align: justify;
+    font-size: 3.75mm;
+    line-height: 1.1;
+    vertical-align: bottom;
+    padding: 0 20px;
+}
+
+ul,
+ol {
+    margin-top: 2.00mm;
+    margin-bottom: 2.00mm;
+}
+
+ul ul,
+ul ol,
+ol ul,
+ol ol {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+hr {
+    float: left;
+    color: white;
+    height: 0.250mm;
+    width: 90%;
+    margin: 0;
+}
+
+hr.mb {
+    margin-bottom: 2.5mm;
+}
+
+hr.mt {
+    margin-top: 2.5mm;
+}
+
+hr.red {
+    color: red;
+}
+
+hr.transparent {
+    color: transparent;
+}
+
+hr.black {
+    color: #333;
+}
+
+hr.trueblack {
+    color: #000;
+}
+
+hr.lightgr {
+    color: #ccc;
+}
+
+hr.gr {
+    color: gray;
+}
+
+hr.darkdr {
+    color: #333;
+}
+
+hr.white {
+    color: white;
+}
+
+hr.blue {
+    color: #5a77a1;
+}
+
+hr.darkblue {
+    color: #093ba3;
+}
+
+hr.lightblue {
+    color: #eaf2ff;
+}
+
+
+hr.px1 {
+    height: 1px;
+}
+
+
+hr.mm125 {
+    height: .125mm;
+}
+
+hr.mm25 {
+    height: .25mm;
+}
+
+hr.mm50 {
+    height: .50mm;
+}
+
+hr.mm {
+    height: 1.00mm;
+}
+
+hr.mm2_5 {
+    height: 2.50mm;
+}
+
+hr.mm5_0 {
+    height: 5.00mm;
+}
+
+hr.mm10_0 {
+    height: 10.00mm;
+}
+
+hr.w100 {
+    width: 99%;
+}
+
+hr.w50 {
+    width: 50%;
+}
+
+hr.w25 {
+    width: 25%;
+}
+
+hr.w10 {
+    width: 10%;
+}
+
+hr.w01 {
+    width: 1%;
+}
+
+
+
+</style>

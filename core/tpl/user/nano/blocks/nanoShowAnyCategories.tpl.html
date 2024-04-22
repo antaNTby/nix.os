@@ -1,0 +1,132 @@
+{* обзор ПОДкатегорий по горизонтали в 1 или 2 или 3 столбца, в зависимости от ширины экрана *}
+{if $CategoriesArray}
+{assign var="CategoriesArray_count" value=$CategoriesArray|@count}
+{* {$CategoriesArray_count|@debug} *}
+
+{if $Caption}
+<div class="d-none d-sm-block mb-1">
+    <div class="d-flex justify-content-between align-items-baseline text-secondary">{$Caption}<span class="badge bg-primary opacity-75">{$CategoriesArray_count}</span></div>
+</div>
+{/if}
+<div class="d-block d-sm-none">
+    {* XS УЗКИЙ *}
+    {assign var="OneHalf" value=$CategoriesArray_count/1}
+    {assign var="ItemsPerColumn" value=$OneHalf|@ceil}
+    {* <div class="dropdown"> *}
+     <div class="btn-group w-100">
+        {if $Caption}
+        <button type="button" class="btn btn-outline-primary">
+            <div class="d-flex px-2 flex-shrink-1 justify-content-between align-items-baseline">{$Caption}<span class="badge bg-primary opacity-75">{$CategoriesArray_count}</span></div>
+        </button>
+        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+        id="dropdownCategoryArray"
+        data-bs-toggle="dropdown"
+        data-bs-auto-close="true"
+        aria-expanded="false"
+        data-bs-offset="0,10"
+        data-bs-reference="parent"
+        title="Показать список"
+        >
+        <span class="visually-hidden">Toggle Dropdown</span>
+        </button>
+        {/if}
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownCategoryArray" style="z-index: 1030;">
+            {if $Caption}<li>
+                <h6 class="dropdown-header">{$Caption}</h6>
+            </li>{/if}
+            {section name=r loop=$CategoriesArray start=0 max=$ItemsPerColumn}
+            {if $CategoriesArray[r].categoryID > 1}
+            {include file="blocks/__category_item.tpl.html" Item=$CategoriesArray[r] Aclass="dropdown"}
+            {/if}
+            {/section}
+        </ul>
+    </div>
+</div>
+<div class="d-none d-sm-block d-lg-none">
+    {* УЗКИЙ *}
+    {assign var="OneHalf" value=$CategoriesArray_count/2}
+    {assign var="ItemsPerColumn" value=$OneHalf|@ceil}
+    <div class="row row-cols-2 g-3">
+        <div class="col">
+            <ul class="list-group">
+                {section name=r loop=$CategoriesArray start=0 max=$ItemsPerColumn}
+                {include file="blocks/__category_item.tpl.html" Item=$CategoriesArray[r]}
+                {/section}
+            </ul>
+        </div>
+        <div class="col">
+            <ul class="list-group">
+                {section name=r loop=$CategoriesArray start=$ItemsPerColumn}
+                {include file="blocks/__category_item.tpl.html" Item=$CategoriesArray[r]}
+                {/section}
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="d-none d-lg-block d-xxl-none">
+    {* ШИРОКИЙ *}
+    {assign var="OneThird" value=$CategoriesArray_count/3}
+    {assign var="ItemsPerColumn" value=$OneThird|@ceil}
+    {assign var="DoubleCount" value=$ItemsPerColumn+$ItemsPerColumn}
+    <div class="row row-cols-3 g-2">
+        <div class="col">
+            <ul class="list-group">
+                {section name=r loop=$CategoriesArray start=0 max=$ItemsPerColumn}
+                {include file="blocks/__category_item.tpl.html" Item=$CategoriesArray[r]}
+                {/section}
+            </ul>
+        </div>
+        <div class="col">
+            <ul class="list-group">
+                {section name=r loop=$CategoriesArray start=$ItemsPerColumn max=$ItemsPerColumn}
+                {include file="blocks/__category_item.tpl.html" Item=$CategoriesArray[r]}
+                {/section}
+            </ul>
+        </div>
+        <div class="col">
+            <ul class="list-group">
+                {section name=r loop=$CategoriesArray start=$DoubleCount}
+                {include file="blocks/__category_item.tpl.html" Item=$CategoriesArray[r]}
+                {/section}
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="d-none d-xxl-block">
+    {*xxl ШИРОКИЙ *}
+    {assign var="OneQuarter" value=$CategoriesArray_count/4}
+    {assign var="ItemsPerColumn" value=$OneQuarter|@ceil}
+    {assign var="DoubleCount" value=$ItemsPerColumn+$ItemsPerColumn}
+    {assign var="TripleCount" value=$DoubleCount+$ItemsPerColumn}
+    <div class="row row-cols-4 g-1">
+        <div class="col">
+            <ul class="list-group">
+                {section name=r loop=$CategoriesArray start=0 max=$ItemsPerColumn}
+                {include file="blocks/__category_item.tpl.html" Item=$CategoriesArray[r]}
+                {/section}
+            </ul>
+        </div>
+        <div class="col">
+            <ul class="list-group">
+                {section name=r loop=$CategoriesArray start=$ItemsPerColumn max=$ItemsPerColumn}
+                {include file="blocks/__category_item.tpl.html" Item=$CategoriesArray[r]}
+                {/section}
+            </ul>
+        </div>
+        <div class="col">
+            <ul class="list-group">
+                {section name=r loop=$CategoriesArray start=$DoubleCount max=$ItemsPerColumn}
+                {include file="blocks/__category_item.tpl.html" Item=$CategoriesArray[r]}
+                {/section}
+            </ul>
+        </div>
+        <div class="col">
+            <ul class="list-group">
+                {section name=r loop=$CategoriesArray start=$TripleCount}
+                {include file="blocks/__category_item.tpl.html" Item=$CategoriesArray[r]}
+                {/section}
+            </ul>
+        </div>
+    </div>
+</div>
+{/if}

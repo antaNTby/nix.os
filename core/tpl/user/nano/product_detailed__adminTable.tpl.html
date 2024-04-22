@@ -1,0 +1,100 @@
+{assign var="a_href" value="`$smarty.const.ADMIN_FILE`?categoryID=`$product_info.categoryID`&amp;eaction=cat"}
+{assign var="a_tips" value="`$smarty.const.ADMIN_EDIT_CATEGORY`"}
+{assign var="a_icon" value="<i class='bi bi-chevron-right opacity-25'></i>"}
+{assign var="a_admin_category" value="<a class='btn-link adminlink' href='`$a_href`' title='`$a_tips`'>`$a_icon`</a>"}
+{assign var="a_admin_catalog" value="<a class='btn-link adminlink' href='`$smarty.const.ADMIN_FILE`?dpt=catalog&sub=products_categories&categoryID=`$product_info.categoryID`&expandCat=`$product_info.categoryID`' title='Редактировать в КАТАЛОГЕ'><i class='bi bi-table opacity-25'></i></a>"}
+{assign var="a_admin_tree" value="<a class='btn-link adminlink' href='`$smarty.const.ADMIN_FILE`?dpt=catalog&sub=tree&expandCatName=`$product_info.name`&expandCat=`$product_info.categoryID`' title='Редактировать в Дереве'><i class='bi bi-tree opacity-25'></i></a>"}
+{assign var="a_admin_product" value="<a class='btn-link adminlink' href='`$smarty.const.ADMIN_FILE`?productID=`$product_info.productID`&amp;eaction=prod' title='`$smarty.const.STRING_EDITPR`'><i class='bi bi-apple opacity-25'></i></a>"}
+<div class="table-responsive-sm p-1">
+    <h5 class="h5 adminlink">
+        Для администраторов
+        <span class="btn-toolbar float-md-end">
+            <a class="btn btn-outline-dark btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#adminInfo" aria-expanded="false" aria-controls="adminInfo"><i class="bi bi-arrows-expand opacity-25" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Скрыть лишнее"></i></a>
+        </span>
+    </h5>
+    <table class="table table-sm collapse" id="adminInfo">
+        <tbody>
+            <tr>
+                <td colspan="2" class="text-nowrap" title="Число просмотров \ Добавить в рекомендуемые">
+                    <span class="h4 badge bg-success"> <i class="bi bi-graph-up-arrow"></i> {$product_info.viewed_times} </span> <span class="d-none d-xxl-inline">число просмотров</span>
+                    <a class="btn btn-link text-danger text-decoration-none" {if !$product_info.enabled}disabled{/if} href="{$smarty.const.ADMIN_FILE}?dpt=catalog&amp;sub=special&amp;new_offer={$product_info.productID}" title=" Добавить в рекомендованные"><i class="bi bi-balloon-fill"></i><span class="d-none d-xxl-inline">Добавить в список на главную страницу</span></a>
+                </td>
+            </tr>
+            <tr>
+                <td>categoryID</td>
+                <td>{$product_info.categoryID}
+                    {$a_admin_category}
+                </td>
+            </tr>
+            <tr>
+                <td>ID</td>
+                <td>{$product_info.productID}
+                    {$a_admin_product}
+                </td>
+            </tr>
+            <tr>
+                <td>Артикул</td>
+                <td>#{$product_info.product_code}
+                    {$a_admin_tree}
+                    {$a_admin_catalog}
+                </td>
+            </tr>
+            <tr>
+                <td>Название</td>
+                <td>{$product_info.name}</td>
+            </tr>
+            <tr>
+                <td>на складе</td>
+                <td>
+                    <label>{$product_info.in_stock}&nbsp;шт&nbsp;&nbsp;&nbsp;&nbsp;{$product_info.in_stock_string}&nbsp;&nbsp;&nbsp;&nbsp;
+                        {if $product_info.free_shipping}свободная доставка{/if} + ${$product_info.shipping_freight}</label>
+                </td>
+            </tr>
+            <tr>
+                <td>Цены</td>
+                <td>
+                    <table class="table table-sm table-warning opacity-50">
+                        <tbody>
+                            <tr>
+                                <td>$</td>
+                                <td class="text-end">{$product_info.Price}</td>
+                            </tr>
+                            <tr>
+                                <th>{$currency_details.Name}</th>
+                                <th class="text-end">{$product_info.PriceWithUnit}</th>
+                            </tr>
+                        </tbody>
+                    </table>
+                    {* {$product_info|@debug} *}
+                    <table class="table table-sm table-warning">
+                        <thead>
+                            <tr>
+                                <td>валюта</td>
+                                <td>Price</td>
+                                <td>Вход</td>
+                                <td>дельта</td>
+                                <td>курс</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {section name=cu loop=$currencies}
+                            {assign var="_cur" value=$currencies[cu]}
+                            <tr>
+                                <td>{$_cur.Name}, {$_cur.currency_iso_3} </td>
+                                <td class="text-success">
+                                    {if $_cur.where2show eq 0}{$_cur.code}{/if}{$product_info.Price*$_cur.currency_value|string_format:"%.2f"}{if $_cur.where2show eq 1} {$_cur.code}{/if}
+                                </td>
+                                <td class="text-muted">{if $_cur.where2show eq 0}{$_cur.code}{/if}{$product_info.list_price*$_cur.currency_value|string_format:"%.2f"}{if $_cur.where2show eq 1} {$_cur.code}{/if}</td>
+                                <td>{if $_cur.where2show eq 0}{$_cur.code}{/if}{$product_info.Price*$_cur.currency_value-$product_info.list_price*$_cur.currency_value}{if $_cur.where2show eq 1} {$_cur.code}{/if}</td>
+                                <td>
+                                    <span class="badge {if $product_info.Price*$_cur.currency_value > $product_info.list_price*$_cur.currency_value}bg-success{else}bg-danger{/if}">{$_cur.currency_value|string_format:"%.2f"} {$_cur.code}</span>
+                                </td>
+                            </tr>
+                            {/section}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

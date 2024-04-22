@@ -1,0 +1,24 @@
+<table class="headblock">
+    {* <caption>table title and/or explanatory text</caption> *}
+    <thead>
+        <tr>
+            <th colspan="4" align="justify" style="font-size: 1.5em; font-weight:bold; color:red;">{$seller.company_name}</th>
+            <th colspan="1" align="justify" style="font-size: 1.5em; font-weight:bold; color:black;">УНП {$seller.company_unp}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="logocell"><img style="width:90px;height: 90px" src="{$pm_logo}" /></td>
+            <td colspan="3" align="left" valign="bottom">
+                <strong>{$seller.company_adress}</strong>. <br>
+                р/с:&nbsp;
+                <span style="font-size: 3.00mm;">{$seller.company_bank}</span>
+                <br>
+                {$seller.company_contacts}
+            </td>
+            <td class="barcodecell">
+                <barcode class="barcode" code="{$smarty.const.CONF_SHOP_URL}/index.php?do=invoice_new_proc&moduleID={$moduleID}&orderID={$orderID}" type="QR" class="barcode" size="0.9" />
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -1,0 +1,72 @@
+{* шаблон формы редактирования адреса в личном аккаунте *}
+<div class="card mt-3">
+    <div class="card-header">{$smarty.const.STRING_ADD_NEW_ADDRESS}</div>
+    <div class="card-body">
+        {if $error ne ""}<div class="alert alert-danger">{$error}</div>
+        {/if}
+        {if $zones}
+        {if $select_zone_statement ne NULL}<div class="alert alert-danger">{$select_zone_statement}</div>
+        {/if}
+        {/if}
+        {$smarty.const.STRING_REQUIRED}
+        {if $add_new_address}
+        <form name='AddressForm' id='AddressForm' action='index.php?add_new_address=yes' method="post" class="row">
+            {elseif $address_editor}
+            <form name='AddressForm' id='AddressForm' action='index.php?address_editor={$address_editor}' method="post" class="row">
+                {/if}
+                <div class="form-group">
+                    <label for="first_name">{$smarty.const.CUSTOMER_FIRST_NAME}</label>
+                    <input type="text" class="form-control" name="first_name" id="first_name" value="{$first_name|default:""}">
+                </div>
+                <div class="form-group">
+                    <label for="last_name">{$smarty.const.CUSTOMER_LAST_NAME}</label>
+                    <input type="text" class="form-control" name="last_name" id="last_name" value="{$last_name|default:""}">
+                </div>
+                {if $countries}
+                <div class="form-group">
+                    <label for="countryID">{$smarty.const.CUSTOMER_COUNTRY} *</label>
+                    <select id="countryID" class="form-control" name='countryID' onchange="changeCountryHandler();">
+                        {section name=i loop=$countries}
+                        <option value="{$countries[i].countryID}" {if $countryID ne NULL} {if $countries[i].countryID==$countryID} selected {/if} {else} {if $countries[i].countryID==$smarty.const.CONF_DEFAULT_COUNTRY} selected {/if} {/if}>{$countries[i].country_name} </option> {/section} </select> </div> {else}<input type=hidden name="countryID" value='NULL'>{/if}
+                            {if $smarty.const.CONF_ADDRESSFORM_STATE ne 2}
+                            {if !$zones}
+                            <div class="form-group">
+                                <label for="state">{$smarty.const.CUSTOMER_STATE}{if $smarty.const.CONF_ADDRESSFORM_STATE eq 0} *{/if}</label>
+                                <input type="text" class="form-control" name="state" id="state" value="{$state}" onchange='billingAddressCheckHandler()'>
+                            </div>
+                            {else}
+                            <div class="form-group">
+                                <label for="zoneID">{$smarty.const.CUSTOMER_STATE}{if $smarty.const.CONF_ADDRESSFORM_STATE eq 0} *{/if}</label>
+                                <select id="zoneID" class="form-control" name="zoneID">
+                                    {section name=i loop=$zones}
+                                    <option value="{$zones[i].zoneID}" {if $zones[i].zoneID==$zoneID}selected{/if}>{$zones[i].zone_name} </option> {/section} </select> </div> {/if} {else}{if $zones}<input type="hidden" name='zoneID' value='0'>{else}<input type="hidden" name='state' value=''>{/if}
+                                        {/if}
+                                        {if $smarty.const.CONF_ADDRESSFORM_CITY ne 2}
+                                        <div class="form-group">
+                                            <label for="city">{$smarty.const.CUSTOMER_CITY}{if $smarty.const.CONF_ADDRESSFORM_CITY eq 0} *{/if}</label>
+                                            <input type="text" class="form-control" name="city" id="city" value="{$city}">
+                                        </div>
+                                        {else}<input type="hidden" name='city' value=''>
+                                        {/if}
+                                        {if $smarty.const.CONF_ADDRESSFORM_ADDRESS ne 2}
+                                        <div class="form-group">
+                                            <label for="address">{$smarty.const.CUSTOMER_ADDRESS}{if $smarty.const.CONF_ADDRESSFORM_ADDRESS eq 0} *{/if}</label>
+                                            <textarea class="form-control" rows="6" name="address" id="address">{$address}</textarea>
+                                        </div>
+                                        {else}<input type="hidden" name='address' value=''>
+                                        {/if}
+                                        {literal}
+                                        <script>
+                                            function changeCountryHandler()
+                      {
+                        document.getElementById('save').name='none';
+            document.getElementById('AddressForm').submit();
+                      }
+                    </script>
+                                        {/literal}
+                                        <div class="nline"><button type="submit" class="btn btn-primary my-3">{$smarty.const.SAVE_BUTTON}</button>
+                                        <a href="index.php?address_book=yes" class="btn btn-default my-3">{$smarty.const.STRING_GO_TO_ADDRESS_LIST}</a></div>
+                                        <input type="hidden" id="save" name='save' value='save'>
+            </form>
+    </div>
+</div>

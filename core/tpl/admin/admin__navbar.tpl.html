@@ -1,0 +1,35 @@
+<nav class="navbar navbar-dark navbar-expand-lg  bg-dark bg-gradient bg-opacity-75">
+    <div class="container-xxl">
+        <a class="navbar-brand nixadmin-brand" href="/"><img alt="nix.by logo" src="/{$smarty.const.ADMIN_IMAGES_DEFAULT_PATH}/{$smarty.const.CONF_LOGO_FILE}" height="32" /> {$smarty.const.SITE_URL}</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+
+                <span class="navbar-text d-none d-sm-inline-block">login </span>
+                <span class="navbar-text badge bg-dark mx-1 mx-lg-3" id="adminName" data-adminname="{if $smarty.const.CONF_BACKEND_SAFEMODE eq 1}demo{else}{$admintempname}{/if}">{if $smarty.const.CONF_BACKEND_SAFEMODE eq 1}demo{else}{$admintempname}{/if}</span>
+
+                <span class="navbar-text d-none d-sm-inline-block">online_users </span>
+                <span class="navbar-text badge bg-dark mx-1 mx-lg-3">{$online_users}</span>
+
+                <span class="navbar-text d-none d-sm-inline-block">Новых заказов: </span>
+                <span class="navbar-text badge bg-danger mx-1 mx-lg-3" href="{$smarty.const.ADMIN_FILE}?order_search_type=SearchByStatusID&amp;checkbox_order_status_{$smarty.const.CONF_NEW_ORDER_STATUS}=1&amp;dpt=custord&amp;sub=orders&amp;search=">{$new_orders_count}</span>
+
+
+            <div class="navbar-nav me-auto mb-2 mb-lg-0 d-flex d-lg-none">
+                <hr>
+                <a class="nav-link active" aria-current="page" href="{$smarty.const.ADMIN_FILE}">Admin <i class="bi bi-gear"></i></a>
+                <a class="nav-link" href="index.php">{$smarty.const.ADMIN_BACK_TO_SHOP} <i class="bi bi-house"></i></a>
+                <a class="nav-link" href="index.php?logout=yes">{$smarty.const.ADMIN_LOGOUT_LINK} <i class="bi bi-door-open"></i></a>
+            </div>
+
+        </div>
+
+        <div class="navbar-nav d-none d-lg-flex me-0 mb-2 mb-lg-0">
+            <a class="nav-link fs-5 active" aria-current="page" href="{$smarty.const.ADMIN_FILE}"><i class="bi bi-gear"></i> Admin </a>
+            <a class="nav-link fs-5" href="index.php"><i class="bi bi-house"></i> {$smarty.const.ADMIN_BACK_TO_SHOP} </a>
+            <a class="nav-link fs-5" href="index.php?logout=yes"><i class="bi bi-door-open"></i> {$smarty.const.ADMIN_LOGOUT_LINK} </a>
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,125 @@
+{if $smarty.get.quick_cart_success}
+{include file="quick_cart__success.tpl.html"}
+{else}
+<div class="m-2 p-3 bg-secondary bg-gradient bg-opacity-10">
+<h3 class="display-6" id="QUICK_CART">Оформление заказа</h3>
+
+<form id="formCart" name="formCart" class="start-validation" method=post action="/index.php?send_quick_cart=yes" title="Форма данных для оформления заказа">
+    <fieldset class="row g-3 mb-3" id="private_data">
+        <label class="h4" for="private_data">Контактные данные</label>
+        <div class="col-xl-4 position-relative">
+            <label for="first_name" class="form-label">Как к вам обращаться</label>
+            <input type="text" class="form-control" id="first_name" name="first_name" value="{$first_name}" placeholder="Введите Ваше имя и фамилию" min="2" required {$disabled}>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Неверно заполнено поле "Имя Фамилия"!
+            </div>
+        </div>
+        <div class="col-xl-4 position-relative">
+            <label for="last_name" class="form-label">Контактный номер</label>
+            <input type="text" class="form-control" id="last_name" name="last_name" value="{$last_name}" placeholder="+### ## ###-##-##" min="2" required {$disabled}>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Неверно заполнено поле "Контактный номер"!
+            </div>
+        </div>
+        <div class="col-xl-4 position-relative">
+            <label for="email" class="form-label">Адрес электронной почты</label>
+            <div class="input-group has-validation">
+                <span class="input-group-text" id="validationTooltipEmail">@</span>
+                <input type="email" class="form-control" id="email" name="email" value="{$email}" aria-describedby="validationTooltipEmail emailHelp" required {$disabled}>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+                <div class="invalid-feedback">
+                    Неверно заполнено поле "Email"!
+                </div>
+            </div>
+        </div>
+        <div id="emailHelp" class="form-text"> Зарегистрированные клиенты могут изменять свои данные (доп.поля,регион,адрес) при оформлении заказа. Эти данные будут изменены и в <a class="alert-link" href="index.php?contact_info=yes"> <i class="bi bi-person"></i> Личном кабинете</a></div>
+    </fieldset>
+    <fieldset class="row g-3 mb-3 p-2" id="offerta">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="public_offer" name="public_offer" onclick="apply_public_offer(1);" value=1 required checked>
+            <label class="form-check-label" for="public_offer"> Я соглашаюсь с условиями
+                <a href="page_2.html" target="_blank" class="alert-link">договора публичной оферты и политикой в отношении персональных данных</a></label>
+            <div class="valid-feedback" id="ok_offer">
+                Looks good!
+            </div>
+            <div class="invalid-feedback" id="error_offer">
+                Согласитесь с условиями договора публичной оферты и политикой в отношении персональных данных для оформления заказа
+            </div>
+        </div>
+    </fieldset>
+    <fieldset class="row g-3 mb-3" id="zone_and_adress">
+        <label class="h4" for="zone_and_adress">Адрес</label>
+        {if $smarty.const.CONF_ADDRESSFORM_STATE==2}
+        <input name="zoneID" id="zoneID" type="hidden" value="0">
+        {/if}
+        {if $smarty.const.CONF_ADDRESSFORM_ADDRESS<2} <input type="hidden" name="addressID" id="addressID" value="{$address.addressID}">
+            <div class="col-xl-4 position-relative">
+                <label class="form-label" for="zoneID">Регион доставки</label>
+                <select id="zoneID" name="zoneID" class="form-select" onchange="region_changed()" {if $smarty.const.CONF_ADDRESSFORM_STATE==0} required{/if} {$disabled}>
+                    <option {if $region.zoneID!=$address.zoneID} selected{/if} disabled value="0">Выберите Ваш регион</option>
+                    {foreach from=$regions item="region"}
+                    {if $region.zoneID==$address.zoneID}{assign var="zoneIDpreselected" value=$region.zoneID}{/if}
+                    <option value="{$region.zoneID}" {if $region.zoneID==$zoneIDpreselected} selected{/if}>{$region.zone_name} </option> {/foreach} </select> <div class="valid-feedback">
+                        Looks good!
+            </div>
+            {if !($smarty.const.CONF_ADDRESSFORM_CITY<2)}</div>{/if} {/if} {if $smarty.const.CONF_ADDRESSFORM_CITY<2} <input type="hidden" id="CONF_ADDRESSFORM_STATE_eq_0" value="1">
+                {if !($smarty.const.CONF_ADDRESSFORM_ADDRESS<2)}<div class="col-xl-4 position-relative">{/if}
+                    <label class="form-label" for="city">Населенный пункт</label>
+                    <input id="city" name="city" class="form-control" type="search" value="{if $address.city !=''}{$address.city}{else}Минск{/if}" placeholder="Название населенного пункта" {if $smarty.const.CONF_ADDRESSFORM_CITY==0} required{/if} {$disabled}>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                    {/if}
+                    </div>
+                    {if $smarty.const.CONF_ADDRESSFORM_ADDRESS<2} <div class="col-xl-6 position-relative">
+                        <label for="address" class="form-label">Ваш Адрес</label>
+                        <textarea class="form-control" id="address" name="address" placeholder="Введите адрес доставки" {if $smarty.const.CONF_ADDRESSFORM_ADDRESS==0} required{/if} {$disabled} style="resize: none;min-height:6.5rem;">{$address.address}</textarea>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        </div>
+                        {/if}
+    </fieldset>
+    {* <div class="col-xl-4 position-relative">
+        {section name=i loop=$additional_fields}
+        <label class="form-label" for="additional_field_{$additional_fields[i].reg_field_ID}">{$additional_fields[i].reg_field_name}</label>
+        <input class="form-control form-control-sm" name='additional_field_{$additional_fields[i].reg_field_ID}' id='additional_field_{$additional_fields[i].reg_field_ID}' type="text" value="{$additional_field_values[i].reg_field_value}" title="{$additional_fields[i].reg_field_name}" {if $additional_fields[i].reg_field_required} required{/if} {$disabled}>
+        {/section}
+    </div> *}
+    <fieldset class="row g-3 mb-3" id="delivery_and_payment">
+        <div class="col-md-6 position-relative">
+            <label class="h4" for="shipping_method_select">Способ доставки</label>
+            <div id="shipping_method_html">
+                {$ShippingSelector}
+            </div>
+
+        </div>
+        <div class="col-md-6 position-relative ">
+            <label class="h4" for="payment_method_select">Способ оплаты</label>
+            <div id="payment_method_html">
+                {$PaymentSelector}
+            </div>
+
+        </div>
+    </fieldset>
+
+{* last_order_companyID:  *}
+<input type="hidden" class="border-0" id="last_order_companyID" name="last_order_companyID" form="formCart" value="{$last_order_companyID}">
+
+</form>
+</div>
+
+{* PAYMENT_FORM_HTML *}
+{* <div class="row g-3 mt-2 mb-0 bg-seconary bg-gradient bg-opacity-25" id="payment_addon_html"></div> *}
+<div class="bg-body border border-3 shadow shadow-lg" id="payment_addon_html"></div>
+{* PAYMENT_FORM_HTML *}
+
+{/if}

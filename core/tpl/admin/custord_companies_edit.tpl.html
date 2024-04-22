@@ -1,0 +1,274 @@
+{* { custord_companies.tpl.html } *}
+<input type="hidden" id="thisCompanyID" value="{$c.companyID}">
+<input type="hidden" id="thisUNP" value="{$c.company_unp}">
+<span class="text-small text-secondary p-2 float-end" id="update_time"><i class="bi bi-stopwatch"></i> {$c.update_time}</span>
+<h3 id="page-title" class="h4{if $c.read_only} text-muted{else} text-dark{/if}">
+    <span class="badge text-bg-warning">{$c.companyID}</span>
+    {$c.company_name} / УНП{$c.company_unp}<br>от <i class="bi bi-clock-history"></i> {$c.creation_time}
+</h3>
+{* {$c|@debug} *}
+<div class="p-2 bg-light shadow-lg border border-2 mb-2">
+    <div class="row g-2 row-cols-lg-auto align-items-center justify-content-between">
+        <div class="col-md-3">
+            <button type="button" id="btn_LinkCompany" name="btn_LinkCompany" class="btn btn-primary btn-lg me-3{if $toOrderID eq 0} visually-hidden{/if}" title="Выбрать эту Компанию'" data-app="AdminCompany" data-operation="LinkCompany"><i class="bi bi-check"></i> Выбрать для счета #{$toOrderID}</button>
+            <button type="button" id="btn_AddCompany" name="btn_AddCompany" class="btn btn-outline-secondary" title="Добавить Новую организацию " data-app="AdminCompany" data-operation="AddCompany"><i class="bi bi-plus"></i> Добавить реквизиты новой компании</button>
+        </div>
+        {* Иморт\Экспорт реквизитов *}
+        <div class="dropdown">
+            <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                Импорт\Экспорт реквизитов
+            </button>
+            <form class="dropdown-menu p-3" action='{$smarty.const.ADMIN_FILE}?dpt=custord&sub=companies&app=app_admincompanies&file_upload=1' method="post" name="form_upload" id="form_upload" enctype="multipart/form-data">
+                <div class="mb-0 d-grid gap-2 col mx-auto">
+                    <button type="button" id="btn_ExportCompany" name="btn_ExportCompany" class="btn btn-outline-secondary" title="Экспорт реквизитов в файл" data-app="AdminCompany" data-operation="ExportCompany" data-export_id="{$c.companyID}"><i class="bi bi-file-arrow-down"></i> Экспорт реквизитов</button>
+                </div>
+                <div class="mb-1">
+                    <hr>
+                </div>
+                <div class="mb-3 d-grid gap-2 col mx-auto">
+                    <a class="btn btn-outline-secondary" id="btn_SelectFile" title="Выбрать файл на сервере" target="_self" href="\lib\tfm\tfm.php?p=uploads&sub=companies&company_detailed={$c.company_unp}&companyID={$c.companyID}" title=" Выбрать файл на сервере"><i class="bi bi-pin-angle" id="pinIcon"></i> Выбрать файл на сервере</a>
+                </div>
+                <div class="mb-3">
+                    <hr>
+                </div>
+                <div class="mb-3">
+                    <label for="fileToUpload" class="form-label text-primary">Загрузить c компьютера</label>
+                    <div class="input-group">
+                        <input type="file" name="fileToUpload" id="fileToUpload" class="form-control input-sm" aria-describedby="fileToUpload" aria-label="Upload" accept=".json" size="2">
+                        <button type="submit" class="btn btn-outline-primary btn-sm" name="submit" title="загрузить c компьютера"><i class="bi bi-upload"></i></button>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <hr>
+                </div>
+                <div class="mb-3 d-grid gap-2 col mx-auto">
+                    <button type="button" id="btn_ImportCompany" name="btn_ImportCompany" class="btn btn-primary disabled" title="Импорт реквизитов из выбранного файла" data-app="AdminCompany" data-operation="ImportCompany" data-import_id="{$c.companyID}"><i class="bi bi-file-arrow-up"></i> Импорт </button>
+                    <div class="text-muted" id="selectedFileName"></div>
+                </div>
+                <div class="mb-3">
+                    <hr>
+                </div>
+                <div class="mb-0 d-grid gap-0 col mx-auto">
+                    <button type="button" class="btn btn-outline-danger" id="resetLS" title="очистить"><i class="bi bi-x-lg"></i> Очистить</button>
+                </div>
+            </form>
+        </div>
+        {* Иморт\Экспорт реквизитов *}
+        <div class="col-md">
+            <a type="button" class="btn btn-secondary" id="btn_clone"><i class="bi bi-copy"></i> Клонировать</a>
+            <a type="button" class="btn btn-success bnt-lg{if $c.read_only} visually-hidden{/if}" id="btn_save"><i class="bi bi-save"></i> Сохранить</a>
+        </div>
+        <div class="col-md">
+            <a class="btn btn-outline-secondary" href="admin.php?dpt=custord&sub=companies"><i class="bi bi-table"></i> Таблица реквизитов</a>
+            <a class="btn btn-outline-secondary" href="admin.php?dpt=custord&sub=orders"><i class="bi bi-cart-plus"></i> Таблица заказов</a>
+        </div>
+    </div>
+</div>
+{* form *}
+{* form *}
+{* form *}
+{* {$c|@debug} *}
+<div class="row row-cols-lg-auto g-3 align-items-center btn-toolbar justify-content-end mb-2">
+    <div class="col-md-9 btn-group{if $c.read_only} visually-hidden diasbled{/if} me-2" id="formDataToolbar">
+        <a type="button" class="btn btn-light btn-sm text-danger" id="btn_clearAll" form="mainForm" title="Очистить все поля с данными"><i class="bi bi-eraser-fill"></i> Очистить данные</a>
+        <a type="button" class="btn btn-light btn-sm text-secondary" id="btn_cancel" form="mainForm" title="Отменить изменения"><i class="bi bi-arrow-counterclockwise"></i> Отменить изменения</a>
+        <a type="button" class="btn btn-light btn-sm text-secondary" id="btn_setDumpData" form="mainForm" title="Заполнить все поля случайными данными"><i class="bi bi-robot"></i> Пример заполнения</a>
+        <a type="button" class="btn btn-light btn-sm text-dark" id="btn_setUserData" form="mainForm" title="Сгенерировать реквизиты"><i class="bi bi-building-fill-check"></i> Сгенерировать Реквизиты</a>
+        <a type="button" class="btn btn-success btn-sm" id="btn_validate" form="mainForm" title="Проверить правильность заполнения"><i class="bi bi-check-all"></i></i> Проверить данные</a>
+    </div>
+    <div class="col-md-3 text-bg-dark rounded px-2 py-1 me-2">
+        <div class="form-check form-switch" id="readonly_switch_container">
+            <input class="form-check-input" type="checkbox" role="switch" id="readonly_switch" {if $c.read_only} checked="checked" {/if} autocomplete="off"> <label class="form-check-label" for="readonly_switch" title="Защита от редактирования">{if $c.read_only}<i class="bi bi-lock-fill text-dark"></i> Защита от записи{else}<i class="bi bi-unlock-fill text-muted"></i> Не защищено{/if}</label>
+        </div>
+    </div>
+</div>
+<div class="alert alert-light alert-dismissible fade show visually-hidden" id="corsContainer" role="alert">
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<form class="needs-validation p-2 shadow-lg" id="mainForm" name="mainForm" title="Реквизиты заказчика и данные для заказа">
+    <div class="form-floating mb-2">
+        <textarea class="form-control input-sm pm-control" name="pm_title" id="pm_title" placeholder="Примечание" style="min-height:calc(5rem + 2px);">{$c.company_title}</textarea>
+        <label for="pm_title">Описание/Примечание</label>
+    </div>
+    <fieldset class="row g-2 mb-3" id="pm_fieldset" {if $c.read_only} disabled{/if}> <div class="col-md">
+        <div class="form-floating mb-2">
+            <textarea class="form-control input-sm pm-control" name="pm_name" id="pm_name" placeholder="Полное Название организации" autofocus required style="min-height:calc(5rem + 2px);">{$c.company_name}</textarea>
+            <label for="pm_name">Краткое/Полное Название организации<sup>1</sup></label>
+        </div>
+        <div class="row g-2">
+            <div class="col-md">
+                <div class="form-floating mb-2">
+                    <input class="form-control input-sm pm-control" type="text" name="pm_unp" id="pm_unp" placeholder="123456789" value="{$c.company_unp}" pattern={literal}"((\d{3} \d{3} \d{3})|(\d{9}))"{/literal} maxlength="11" required title="9-тизначный цифровой код">
+                    <label for="pm_unp">УНП</label>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="form-floating mb-2">
+                    <input class="form-control input-sm pm-control" type="text" name="pm_okpo" id="pm_okpo" placeholder="123456789012" value="{$c.company_okpo}" pattern={literal}"((\d{8})|(\d{12}))"{/literal} title="8-ми или 12-ти значный цифровой код">
+                    <label for="pm_okpo">ОКПО</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-floating mb-2">
+            <textarea class="form-control input-sm pm-control" name="pm_adress" id="pm_adress" placeholder="Адреса организации" required style="min-height:calc(7rem + 11px);">{$c.company_adress}</textarea>
+            <label for="pm_adress">Адреса организации<sup>3</sup></label>
+        </div>
+        <div class="form-floating mb-2">
+            <textarea class="form-control input-sm pm-control" name="pm_bank" id="pm_bank" placeholder=" р/с, Банк, код банка организации" style="min-height:calc(7rem + 11px);">{$c.company_bank}</textarea>
+            <label for="pm_bank">Банк<sup>4</sup></label>
+        </div>
+        </div>
+        <div class="col-md">
+            <div class="form-floating mb-2">
+                <textarea class="form-control input-sm pm-control" name="pm_contacts" id="pm_contacts" placeholder="Заполните контактные номера организации" style="min-height:calc(9rem + 4px);">{$c.company_contacts}</textarea>
+                <label for="pm_contacts">Контакты организации [телефон, e-mail, viber и т.д.]</label>
+            </div>
+            <div class="form-floating mb-2">
+                <input class="form-control input-sm pm-control" type="text" name="pm_email" id="pm_email" placeholder="sendme@domainname.by" required value="{$c.company_email}">
+                <label for="pm_contacts">e-mail для выставления счета</label>
+            </div>
+            <div class="form-floating mb-2">
+                <input class="form-control input-sm pm-control" type="text" name="pm_director_nominative" id="pm_director_nominative" placeholder="Директор Иванов А.Г." value="{$c.director_nominative}">
+                <label for="pm_director_nominative">Руководитель в именительном падеже</label>
+            </div>
+            <div class="form-floating mb-2">
+                <input class="form-control input-sm pm-control" type="text" name="pm_director_genitive" id="pm_director_genitive" placeholder="Директора Иванова А.Г." value="{$c.director_genitive}">
+                <label for="pm_director_genitive">Договор заключается в лице</label>
+            </div>
+            <div class="form-floating mb-2">
+                <input class="form-control input-sm pm-control" type="text" name="pm_director_reason" id="pm_director_reason" placeholder="Устава" value="{$c.director_reason}">
+                <label for="pm_director_reason">Действующего на основании</label>
+            </div>
+        </div>
+    </fieldset>
+    <fieldset class="row g-2 mb-3" id="data_fieldset" {if $c.read_only} disabled{/if}> <div class="col-md">
+        <div class="form-floating mb-2">
+            <textarea class="form-control input-sm pm-control" name="pm_userdata" id="pm_userdata" placeholder="User Data" style="min-height:calc(15rem + 2px);">{$c.company_data}</textarea>
+            <label for="pm_userdata">User Data</label>
+        </div>
+        </div>
+        <div class="col-md">
+            <div class="form-floating mb-2">
+                <textarea class="form-control input-sm pm-control" name="pm_admindata" id="pm_admindata" placeholder="Admin Data" style="min-height:calc(15rem + 2px);">{$c.company_admin}</textarea>
+                <label for="pm_admindata">Admin Data</label>
+            </div>
+        </div>
+    </fieldset>
+</form>
+<div class="row row-cols-lg-auto mt-0 mb-2 g-1 align-items-center btn-toolbar justify-content-end" id="formDataToolbar2">
+    <div class="col-md btn-group">
+        <button type="button" id="btn_cors" id="btn_cors" class="btn btn-light btn-sm" title="Сделать запрос на сайт налоговой(grp.nalog.gov.by) для уточнения реквизитов" data-app="AdminCompany" data-operation="CorsCompany"><i class="bi bi-r-square-fill"></i> Получить данные из налоговой</button>
+        <a class="btn btn-light btn-sm" target="_blank" href="https://egr.gov.by/egrmobile/providing-information/find"><i class="bi bi-file-text-fill"></i> Поиск в базе данных ЕГР РБ</a>
+        {if $c.company_unp > 0}
+        <a class="btn btn-light btn-sm" name="bt_egr" target="_blank" href="https://egr.gov.by/egrmobile/information?pan={$c.company_unp}"><i class="bi bi-filetype-doc"></i> Выписка из базы данных ЕГР</a>
+        {/if}
+    </div>
+</div>
+{if $c.variants|@count >1}
+<div class="p-2 mt-5 mb-3 border border-1 rounded rounded-2 bg-white" id="htmlCompanyVariants">
+    <h5>Для УНП <strong>{$c.company_unp}</strong> есть <span class="badge bg-danger">{$c.variants|@count}</span>{$c.variants|@count|@say_to_russian:'вариант реквизитов':'варианта реквизитов':'вариантов реквизитов'}</h5>
+    {foreach from=$c.variants item=foo name=variants}
+    {if $foo.companyID eq $c.companyID}
+    {assign var="isSelectedClass" value="list-group-item list-group-item-action list-group-item-dark"}
+    {else}
+    {assign var="isSelectedClass" value="list-group-item list-group-item-action"}
+    {/if}
+    {assign var="itemIndex" value=$smarty.foreach.variants.index+1}
+    <ul class="mb-1 list-group list-group-horizontal">
+        <li class="list-group-item text-nowrap text-end text-danger" style="width: 3em!important;">{$itemIndex|@zeroFill:2}</li>
+        <li class="list-group-item" style="width: 24em!important;">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="Sample" id="radioSample_{$foo.companyID}" value="{$foo.companyID}">
+                <label class="form-check-label text-nowrap" for="radioSample_{$foo.companyID}">
+                    Выбрать как правильный
+                </label>
+            </div>
+        </li>
+        {* *}
+        <a class="{$isSelectedClass}" href="{$smarty.const.ADMIN_FILE}?dpt=custord&sub=companies&company_detailed={$c.company_unp}&companyID={$foo.companyID}{if $toOrderID}&toOrderID={$toOrderID}{/if}" title="{$foo.company_title}"> Вариант <span class="badge text-bg-warning">{$foo.companyID}</span> от {$foo.creation_time} &nbsp; <em class="bg-light lh-1 px-2">{$foo.company_title|truncate:50}</em></a>
+        {* *}
+        {if
+        $foo.orders_count eq 0 &&
+        $foo.sellers_count eq 0 &&
+        $foo.buyers_count eq 0 &&
+        $foo.old_sellers_count eq 0 &&
+        $foo.old_buyers_count eq 0
+        }
+        <li class="list-group-item">
+            <button class="btn btn-danger btn-sm" name="btn_KillCompany" title="Удалить компанию" data-kill_id="{$foo.companyID}" data-app="AdminCompany" data-operation="KillCompany" style="width: 8em!important;">МОЖНО УДАЛИТЬ</button>
+        </li>
+        {else}
+        <li class="list-group-item" style="width: 14em!important;">
+            <table class="float-end">
+                <tr>
+                    <td class='px-1 text-nowrap text-small text-center text-bg-primary' title="количество заказов"><i class="bi bi-cart4"></i></td>
+                    <td class='px-1 text-nowrap text-small text-center' title="количество счетов как продавец"><i class="bi bi-file-earmark-pdf"></i></td>
+                    <td class='px-1 text-nowrap text-small text-center text-bg-danger' title="количество счетов как покупатель"><i class="bi bi-file-earmark-pdf"></i></td>
+                    <td class='px-1 text-nowrap text-small text-center text-secondary' title="количество СТАРЫХ счетов как продавец"><i class="bi bi-file-earmark-pdf"></i></td>
+                    <td class='px-1 text-nowrap text-small text-center text-bg-secondary' title="количество СТАРЫХ счетов как покупатель"><i class="bi bi-file-earmark-pdf"></i></td>
+                </tr>
+                <tr>
+                    <td class='px-1 text-nowrap text-small text-center text-bg-primary' title="количество заказов">{$foo.orders_count}</td>
+                    <td class='px-1 text-nowrap text-small text-center' title="количество счетов как продавец">{$foo.sellers_count}</td>
+                    <td class='px-1 text-nowrap text-small text-center text-bg-danger' title="количество счетов как покупатель">{$foo.buyers_count}</td>
+                    <td class='px-1 text-nowrap text-small text-center text-secondary' title="количество СТАРЫХ счетов как продавец">{$foo.old_sellers_count}</td>
+                    <td class='px-1 text-nowrap text-small text-center text-bg-secondary' title="количество СТАРЫХ счетов как покупатель">{$foo.old_buyers_count}</td>
+                </tr>
+            </table>
+        </li>
+        {/if}
+        <li class="list-group-item" style="width: 20em!important;">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="{$foo.companyID}" name="DeadMan" id="checkAsDeadMan_{$foo.companyID}" {if $foo.read_only}disabled{/if}> <label class="form-check-label text-nowrap" for="checkAsDeadMan_{$foo.companyID}">
+                {if $foo.read_only} Защита от записи{else}Пометить на слияние{/if}
+                </label>
+            </div>
+        </li>
+    </ul>
+    {/foreach}
+    <div class=" mt-3 g-3 align-items-center btn-toolbar justify-content-between">
+        <button type="button" id="btn_UniteCompanies" name="btn_UniteCompanies" class="btn btn-warning" title="Выполнить слияние | Заменить выбраные компании" data-app="AdminCompany" data-operation="UniteCompanies">
+            <i class="bi bi-union"></i> Выполнить слияние
+        </button>
+        <button type="button" id="btn_CancelUnite" name="btn_CancelUnite" class="btn btn-outline-danger" title="Отменить" data-app="AdminCompany" data-operation="CancelUnite">
+            <i class="bi bi-x-lg"></i> Отменить
+        </button>
+    </div>
+</div>
+{/if}
+<div class="p-2 border border-1 rounded rounded-2 bg-white" id="htmlCompanyStat">
+    <h5> Статистика </h5>
+    {* {$c|@debug} *}
+    {if
+    $c.orders_count eq 0 &&
+    $c.sellers_count eq 0 &&
+    $c.buyers_count eq 0 &&
+    $c.old_sellers_count eq 0 &&
+    $c.old_buyers_count eq 0
+    }
+    <div class="m-5 p-5 text-bg-secondary">
+        <h2>Нет заказов и/или выставленных счетов для этой компанией</h2>
+        <button class="btn btn-danger btn-sm" name="btn_KillCompany" title="Удалить компанию" data-kill_id="{$c.companyID}" data-app="AdminCompany" data-operation="KillCompany">МОЖНО УДАЛИТЬ ЭТУ КОМПАНИЮ</button>
+    </div>
+    {else}
+    <table class="table table-info">
+        <tr>
+            <td class='px-1 text-nowrap text-small text-center text-bg-primary' title="количество заказов"><i class="bi bi-cart4"></i> Количество заказов</td>
+            <td class='px-1 text-nowrap text-small text-center' title="количество счетов как продавец"><i class="bi bi-file-earmark-pdf"></i> Количество счетов как продавец</td>
+            <td class='px-1 text-nowrap text-small text-center text-bg-danger' title="количество счетов как покупатель"><i class="bi bi-file-earmark-pdf"></i> Количество счетов как покупатель</td>
+            <td class='px-1 text-nowrap text-small text-center text-secondary' title="количество СТАРЫХ счетов как продавец"><i class="bi bi-file-earmark-pdf"></i> Количество СТАРЫХ счетов как продавец</td>
+            <td class='px-1 text-nowrap text-small text-center text-bg-secondary' title="количество СТАРЫХ счетов как покупатель"><i class="bi bi-file-earmark-pdf"></i> Количество СТАРЫХ счетов как покупатель</td>
+        </tr>
+        <tr>
+            <td class='px-1 text-nowrap text-small text-center text-bg-primary' title="количество заказов">{$c.orders_count}</td>
+            <td class='px-1 text-nowrap text-small text-center' title="количество счетов как продавец">{$c.sellers_count}</td>
+            <td class='px-1 text-nowrap text-small text-center text-bg-danger' title="количество счетов как покупатель">{$c.buyers_count}</td>
+            <td class='px-1 text-nowrap text-small text-center text-secondary' title="количество СТАРЫХ счетов как продавец">{$c.old_sellers_count}</td>
+            <td class='px-1 text-nowrap text-small text-center text-bg-secondary' title="количество СТАРЫХ счетов как покупатель">{$c.old_buyers_count}</td>
+        </tr>
+    </table>
+    {/if}
+</div>
+{if $antSUB eq "companies" && $company_detailed}
+<script src="./core/tpl/admin/apps/AdminCompanies/appAdminCompanyEdit.js" type="module"></script>
+{/if}

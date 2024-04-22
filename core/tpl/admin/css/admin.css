@@ -1,0 +1,64 @@
+/*admin.css*/
+
+.nixadmin-brand {
+    color: #c00;
+    letter-spacing: 4px;
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-weight: 700;
+    /*font-size: 1.4rem;*/
+    text-shadow: 1px 1px 2px #fff, 0 0 1em #000, 0 0 .2em #000;
+    cursor: grab
+}
+
+.bg-admin{
+    background-color: var(--bs-gray-700);
+}
+.text-admin{
+    background-color: var(--bs-orange);
+}
+
+.bootstrap-select .dropdown-menu {
+    min-width: 80%;
+    max-width: 100%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    /*! box-sizing: border-box; */
+}
+
+.btn-sq-lg {
+  width: 150px !important;
+  height: 150px !important;
+}
+
+.btn-sq {
+  width: 100px !important;
+  height: 100px !important;
+  font-size: 10px;
+}
+
+.btn-sq-sm {
+  width: 50px !important;
+  height: 50px !important;
+  font-size: 10px;
+}
+
+.btn-sq-fl {
+  width: 44px !important;
+  height: 44px !important;
+  font-size: 24px;
+  border: var(--bs-btn-border-width) solid var(--bs-btn-border-color);
+  border-radius: 3px;
+}
+
+.btn-sq-xs {
+  width: 25px !important;
+  height: 25px !important;
+  padding:2px;
+}
+
+
+.btn-default {
+background-color: #d1e4ef!important;
+}

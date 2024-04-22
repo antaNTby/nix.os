@@ -1,0 +1,31 @@
+{* <div style="width: 50%; float:left; text-align: left;">
+    <b>Поставщик:</b>
+    &nbsp;&nbsp;&nbsp;{$pm_placeholder}{$pm_placeholder}&nbsp;&nbsp;&nbsp; {$seller.company_director0}
+</div>
+<div style="width: 50%; float:right; text-align: left;">
+    <b>Покупатель:</b>
+    &nbsp;&nbsp;&nbsp;{$pm_placeholder}{$pm_placeholder}&nbsp;&nbsp;&nbsp; {$buyer.company_director0}
+</div>
+
+ *}
+<hr style="color:#fff; height:0.25mm; width:1%;">
+<hr style="color:#fff; height:0.25mm; width:1%;">
+
+<div style="width: 87.5mm; padding-left:0; float:left; text-align: left;">
+    <b>Поставщик:</b>
+    &nbsp;&nbsp;&nbsp;
+{if !$stampsBYTE}
+{$pm_placeholder}
+{else}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+{/if}
+&nbsp;&nbsp;&nbsp;{$seller.company_director0|replace:" ":"&nbsp;"}
+</div>
+
+<div style="width:47.5mm; padding-left:0; float:left; text-align: left; ">
+    <b>Покупатель:</b> &nbsp;&nbsp;&nbsp;&nbsp; ______________________
+</div>
+<div style="width:50mm; padding-left:0; float:left; text-align: left; ">
+    {$buyer.company_director0|replace:" ":"&nbsp;"}
+</div>

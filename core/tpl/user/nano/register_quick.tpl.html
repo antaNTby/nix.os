@@ -1,0 +1,109 @@
+{* шаблон формы быстрой регистрации для текущего заказа (без регистрации покупателя в магазине) *}
+{* {assign var="preheader" value="<a href='`$smarty.const.ADMIN_FILE`?dpt=custord&amp;sub=reg_fields' title='`$smarty.const.EDIT_BUTTON`' class='pull-right'><i class='fas fa-cogs fa-sm adminlink'></i></a>"}
+{if $isadmin eq "yes"}{assign var="postheader" value=`$preheader``$smarty.const.STRING_REGISTRATION_FORM`}{else}{assign var="postheader" value=$smarty.const.STRING_REGISTRATION_FORM}{/if} *}
+<div class="card mx-auto mt-5">
+    {if $postheader ne ""}<div class="card-header">{$postheader}</div>{/if}
+    <div class="card-body">
+        {if $reg_error ne NULL}<div class="alert alert-danger">{$reg_error}</div>{/if}
+        {$smarty.const.STRING_REQUIRED}
+        <form method="post" name='RegisterForm' id="RegisterForm" role="form" class="row g-3 mb-3">
+            <div class="col-md-6 col-xl-4 position-relative">
+                <label class="form-label" for="first_name">{$smarty.const.CUSTOMER_FIRST_NAME} *</label>
+                <input type="text" class="form-control" name="first_name" id="first_name" value="{$first_name|default:""}">
+            </div>
+            <div class="col-md-6 col-xl-4 position-relative">
+                <label class="form-label" for="last_name">{$smarty.const.CUSTOMER_LAST_NAME} *</label>
+                <input type="text" class="form-control" name="last_name" id="last_name" value="{$last_name|default:""}">
+            </div>
+            {if $smarty.const.CONF_ACTIVATE_ORDER eq 1 or $smarty.const.CONF_EMAIL_ORDER_SEND eq 1}
+            <div class="col-md-6 col-xl-4 position-relative">
+                <label class="form-label" for="email">{$smarty.const.CUSTOMER_EMAIL} *</label>
+                <input type="text" class="form-control" name="email" id="email" value="{$email|default:""}">
+            </div>
+            {else}<input type="hidden" name="email" value="-">{/if}
+            {if !$SessionRefererLogin && $smarty.const.CONF_AFFILIATE_PROGRAM_ENABLED eq 1}
+            <div class="col-md-6 col-xl-4 position-relative">
+                <label class="form-label" for="affiliationLogin">{$smarty.const.CUSTOMER_AFFILIATION}</label>
+                <input type="text" class="form-control" name="affiliationLogin" id="affiliationLogin" value="{$affiliationLogin}">
+            </div>
+            {/if}
+            {if $SessionRefererLogin || $smarty.const.CONF_AFFILIATE_PROGRAM_ENABLED eq 0}<input name="affiliationLogin" type="hidden" value="{$SessionRefererLogin}">{/if}
+            {section name=i loop=$additional_fields}
+            <div class="col-md-6 col-xl-4 position-relative">
+                <label class="form-label" for="additional_field_{$additional_fields[i].reg_field_ID}">{$additional_fields[i].reg_field_name}{if $additional_fields[i].reg_field_required} * {/if}</label>
+                <input type="text" class="form-control" name="additional_field_{$additional_fields[i].reg_field_ID}" id="additional_field_{$additional_fields[i].reg_field_ID}" value="{$additional_field_values[i].reg_field_value}">
+            </div>
+            {/section}
+            {if $countries}
+            <div class="col-md-6 col-xl-4 position-relative">
+                <label class="form-label" for="countryID">{$smarty.const.CUSTOMER_COUNTRY} *</label>
+                <select id="countryID" class="form-control" name='countryID' onchange='billingAddressCheckHandler(); changeCountryHandler();'>
+                    {section name=i loop=$countries}
+                    <option value="{$countries[i].countryID}" {if $countryID ne NULL} {if $countries[i].countryID==$countryID} selected {/if} {else} {if $countries[i].countryID==$smarty.const.CONF_DEFAULT_COUNTRY} selected {/if} {/if}>{$countries[i].country_name}</option>
+                    {/section}
+                </select>
+            </div>
+            {else}<input type=hidden name='countryID' value='NULL'>{/if}
+            {if $smarty.const.CONF_ADDRESSFORM_STATE ne 2}
+            {if !$zones}
+            <div class="col-md-6 col-xl-4 position-relative">
+                <label class="form-label" for="state">{$smarty.const.CUSTOMER_STATE}{if $smarty.const.CONF_ADDRESSFORM_STATE eq 0} *{/if}</label>
+                <input type="text" class="form-control" name="state" id="state" value="{$state}" onchange='billingAddressCheckHandler()'>
+            </div>
+            {else}
+            <div class="col-md-6 col-xl-4 position-relative">
+                <label class="form-label" for="zoneID">{$smarty.const.CUSTOMER_STATE}{if $smarty.const.CONF_ADDRESSFORM_STATE eq 0} *{/if}</label>
+                <select id="zoneID" class="form-control" name="zoneID" onchange='billingAddressCheckHandler()'>
+                    {section name=i loop=$zones}
+                    <option value="{$zones[i].zoneID}" {if $zones[i].zoneID==$zoneID}selected{/if}>{$zones[i].zone_name} </option> {/section} </select> </div> {/if} {else}{if !$zones} <input type=hidden name='state' value=''>
+                        {else}
+                        <input type=hidden name='zoneID' value='0'>
+                        {/if}
+                        {/if}
+                        {if $smarty.const.CONF_ADDRESSFORM_CITY ne 2}
+                        <div class="col-md-6 col-xl-4 position-relative">
+                            <label class="form-label" for="city">{$smarty.const.CUSTOMER_CITY}{if $smarty.const.CONF_ADDRESSFORM_CITY eq 0} *{/if}</label>
+                            <input type="text" class="form-control" name="city" id="city" value="{$city}" onblur='billingAddressCheckHandler()' onchange='billingAddressCheckHandler()'>
+                        </div>
+                        {else}<input type=hidden name='city' value=''>{/if}<input type=hidden name='receiver_first_name' value='shop'>
+                        <input type=hidden name='receiver_last_name' value='shop'>
+                        {if $smarty.const.CONF_ADDRESSFORM_ADDRESS ne 2}
+                        <div class="col-md-6 col-xl-4 position-relative">
+                            <label class="form-label" for="address">{$smarty.const.CUSTOMER_ADDRESS}{if $smarty.const.CONF_ADDRESSFORM_ADDRESS eq 0} *{/if}</label>
+                            <textarea class="form-control" rows="6" name="address" id="address" onchange='billingAddressCheckHandler()'>{$address}</textarea>
+                        </div>
+                        {else}
+                        <input type=hidden name='address' value=''>
+                        {/if}
+                        {if $smarty.const.CONF_ENABLE_CONFIRMATION_CODE eq 1}
+                        <div class="row">
+                            <div class="col-xs-8">
+                                <div class="col-md-6 col-xl-4 position-relative">
+                                    <label class="form-label" for="fConfirmationCode">{$smarty.const.STR_ENTER_CCODE}</label>
+                                    <input type="text" class="form-control" name="fConfirmationCode" id="fConfirmationCode" value="">
+                                </div>
+                            </div>
+                            <div class="col-xs-4 text-end">
+                                <img src="index.php?do=captcha&amp;{php}echo session_name();{/php}={php}echo session_id();{/php}" alt="code" class="img-rounded" style="margin-top: 10px">
+                            </div>
+                        </div>
+                        {/if}
+                        <button type="submit" class="btn btn-primary">{$smarty.const.OK_BUTTON3}</button>&nbsp;&nbsp;<a href="#" onclick="document.getElementById('RegisterForm').reset(); return false" class="btn btn-default">{$smarty.const.RESET_BUTTON}</a>
+                        {literal}
+                        <script>
+                            function changeCountryHandler()
+                {
+                  document.getElementById('RegisterForm').submit();
+                }
+
+                function billingAddressCheckHandler()
+                {
+                  return;
+                }
+        </script>
+                        {/literal}
+                        <input type="hidden" value="" name="save">
+                        <input type="hidden" name="quick_register" value=1>
+        </form>
+    </div>
+</div>

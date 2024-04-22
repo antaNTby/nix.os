@@ -1,0 +1,45 @@
+{* БИБЛИОТЕКИ *}
+{* <script src="/lib/bootstrap/bootstrap-5.3.1-dist/js/bootstrap.min.js" defer></script> *}
+{* <script src="/lib/bootstrap/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js" defer></script> *}
+<script src="/lib/bootstrap/bootstrap-5.3.2-dist/js/bootstrap.bundle.min.js" defer></script>
+<script src="/lib/jquery-3.6.0.min.js" defer></script>
+{* <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script> *}
+{* <script src="/core/tpl/user/nano/js/nano.js" defer></script> *}
+ {* <script src="/lib/bootstrap-select-1.14.0-beta3/bootstrap-select.min.js" defer></script> *}
+{*  fix .selectpicker('refresh') duplicates data
+https://github.com/snapappointments/bootstrap-select/issues/2801
+*}
+<script src="/lib/bootstrap-select-1.14.0-beta3/bootstrap-select.js" defer></script>
+<script src="/lib/bootstrap-select-1.14.0-beta3/defaults-ru_RU.min.js" defer></script>
+<!-- Подключение jQuery плагинов MaskedInput bootstrap-select -->
+{* <script src="/lib/jquery.maskedinput.min.js" defer></script> *}
+<script src="/lib/toastr/toastr.min.js" defer></script>
+
+<script src="/lib/jquery.blockui.js" charset="utf-8" defer></script>
+<script src="/lib/cleave/dist/cleave.min.js"></script> {* CleaveJS *}
+<script src="/lib/DataTables_JQuery3/datatables.min.js"></script> {* datatables *}
+
+ <script src="/lib/vanillajs-datepicker/js/datepicker-full.min.js"></script>
+ {* <script src="/lib/vanillajs-datepicker/js/locales/ru.js"></script> *}
+ <script src="/lib/vanillajs-datepicker/js/locales/by.js"></script>
+
+{* мои СКРИПТЫ *}
+<script src="/core/tpl/admin/js/admin.js"></script>
+{* <script src="/core/tpl/user/nano/js/nano-toasts.js" defer></script> *}
+
+
+
+
+<script src="/core/tpl/admin/js/jQueryScripts.js" defer></script>
+{* <script src="/lib/jquery.form.min.js"></script> *}
+
+{* мои МОДУЛИ *}
+{if $order_detailed}
+{* <script src="./core/tpl/admin/js/js-modules/currency/controller.js" type="module" defer></script> *}
+<script src="./core/tpl/admin/apps/Currency/appCurrency.js" type="module"></script>
+<script src="./core/tpl/admin/apps/OrderContent/appOrderContent.js" type="module"></script>
+<script src="./core/tpl/admin/apps/AdminProductDataTable/appAdminProductDataTable.js" type="module"></script>
+{/if}
+
+{* {if $antSUB eq "companies" && !$company_detailed}
+{/if} *}

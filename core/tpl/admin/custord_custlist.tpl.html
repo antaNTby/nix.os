@@ -1,0 +1,300 @@
+{if !$customer_details}
+
+<form name="extform2" method=GET id="extform2" action="">
+    <input type="hidden" name="dpt" value="custord">
+    <input type="hidden" name="sub" value="custlist">
+
+    {if $customers_has_been_exported_succefully == 1}
+    <div class="text-start text-bg-success">{$smarty.const.ADMIN_CUSTOMERS_HAS_BEEN_EXPORTED_SUCCESSFULLY}!</div>
+    <div class="text-start pt-3"><a href='{$urlToDownloadResult}' class="btn btn-link">{$smarty.const.ADMIN_DOWN_LOAD}</a> ( {$file_size} b ) </div>
+    {/if}
+<div class="table-responsive-xl">
+    <table class="table table-hover table-striped align-middle">
+        <thead class="table-primary">
+            <tr>
+                <th class="text-nowrap text-start"><a href='{$urlToSort}&amp;sort=Login&amp;direction=ASC' class="btn btn-link"><i class="bi bi-sort-up-alt"></i></a>{$smarty.const.ADMIN_CUSTOMER_LOGIN}<a href='{$urlToSort}&amp;sort=Login&amp;direction=DESC' class="btn btn-link"><i class="bi bi-sort-down"></i></a></th>
+                <th class="text-nowrap text-center"><a href='{$urlToSort}&amp;sort=first_name&amp;direction=ASC' class="btn btn-link"><i class="bi bi-sort-up-alt"></i></a>{$smarty.const.ADMIN_CUSTOMER_FIRST_NAME}<a href='{$urlToSort}&amp;sort=first_name&amp;direction=DESC' class="btn btn-link"><i class="bi bi-sort-down"></i></a></th>
+                <th class="text-nowrap text-center"><a href='{$urlToSort}&amp;sort=last_name&amp;direction=ASC' class="btn btn-link"><i class="bi bi-sort-up-alt"></i></a>{$smarty.const.ADMIN_CUSTOMER_LAST_NAME}<a href='{$urlToSort}&amp;sort=last_name&amp;direction=DESC' class="btn btn-link"><i class="bi bi-sort-down"></i></a></th>
+                <th class="text-nowrap text-center"><a href='{$urlToSort}&amp;sort=Email&amp;direction=ASC' class="btn btn-link"><i class="bi bi-sort-up-alt"></i></a>{$smarty.const.ADMIN_CUSTOMER_EMAIL}<a href='{$urlToSort}&amp;sort=Email&amp;direction=DESC' class="btn btn-link"><i class="bi bi-sort-down"></i></a></th>
+                <th class="text-nowrap text-center"><a href='{$urlToSort}&amp;sort=custgroupID&amp;direction=ASC' class="btn btn-link"><i class="bi bi-sort-up-alt"></i></a>{$smarty.const.ADMIN_CUSTOMER_GROUP_NAME}<a href='{$urlToSort}&amp;sort=custgroupID&amp;direction=DESC' class="btn btn-link"><i class="bi bi-sort-down"></i></a></th>
+                <th class="text-nowrap text-center"><a href='{$urlToSort}&amp;sort=reg_datetime&amp;direction=ASC' class="btn btn-link"><i class="bi bi-sort-up-alt"></i></a>{$smarty.const.ADMIN_REGISTRATION_TIME}<a href='{$urlToSort}&amp;sort=reg_datetime&amp;direction=DESC' class="btn btn-link"><i class="bi bi-sort-down"></i></a></th>
+                <th class="text-nowrap text-center">{$smarty.const.STR_ACTSTATE}</th>
+                <th class="text-nowrap text-center fs-5"><i class="bi bi-terminal-x"></i></th>
+            </tr>
+        </thead>
+        <tbody>
+            {section name=i loop=$customers}
+            <tr>
+                <td class="text-start"><a href='{$smarty.const.ADMIN_FILE}?dpt=custord&amp;sub=custlist&amp;customer_details=contact_info&amp;customerID={$customers[i].customerID}&amp;encodedReturnUrl={$encodedReturnUrl}'>{$customers[i].Login}</a></td>
+                <td class="text-end">{$customers[i].first_name}</td>
+                <td class="text-end">{$customers[i].last_name}</td>
+                <td class="text-end">{if $smarty.const.CONF_BACKEND_SAFEMODE eq 0}{$customers[i].Email}{else}{$smarty.const.ADMIN_SAFEMODE_BLOCKED}{/if}</td>
+                <td class="text-end">{$customers[i].custgroup_name}</td>
+                <td class="text-end">{$customers[i].reg_datetime}</td>
+                <td class="text-start">{if $customers[i].ActivationCode}{$smarty.const.STR_NOTACTIVATED}<br><a href="{" activateID=`$customers[i].customerID`"|set_query}" onclick="return confirm('{$smarty.const.STR_QACTIVATE_ACCOUNT|replace:'[email]':$customers[i].Email}');">{$smarty.const.ACTIVATE_BUTTON}</a>{else}{$smarty.const.STR_ACTIVATED}{/if}
+                </td>
+                <td class="text-center">{if $customers[i].allowToDelete}<button class="btn btn-outline-danger" onclick="confirmDelete({$customers[i].customerID}, '{$smarty.const.QUESTION_DELETE_CONFIRMATION}', '{$smarty.const.ADMIN_FILE}?dpt=custord&amp;sub=custlist&amp;encodedReturnUrl={$encodedReturnUrl}&amp;deleteCustomerID=')"><i class="bi bi-x-lg"></i></button>{/if}
+                </td>
+            </tr>
+            {sectionelse}
+            <tr>
+                <td colspan="8" class="text-center text-nowrap">{$smarty.const.ADMIN_NO_VALUES}</td>
+            </tr>
+            {/section}
+        </tbody>
+    </table>
+            {if $navigator}
+                    <nav aria-label="Page navigation example">
+                      <ul class="pagination">
+                        {$navigator}
+                    </ul>
+                    </nav>
+            {/if}
+</div>
+
+
+    <input type="hidden" name="count_to_export" value="{$count_to_export}">
+    <input type="hidden" name="export_to_excel" value="1">
+</form>
+
+
+                {if $customers}
+<div class="mt-3 mb-1 d-grid gap-2 d-md-flex justify-content-center">
+    <a href="#" onclick="document.getElementById('extform2').submit(); return false" class="btn btn-outline-dark">{$smarty.const.ADMIN_EXPORT_USER_TO_FILE}</a>
+</div>
+                {/if}
+
+{/if}
+
+{if $customer_details}
+
+
+
+        {if $customerID eq NULL}
+        <div class="mt-3 mb-1 d-grid gap-2 d-md-flex justify-content-center">
+            {$smarty.const.ADMIN_NO_RECORD_FOUND}
+            {if $returnUrl}
+            <a href='{$returnUrl}' class="btn btn-link">{$smarty.const.ADMIN_BACK_TO_SEARCH_FORM}</a>
+            {else}
+            <a href='{$smarty.const.ADMIN_FILE}?dpt=custord&amp;sub=custlist' class="btn btn-link">{$smarty.const.ADMIN_BACK_TO_SEARCH_FORM}</a>
+            {/if}
+        </div>
+        {/if}
+
+        {if $customerID neq NULL}
+
+        <nav class="nav nav-tabs flex-column flex-sm-row">
+          <a id="contact_info-tab" class="flex-sm-fill text-sm-center nav-link{if $customer_details == 'contact_info'} active{/if}" {if $customer_details == 'contact_info'}aria-current="page"{/if}
+           href="{$smarty.const.ADMIN_FILE}?dpt=custord&amp;sub=custlist&amp;customer_details=contact_info&amp;customerID={$customerID}&amp;encodedReturnUrl={$encodedReturnUrl}"
+ data-bs-toggle="tab" data-bs-target="#contact_info" type="button" role="tab"
+           aria-selected="{if $customer_details == "contact_info"}true{else}false{/if}">{$smarty.const.STRING_CONTACT_INFORMATION_DOWN_CASE}</a>
+
+          <a id="address_book-tab" class="flex-sm-fill text-sm-center nav-link{if $customer_details == 'address_book'} active{/if}" {if $customer_details == 'address_book'}aria-current="page"{/if}
+           href="{$smarty.const.ADMIN_FILE}?dpt=custord&amp;sub=custlist&amp;customer_details=address_book&amp;customerID={$customerID}&amp;encodedReturnUrl={$encodedReturnUrl}"
+ data-bs-toggle="tab" data-bs-target="#address_book" type="button" role="tab"
+           aria-selected="{if $customer_details == "address_book"}true{else}false{/if}">{$smarty.const.STRING_ADDRESS_BOOK}</a>
+
+          <a id="order_history-tab" class="flex-sm-fill text-sm-center nav-link{if $customer_details == 'order_history'} active{/if}" {if $customer_details == 'order_history'}aria-current="page"{/if}
+           href="{$smarty.const.ADMIN_FILE}?dpt=custord&amp;sub=custlist&amp;customer_details=order_history&amp;customerID={$customerID}&amp;encodedReturnUrl={$encodedReturnUrl}"
+ data-bs-toggle="tab" data-bs-target="#order_history" type="button" role="tab"
+           aria-selected="{if $customer_details == "order_history"}true{else}false{/if}">{$smarty.const.STRING_ORDER_HISTORY}</a>
+
+          <a id="visit_log-tab" class="flex-sm-fill text-sm-center nav-link{if $customer_details == 'visit_log'} active{/if}" {if $customer_details == 'visit_log'}aria-current="page"{/if}
+           href="{$smarty.const.ADMIN_FILE}?dpt=custord&amp;sub=custlist&amp;customer_details=visit_log&amp;customerID={$customerID}&amp;encodedReturnUrl={$encodedReturnUrl}"
+ data-bs-toggle="tab" data-bs-target="#visit_log" type="button" role="tab"
+           aria-selected="{if $customer_details == "visit_log"}true{else}false{/if}">{$smarty.const.STRING_VISIT_HISTORY}</a>
+
+          <a id="affiliate-tab" class="flex-sm-fill text-sm-center nav-link{if $customer_details == 'affiliate'} active{/if} disabled" {if $customer_details == 'affiliate'}aria-current="page"{/if}
+           href="{$smarty.const.ADMIN_FILE}?dpt=custord&amp;sub=custlist&amp;customer_details=affiliate&amp;customerID={$customerID}&amp;encodedReturnUrl={$encodedReturnUrl}"
+ data-bs-toggle="tab" data-bs-target="#affiliate" type="button" role="tab"
+           aria-selected="{if $customer_details == "affiliate"}true{else}false{/if}" disabled>{$smarty.const.STRING_AFFILIATE_PROGRAM}</a>
+        </nav>
+
+
+
+
+
+
+<div class="table-responsive tab-content" id="myTabContent">
+
+        {* {if $customer_details == 'contact_info'} *}
+        <div class="tab-pane fade{if $customer_details == 'contact_info'} show active{/if}" id="contact_info" role="tabpanel" aria-labelledby="contact_info-tab" tabindex="0">
+        <form method=POST name=MainForm action="">
+        <table class="table table-sm bg-body">
+            <tbody>
+
+                <tr>
+                    <th>{$smarty.const.CUSTOMER_LOGIN}</th>
+                    <td>{$customerInfo.Login|replace:"<":"&lt;"} </td>
+                </tr>
+
+                 <tr>
+                    <th>{$smarty.const.CUSTOMER_FIRST_NAME}</th>
+                    <td>{$customerInfo.first_name|replace:"<":"&lt;"} </td>
+                </tr>
+
+                 <tr>
+                    <th>{$smarty.const.CUSTOMER_LAST_NAME}</th>
+                    <td>{$customerInfo.last_name|replace:"<":"&lt;"} </td>
+                </tr>
+
+                 <tr>
+                    <th>{$smarty.const.CUSTOMER_EMAIL}</th>
+                    <td>{if $smarty.const.CONF_BACKEND_SAFEMODE eq 0}{$customerInfo.Email|replace:"<":"&lt;"} {else}{$smarty.const.ADMIN_SAFEMODE_BLOCKED}{/if} </td>
+                </tr>
+
+                {section name=i loop=$reg_fields_values}
+                <tr>
+                    <th>{$reg_fields_values[i].reg_field_name}:        </th>
+                    <td>{$reg_fields_values[i].reg_field_value|replace:"<":"&lt;"} </td>
+                </tr>
+                {/section}
+
+                <tr>
+                    <th>{$smarty.const.CUSTOMER_SUBSCRIBE_FOR_NEWS}</th>
+                    <td valign=middle>
+                        <input type=checkbox {if $customerInfo.subscribed4news} checked {/if} name='subscribed4news' value='1'>
+                        <input type=submit name='subscribed4news_submit' value='{$smarty.const.ADMIN_CHANGE}' class="btn btn-primary">
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>{$smarty.const.ADMIN_CUSTOMER_GROUP_NAME}</th>
+                    <td>{if $customerInfo.custgroup_name}{$customerInfo.custgroup_name}&nbsp;&nbsp;&nbsp;{/if}{$smarty.const.ADMIN_CHANGE}
+                        <select name='custgroupID'>
+                        <option value='null'>-</option>
+                        {section name=i loop=$customer_groups}
+                        <option value='{$customer_groups[i].custgroupID}' {if $customer_groups[i].custgroupID==$customerInfo.custgroupID} selected {/if}> {$customer_groups[i].custgroup_name} </option> {/section}
+                        </select>
+                        <input type=submit name='custgroupID_submit' value='{$smarty.const.ADMIN_CHANGE}' class="btn btn-primary">
+                    </td>
+                </tr>
+
+                <tr>
+                    <th> {$smarty.const.STR_ACTSTATE}</th>
+                    <td>
+                    {if $customerInfo.ActivationCode}
+                    {$smarty.const.STR_NOTACTIVATED}
+                    <a href="{" activateID=`$customerInfo.customerID`"|set_query}" onclick="return confirm('{$smarty.const.STR_QACTIVATE_ACCOUNT|replace:'[email]':$customerInfo.Email}');">{$smarty.const.ACTIVATE_BUTTON}</a>
+                    {else}
+                    {$smarty.const.STR_ACTIVATED}
+                    {/if}
+                    </td>
+                </tr>
+
+                {if $customerInfo.ActivationCode}
+                <tr>
+                    <th><strong>{$smarty.const.STR_ACTCODE}</strong></th>
+                    <td>{$customerInfo.ActivationCode}</td>
+                </tr>
+                {/if}
+
+                {if $customerInfo.allowToDelete}
+                <tr>
+                    <th>del</th>
+                    <td><input type="button" onclick="if(window.confirm('{$smarty.const.QUESTION_DELETE_CONFIRMATION}'))document.location.href='{" &safemode=&deleteCustomerID=`$customerInfo.customerID`"|set_query}';" value="{$smarty.const.TERMINATE_ACCOUNT_LINK}" class="btn btn-danger"></td>
+                </tr>
+                {/if}
+
+            </tbody>
+        </table>
+        </form>
+        </div>
+        {* {/if} *}
+
+
+
+
+        {* {if $customer_details == 'address_book'} *}
+        <div class="tab-pane fade{if $customer_details == 'address_book'} show active{/if}" id="address_book" role="tabpanel" aria-labelledby="address_book-tab" tabindex="0">
+            <table class="table table-sm bg-body">
+                <tbody>
+                {section name=i loop=$addresses}
+                <tr>
+                    <td>
+                        <b>{$smarty.const.CUSTOMER_ADDRESS} {$smarty.section.i.index+1}
+                            {if $addresses[i].addressID == $defaultAddressID}({$smarty.const.STRING_DEFAULT}){/if}
+                        </b>
+                        <br>
+                        {$addresses[i].addressStr|replace:"<":"&lt;"|replace:"&lt;br>":"<br>"}
+                    </td>
+                </tr>
+                {/section}
+                </tbody>
+            </table>
+        </div>
+        {* {/if} *}
+
+
+
+
+
+        {* {if $customer_details == 'order_history'} *}
+        <div class="tab-pane fade{if $customer_details == 'order_history'} show active{/if}" id="order_history" role="tabpanel" aria-labelledby="order_history-tab" tabindex="0">
+            {if $orders}
+            <form action='{$urlToSubmit}' method=POST>
+                {include file='admin/admin_order_history.tpl.html'}
+            </form>
+            {else}
+            &lt; {$smarty.const.ADMIN_NO_RECORD_FOUND} &gt;
+            {/if}
+        </div>
+        {* {/if} *}
+
+
+
+
+
+
+
+        {if $customer_details == 'visit_log'}
+        <div class="tab-pane fade{if $customer_details == 'visit_log'} show active{/if}" id="visit_log" role="tabpanel" aria-labelledby="visit_log-tab" tabindex="0">
+            {if $visits}
+            <table class="table table-sm bg-body">
+                <tr>
+                    <td class="text-start">IP</td>
+                    <td class="text-start" width="100%">{$smarty.const.ADMIN_CUSTOMER_ENTER_TIME}</td>
+                </tr>
+                {section name=i loop=$visits}
+                <tr>
+                    <td>{$visits[i].customer_ip}</td>
+                    <td>{$visits[i].customer_logtime}</td>
+                </tr>
+                {/section}
+                {if $navigator}
+                <tr>
+                    <td class="navigator" colspan=7>{$navigator}</td>
+                </tr>
+                {/if}
+            </table>
+            {else}
+            &lt; {$smarty.const.ADMIN_NO_RECORD_FOUND} &gt;
+            {/if}
+        </div>
+        {/if}
+
+
+
+
+        {if $customer_details == 'affiliate'}
+        <div class="tab-pane fade{if $customer_details == 'affiliate'} show active{/if}" id="affiliate" role="tabpanel" aria-labelledby="affiliate-tab" tabindex="0">
+            {include file="admin/custord_custlist_affiliate.tpl.html"}
+        </div>
+        {/if}
+
+</div> {* end tab content *}
+
+
+
+        <div class="mt-5 mb-1 d-grid gap-2 d-md-flex justify-content-center">
+        {if $returnUrl}
+        <a href='{$returnUrl}' class="btn btn-light">{$smarty.const.ADMIN_BACK_TO_SEARCH_FORM}</a>
+        {else}
+        <a href='{$smarty.const.ADMIN_FILE}?dpt=custord&amp;sub=custlist' class="btn btn-light"> {$smarty.const.ADMIN_BACK_TO_SEARCH_FORM}</a>
+        {/if}
+        </div>
+
+        {/if} {* {if $customerID neq NULL} *}
+
+
+{/if} {* if $customer_details == 'contact_info'} *}

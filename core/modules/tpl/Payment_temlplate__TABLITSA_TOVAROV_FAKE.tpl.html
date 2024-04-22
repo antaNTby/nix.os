@@ -1,0 +1,75 @@
+{* antaNT64 таблица товаров без скидок и стоимости доставки для  счета на оплату *}
+<table cellSpacing="0" cellPadding="2" border="1">
+    <thead>
+        <tr>
+            {* <th class="nw" align="center" width="0%">№</th> *}
+            <th class="nw" align="center" width="40%">Название</th>
+{*             <th class="nw" align="center">
+                Ед.
+                <br/>
+                изм.
+            </th> *}
+            <th class="nw" align="center">Кол-во</th>
+            <th class="nw" align="center">
+                Цена,
+                <br/>
+                {$cm}
+            </th>
+            <th class="nw" align="center">
+                Сумма,
+                <br/>
+                {$cm}
+            </th>
+            <th class="nw" align="center" width="10%">
+                Ставка&nbsp;НДС,
+                <br/>
+                %
+            </th>
+            {if $VAT_rate > 0}
+            <th class="nw" align="center" width="10%">
+                Сумма&nbsp;НДС,
+                <br/>
+                {$cm}
+            </th>
+            <th class="nw" align="center" width="10%">
+                Всего с НДС,
+                <br/>
+                {$cm}
+            </th>
+            {/if}
+        </tr>
+    </thead>
+    <tbody>
+        {section name=i loop=$order_content}
+        <tr>
+            {* <td class="nw" align="center">{$smarty.section.i.iteration}</td> *}
+            <td class="pw name" align="left" width="40%">{$order_content[i].name}</td>
+            {* <td class="nw" align="center">{$order_content[i].itemUnit}</td> *}
+            <td class="nw" align="right">{$order_content[i].Quantity}</td>
+            <td class="nw" align="right">{$order_content[i].Price_OUT|replace:",":"."|replace:" ":"&nbsp;"}</td>
+            <td class="nw" align="right" style="font-size: 1.0em">{$order_content[i].Cost_OUT|replace:",":"."|replace:" ":"&nbsp;"}</td>
+            <td class="nw" align="right">
+                {if $VAT_rate > 0}{$VAT_rate}{else}Без&nbsp;НДС{/if}
+            </td>
+            {if $VAT_rate > 0}
+            <td class="nw" align="right">{$order_content[i].VATsumm_OUT|replace:",":"."}</td>
+            <td class="nw" align="right">{$order_content[i].Total_OUT|replace:",":"."|replace:" ":"&nbsp;"}</td>
+            {/if}
+        </tr>
+        {/section}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th align="right" colspan=1 style="border-left:none;border-bottom:none;"><b>Итого:</b></th>
+            {* <th align="center">x</th> *}
+            <th align="right" class="nw">{$order_qty}</th>
+            <th align="center" class="nw">x</th>
+            <th align="right" class="nw">{$TOTALwithOutVAT|replace:",":"."}</th>
+            <th align="center" class="nw">x</th>
+            {if $VAT_rate > 0}
+            <th align="right" class="nw">{$TOTALamountVAT|replace:",":"."}</th>
+            <th align="right" class="nw">{$TOTALwithVAT|replace:",":"."}</th>
+            {/if}
+        </tr>
+    </tfoot>
+</table>

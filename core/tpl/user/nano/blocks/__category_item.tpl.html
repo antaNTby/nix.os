@@ -1,0 +1,29 @@
+{if $smarty.const.CONF_MOD_REWRITE eq 1}{assign var="ahref" value="category_`$Item.categoryID`.html"}
+{else}{assign var="ahref" value="index.php?categoryID=`$Item.categoryID`"}
+{/if}
+
+{if $smarty.const.CONF_SHOW_COUNTPROD eq 1}
+{assign var="productCountBadge" value="<span class='badge bg-primary opacity-75 text-light rounded-pill'>`$Item.products_count`</span>"}
+{/if}
+{if $Item.parent eq 1}
+{assign var="uppercase" value=" text-uppercase"}
+{/if}
+
+{if $Aclass eq "dropdown"}
+{strip}
+<li><a class="dropdown-item d-flex justify-content-between align-items-center {$uppercase}{if $Item.categoryID eq $categoryID} text-primary fw-bold{else} text-primary fw-lighter{/if}" {if $Item.categoryID eq $categoryID} aria-current="true"{/if} href="{$ahref}" title="{$Item.name}">{$Item.name}{$productCountBadge}
+</a></li>
+{/strip}
+
+{elseif $Aclass eq "nav-link"}
+{strip}
+<a href="{$ahref}" class="nav-link mb-1 me-1 flex-md-fill text-md-center {$uppercase} text-primary{if $active} fw-bolder{else} fw-lighter{/if} border border-primary item-mini" {$aria_current}>{$Item.name}</a>
+{/strip}
+
+{else}
+<a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {$uppercase} text-primary{if $Item.categoryID eq $categoryID} fw-bold{else} fw-lighter{/if} item-mini" {if $Item.categoryID eq $categoryID} aria-current="true"{/if} href="{$ahref}" title="{$Item.name}">{$Item.name}{$productCountBadge}
+</a>
+{/if}
+{* {if $smarty.const.CONF_MOD_REWRITE eq 1}{assign var="ahref" value="category_`$CategoriesArray[r].categoryID`.html"}{else}{assign var="ahref" value="index.php?categoryID=`$CategoriesArray[r].categoryID`"}{/if} *}
+{* <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center{if $CategoriesArray[r].categoryID eq $categoryID} active{/if} fs-8 item-mini" {if $CategoriesArray[r].categoryID eq $categoryID} aria-current="true" {/if} href="{$ahref}" title="{$CategoriesArray[r].name}">{$CategoriesArray[r].name}{if $smarty.const.CONF_SHOW_COUNTPROD eq 1}<span class="badge bg-primary opacity-75 text-light rounded-pill">{$CategoriesArray[r].products_count}</span>{/if}
+</a> *}

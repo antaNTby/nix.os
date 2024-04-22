@@ -1,0 +1,94 @@
+{* antaNT64 таблица товаров без скидок и стоимости доставки для  счета на оплату *}
+{* <table style="page-break-inside:avoid"> to force the table onto one page. *}
+<table cellSpacing="0" cellPadding="2" border="1" class="producttable" autosize="1">{*  rotate="90" autosize="1"*}
+    <thead>
+        <tr>
+            <th class="nw" align="center">№</th>
+            <th class="nw" align="center">Наименование прав*</th>
+            <th class="nw" align="center">{*  text-rotate="-90" *}
+                Ед.
+                <br/>
+                изм.&nbsp;
+            </th>
+            <th class="nw" align="center">Кол-во</th>
+            <th class="nw" align="center">
+                Цена,
+                <br/>
+                {$cm}
+            </th>
+            <th class="nw" align="center">
+                Сумма,&nbsp;
+                <br/>
+                {$cm}
+            </th>
+            <th class="nw" align="center">
+                Ставка&nbsp;НДС,&nbsp;
+                <br/>
+                %
+            </th>
+            {if $VAT_rate > 0}
+            <th class="nw" align="center">
+                Сумма&nbsp;НДС,&nbsp;
+                <br/>
+                {$cm}
+            </th>
+            <th class="nw" align="center">
+                Всего с НДС,&nbsp;
+                <br/>
+                {$cm}
+            </th>
+            {/if}
+        </tr>
+    </thead>
+    <tbody>
+        {section name=i loop=$order_content}
+        <tr style="border-top:none;">
+            <td class="nw" align="center">{$smarty.section.i.iteration}</td>
+            <td class="pw name" align="left" width="100mm">{$order_content[i].name}</td>
+            <td class="nw" align="center">{$order_content[i].itemUnit}</td>
+            <td class="nw" align="right">{$order_content[i].Quantity}</td>
+            <td class="nw" align="right">{$order_content[i].Price_OUT|replace:",":"."|replace:" ":"&nbsp;"}</td>
+            <td class="nw" align="right" style="font-size: 2.50mm;">{$order_content[i].Cost_OUT|replace:",":"."|replace:" ":"&nbsp;"}</td>
+            <td class="nw" align="right">
+                {if $VAT_rate > 0}{$VAT_rate}{else}Без&nbsp;НДС{/if}
+            </td>
+            {if $VAT_rate > 0}
+            <td class="nw" align="right">{$order_content[i].VATsumm_OUT|replace:",":"."}</td>
+            <td class="nw" align="right">{$order_content[i].Total_OUT|replace:",":"."|replace:" ":"&nbsp;"}</td>
+            {/if}
+        </tr>
+        {/section}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th align="right" colspan=3 class="big" style="border-left:none;border-bottom:none;"><b>ИТОГО&nbsp;&nbsp; </b></th>
+            {* <th align="center">x</th> *}
+            <th align="right" class="nw">{$order_qty}</th>
+            <th align="center" class="nw">x</th>
+            <th align="right" class="nw">{$TOTALwithOutVAT|replace:",":"."}</th>
+            <th align="center" class="nw">x</th>
+            {if $VAT_rate > 0}
+            <th align="right" class="nw">{$TOTALamountVAT|replace:",":"."}</th>
+            <th align="right" class="nw">{$TOTALwithVAT|replace:",":"."}</th>
+            {/if}
+        </tr>
+    </tfoot>
+</table>
+
+
+
+{if $VAT_rate>0}
+        <div style="text-align: left; padding-top:0.25mm; color:#333;">
+            Сумма НДС по ставке {$VAT_rate}% : <em><strong>{$TOTALamountVAT_withUnit}</strong> ({$TOTALamountVAT_STRING}).</em>
+        </div>
+        <div style="text-align: left; font-size: 1.0em; padding-top:0.25mm; color:#333;">
+            {* <em><strong>Всего на сумму с НДС: </strong> {$TOTALwithVAT_STRING}.</em> *}
+            Всего на сумму с НДС: <em><strong>{$TOTALwithVAT_withUnit}</strong> ({$TOTALwithVAT_STRING}).</em>
+        </div>
+{else}
+        <div style="text-align: left; font-size: 1.0em; padding-top:0.25mm; color:#333;">
+            {* <em><strong>Всего на сумму: </strong> {$TOTALwithVAT_STRING}&nbsp;без&nbsp;НДС.</em> *}
+            Всего на сумму: <em><strong>{$TOTALwithVAT_withUnit}</strong> ({$TOTALwithVAT_STRING})&nbsp;без&nbsp;НДС.</em>
+
+        </div>
+{/if}

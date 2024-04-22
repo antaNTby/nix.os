@@ -1,0 +1,63 @@
+{* conf_setting.tpl.html *}
+{if $settings_groupID eq 2 or $settings_groupID eq 3 or $settings_groupID eq 4}
+<form action='{$smarty.const.ADMIN_FILE}?dpt=conf&amp;sub=setting&amp;settings_groupID={$settings_groupID}' name='MainForm' method=post id='MainForm'>
+    <div class="my-3 table-responsive-md">
+        <table class="table table-sm table-hover align-middle bg-body">
+            <thead>
+                <tr>
+                    <th>Значение</th>
+                    <th class="text-center fs-5"><i class="bi bi-terminal-x"></i></th>
+                    <th class="text-end">Описание</th>
+                    <td class="text-end">
+                        <button onclick="document.getElementById('MainForm').submit(); return false" class="btn btn-success btn-lg text-nowrap">{$smarty.const.SAVE_BUTTON}&nbsp;<i class="bi bi-save"></i></button>
+                    </td>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                {section name=i loop=$settings}
+                <tr>
+                    <td class="text-start">{$controls[i]}</td>
+                    <td class="text-center"><button onclick="document.getElementById('MainForm').submit(); return false" class="btn btn-success btn-sm"><i class="bi bi-save"></i></button></td>
+                    <td class="text-start" colspan=3><b>{$settings[i].settings_title}</b> <sub class="text-danger"><var>{$settings[i].settings_constant_name}</var><sub>{$settings[i].settingsID}:{$settings[i].settings_groupID}</sub></sub><br>{$settings[i].settings_description}</td>
+                </tr>
+                {/section}
+            </tbody>
+        </table>
+    </div>
+    <input type="hidden" name="save" value="">
+</form>
+<div class="mt-3 mb-1 d-grid gap-2 d-md-flex justify-content-center">
+    <a href="#" onclick="document.getElementById('MainForm').submit(); return false" class="btn btn-success btn-lg">{$smarty.const.SAVE_BUTTON}&nbsp;<i class="bi bi-save"></i></a>
+</div>
+
+{include file="admin/apps/appImageBrowser.tpl.html"}
+
+<div class="mt-1 mb-3 d-grid gap-2 d-md-flex justify-content-md-end">
+    {if $settings_groupID eq 2}
+    <a href="{$smarty.const.ADMIN_FILE}?dpt=conf&amp;sub=setting&amp;settings_groupID=3" class="btn btn-outline-dark">{$smarty.const.ADMIN_IMAGES_SETTINGS}</a>
+    <a href="{$smarty.const.ADMIN_FILE}?dpt=conf&amp;sub=setting&amp;settings_groupID=4" class="btn btn-outline-dark">{$smarty.const.STRING_AFFILIATE_PROGRAM}</a>
+    {elseif $settings_groupID eq 3}
+    <a href="{$smarty.const.ADMIN_FILE}?dpt=conf&amp;sub=setting&amp;settings_groupID=2" class="btn btn-outline-dark">{$smarty.const.ADMIN_SETTINGS_GENERAL}</a>
+    <a href="{$smarty.const.ADMIN_FILE}?dpt=conf&amp;sub=setting&amp;settings_groupID=4" class="btn btn-outline-dark">{$smarty.const.STRING_AFFILIATE_PROGRAM}</a>
+    {elseif $settings_groupID eq 4}
+    <a href="{$smarty.const.ADMIN_FILE}?dpt=conf&amp;sub=setting&amp;settings_groupID=2" class="btn btn-outline-dark">{$smarty.const.ADMIN_SETTINGS_GENERAL}</a>
+    <a href="{$smarty.const.ADMIN_FILE}?dpt=conf&amp;sub=setting&amp;settings_groupID=3" class="btn btn-outline-dark">{$smarty.const.ADMIN_IMAGES_SETTINGS}</a>
+    {/if}
+</div>
+{if $settings_groupID eq 3}
+<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+    <a disabled href="{$smarty.const.ADMIN_FILE}?dpt=conf&amp;sub=setting&amp;settings_groupID=3&amp;resizestart=yes" aria-disabled="true" class="disabled btn btn-outline-dark text-wrap">{$smarty.const.ADMIN_STARTLINK_IMAGES}</a>
+    <a disabled href="{$smarty.const.ADMIN_FILE}?dpt=conf&amp;sub=setting&amp;settings_groupID=3&amp;watermarkstart=yes" aria-disabled="true" class="disabled btn btn-outline-dark text-wrap">{$smarty.const.ADMIN_STARTLINK_WATERMARKS}</a>
+    <span class="text-danger">Внимание! Все фотографии будут изменены безвозвратно! Будьте внимательны при запуске этих процедур.</span>
+</div>
+{/if}
+{if $settings_groupID eq 3}
+<div class="my-5 alert alert-success alert-dismissible fade show" role="alert">
+    <span class="fw-bold">{$smarty.const.USEFUL_FOR_YOU}</span>
+    Функции изменения размера фотографий и наложения водяного знака работают только в том случае, если фотографии хранящиеся на сервере принадлежат тому же пользователю под которым работает скрипт, обычно это "apache:apache". Если ваши фотографии были загружены не через скрипт, а к примеру через FTP, то скорее всего вам нужно будет изменить их владельца с помощью Shell консоли вашего сервера.
+    <br><br>
+    Назначить для всех файлов в папках data/small/, data/medium/, data/big/ и data/category/ пользователя apache и группу apache можно следующей shell командой: "chown apache:apache *.*". Внимание! Если вы не знаете что такое shell и как с ним работать обратитесь к более опытному специалисту для выполнения необходимых действий, не пытайтесь выполнить их самостоятельно!
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{/if}
+{/if}

@@ -1,0 +1,113 @@
+{if $maxDeliveryDelayValue >0 }
+<div class="my-1 alert alert-warning alert-dismissible fade show" role="alert">
+    <span class="fw-bold">ВНИМАНИЕ </span>В корзине есть товары, поставляемые "под заказ"
+    <p class="text-break mb-0">Время поставки заказа может быть увеличено, по независящим от нас обстоятельствам. Задержка поставки может составить <strong>{$maxDeliveryDelayString}</strong></p>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{/if}
+
+<div class="table-responsive-md">
+    <table class="table table-sm table-borderless table-hover">
+        <thead class="table-primary">
+            <tr>
+                <th class="text-nowrap" style="width: 0%">#</th>
+                <th class="text-nowrap" style="width: 0%">Артикул</th>
+                <th class="text-nowrap" style="width: 80%">{$smarty.const.TABLE_PRODUCT_NAME}</th>
+                <th class="text-nowrap text-center" style="width: 10%">{$smarty.const.TABLE_PRODUCT_QUANTITY}</th>
+                <th class="text-nowrap text-center">{$smarty.const.STRING_SUM}</th>
+                <th class="text-nowrap"><i class="bi bi-terminal"></i></th>
+            </tr>
+        </thead>
+        <tbody>
+            {section loop=$cart_content name=i}
+            {* {counter name=product_count print=false} *}
+            <tr class="align-middle">
+                <td class="text-center">{$smarty.section.i.iteration}</td>
+                <th class=""><a class="btn btn-link text-end text-danger" href="{if $smarty.const.CONF_MOD_REWRITE eq 1}product_{$cart_content[i].productID}.html{else}index.php?productID={$cart_content[i].productID}{/if}"><strong>{$cart_content[i].product_code}</strong></a></th>
+                <td class="text-start"> {$cart_content[i].name}</td>
+                <td class="text-end text-nowrap" > {* QUANTITY *}
+                    {if $session_items}
+                    <div class="input-group input-group-sm mb-0">
+                        <button type="button" class="btn btn-outline-dark bg-gradient" onclick="cartminus('count_{$session_items[i]}'); return false"><i class="bi bi-dash"></i></button>
+                        <input type="text" name="count_{$session_items[i]}" id="count_{$session_items[i]}" class="form-control text-end bg-light inputCount" value="{$cart_content[i].quantity}" pattern="[0-9]{literal}{1,5}{/literal}">
+                        <button type="button" class="btn btn-outline-dark bg-gradient" onclick="cartplus('count_{$session_items[i]}'); return false"{if $cart_content[i].in_stock >0} title="доступно {$cart_content[i].in_stock} шт" {/if}><i class="bi bi-plus"></i></button>
+                    </div>
+                    {else}
+                    {* BEGIN AJAX-пересчет корзины *}
+                    <div class="input-group input-group-sm mb-0">
+                        <button class="btn btn-secondary bg-gradient" type="button" onclick="cartminus('count_{$cart_content[i].id}');count_changed('#count_{$cart_content[i].id}');return false"><i class="bi bi-dash"></i></button>
+                        <input type="text" name="count_{$cart_content[i].id}" id="count_{$cart_content[i].id}" class="form-control text-end bg-light inputCount" value="{$cart_content[i].quantity}" pattern="[0-9]{literal}{1,5}{/literal}">
+                        <button class="btn btn-secondary bg-gradient" type="button" onclick="cartplus('count_{$cart_content[i].id}');count_changed('#count_{$cart_content[i].id}'); return false"{if $cart_content[i].in_stock >0} title="доступно {$cart_content[i].in_stock} шт" {/if}><i class="bi bi-plus"></i></button>
+                    </div>
+
+                    {* END AJAX-пересчет корзины *}
+                    {/if}
+                    {if $cart_content[i].min_order_amount}
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        {$smarty.const.STRING_MIN_ORDER_AMOUNT} <strong>{$cart_content[i].min_order_amount}</strong>{$smarty.const.STRING_ITEM}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {/if}
+                </td>
+                <td class="text-end text-nowrap"> {$cart_content[i].cost}</td>
+                <td class="text-end text-nowrap">
+                    {if $session_items}<a class="btn btn-outline-danger btn-sm bg-gradient" href="{$cart_reguest}&amp;shopping_cart=yes&amp;remove={$session_items[i]}"><i class="bi bi-x-lg"></i></a>
+                    {else}<a class="btn btn-outline-danger btn-sm bg-gradient" href="{$cart_reguest}&amp;shopping_cart=yes&amp;remove={$cart_content[i].id}"><i class="bi bi-x-lg"></i></a>{/if}
+                </td>
+            </tr>
+            {/section}
+        </tbody>
+    </table>
+    <table class="table table-sm table-borderless">
+        <tbody>
+            {if $discount_prompt != 0}
+            {* {counter name=product_count print=false} *}
+            {if $discount_prompt == 1 && $discount_percent != 0}
+            <tr>
+                <th class="text-end">{$smarty.const.ADMIN_DISCOUNT} {$discount_percent}%:</th>
+                <td class="text-nowrap text-end">{$discount_value}</td>
+            </tr>
+            {/if}
+            {if $discount_prompt == 2}
+            {* {counter name=product_count print=false} *}
+            <tr>
+                <td colspan="2">{$smarty.const.STRING_UNREGISTERED_CUSTOMER_DISCOUNT_PROMPT}</td>
+            </tr>
+            {/if}
+            {if $discount_prompt == 3 && $discount_percent != 0}
+            {* {counter name=product_count print=false} *}
+            <tr>
+                <th class="text-end">{$smarty.const.ADMIN_DISCOUNT} {$discount_percent}%:</th>
+                <td class="text-nowrap text-end">{$discount_value}</td>
+            </tr>
+            <tr>
+                <td colspan="2">{$smarty.const.STRING_UNREGISTERED_CUSTOMER_COMBINED_DISCOUNT_PROMPT}</td>
+            </tr>
+            {/if}
+            {/if}
+            <tr>
+                <th class="text-end">{$smarty.const.TABLE_TOTAL} ( <span id="cartItemCount" data-num="{$cartItemCount}"> {$cartItemCount}</span> шт.) :</th>
+                <td class="text-nowrap text-end"><strong id="cartItemTotal">{$cart_total}</strong></td>
+            </tr>
+            {if $shipping_costWithoutUnits}
+            <tr>
+                <th class="text-nowrap text-end">{if ($shipping_cost > 0) == 1 }Транспортные расходы{else}Скидка за самовывоз{/if}</th>
+                <td class="text-nowrap text-end">{$shipping_cost}</td>
+            </tr>
+            <tr>
+                <th class="text-nowrap text-end">{if ($shipping_cost > 0) == 1 }Итого с доставкой:{else}Итого при самовывозе:{/if}</th>
+                <td class="text-nowrap text-end"><strong>{$total_cost}</strong></td>
+            </tr>
+            {/if}
+        </tbody>
+    </table>
+</div>
+<input type="hidden" name="update" value="1">
+<input type=hidden name="shopping_cart" value="1">
+{* BEGIN AJAX-пересчет корзины *}
+<input type="hidden" name="ajax_cart" id="ajax_cart" value="1">
+{* END AJAX-пересчет корзины *}
+
+{if $maxDeliveryDelayValue >0 }
+<input type="hidden" id="payment_terminMax" name="payment_terminMax" value="{$maxDeliveryDelayValue}">
+{/if}

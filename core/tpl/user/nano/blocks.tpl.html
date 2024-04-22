@@ -1,0 +1,25 @@
+{* шаблон вывода блоков *}
+{* <h3>шаблон вывода блоков</h3> *}
+{section name=b loop=$binfo}
+{if $binfo[b].styling}
+{assign var="cardStyling" value="`$binfo[b].styling`"}
+{else}
+{assign var="cardStyling" value="mb-1"}
+{/if}
+{if $binfo[b].html eq 1}
+{include file="blocks/`$binfo[b].url`" blocknum=$smarty.section.b.index}
+{else}
+<div class="card {$cardStyling}" style="max-width: 18rem;">
+    <div class="card-header ">Header</div>
+    <div class="card-body">
+        {if $binfo[b].title}<h5 class="card-title">{$binfo[b].title}</h5>{/if}
+        <p class="card-text">{$binfo[b].content}</p>
+    </div>
+    {if $isadmin}<div class="card-footer">
+        <span class='justify-content-start'>{$binfo[b].bid} <b>{$binfo[b].bposition|@BPos}</b></span>
+        <a target="_blank" class="link-dark stretched-link text-decoration-none position-absolute bottom-0 end-0 me-1" href="{$smarty.const.ADMIN_FILE}?dpt=conf&amp;sub=blocks_edit" title="{$smarty.const.ADMINLINK}"><i class="bi bi-gear"></i></a>
+        <a target="_blank" class="link-danger stretched-link text-decoration-none position-absolute bottom-10 end-10 me-1" href="adminer.php?username=nixby_dbadmin&db=nixby_UTF8&edit=UTF_blocks&where%5Bbid%5D={$binfo[b].bid}" title="{$smarty.const.ADMINER_FILE}"><i class="bi bi-at"></i></a>
+    </div>{/if}
+</div>
+{/if}
+{/section}

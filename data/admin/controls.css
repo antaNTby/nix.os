@@ -1,0 +1,88 @@
+div.input-group.input-group-float.control-input-group[control-name] {
+    width: 1%;
+    margin: 0 auto;
+}
+
+/*div.input-group.control-input-group[control-name] input.number-control > span.help-block {
+width: 1%;
+margin: 0 auto;
+color:lime;
+}
+*/
+
+div.input-group.control-input-group[control-name] div.input-group-addon {
+    border-left: 0;
+    border-right: 0;
+    background-color: whitesmoke;
+}
+
+
+div.input-group.control-input-group[control-name] span.input-group-btn .btn {
+    height: 31px !important;
+}
+
+div.input-group.control-input-group[control-name] input.number-control {
+    display: inline !important;
+    width: 128px !important;
+    height: 31px !important;
+}
+
+.control-help-block {
+    /*min-height: 20px;*/
+    font-size: 90%;
+    padding: 5px 5px;
+    margin: 2px 2px 5px 2px;
+    color: #ee0000;
+    background-color: #fffafa;
+    /*border: 1px solid #c0c0c0;*/
+    border-radius: 4px;
+}
+
+div.bitmask-control label.btn:hover {
+    background-color: transparent;
+    color: lightsteelblue;
+}
+
+div.bitmask-control label.btn:focus {
+    background-color: transparent !important;
+    /*color:lightsteelblue;*/
+}
+
+div.bitmask-control label.btn.active {
+    background-color: steelblue;
+    color: #fafaff;
+}
+
+
+textarea[control-name],
+input[control-name] {
+    background-color: #fafaff;
+}
+
+button.btn[data-toggle][aria-haspopup="listbox"] {
+    /*box-shadow: 2px 2px 2px 4px lightsteelblue!important;*/
+    background-color: #fafaff;
+}
+
+
+div.control-select.pinned-dropdown .dropdown-menu.open {
+    top: -41px !important;
+    left: -1px !important;
+    /*z-index: 100;*/
+}
+
+
+.form-group label.control-label[for] {
+    font-weight: 400;
+}
+
+.border-bright label.control-label[for] {
+    color: black;
+    font-weight: 700;
+    text-shadow: 2px 1px 5px dimgray;
+}
+
+div.input-group.control-input-group[control-name] .bootstrap-select .dropdown-toggle .filter-option {
+    position: relative;
+    padding-left: 0;
+}

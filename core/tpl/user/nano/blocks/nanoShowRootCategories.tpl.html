@@ -1,0 +1,75 @@
+{* {$CategoriesArray|@debug} *}
+{if $CategoriesArray}
+{assign var="CategoriesArray_count" value=$CategoriesArray|@count}
+{if $CategoriesArray_count}
+<div class="d-none d-md-flex justify-content-center">
+        <nav class="my-0 pt-1 nav nav-pills flex-row">
+        {section name=h loop=$CategoriesArray start=1}
+
+        {assign var="cnt_h" value=$CategoriesArray[h].products_count}
+        {if $product_category_path.0.categoryID == $CategoriesArray[h].categoryID}
+        {assign var="active" value=" active"}
+        {assign var="aria_current" value=" aria-current='page'"}
+        {/if}
+                     {strip}{include file="blocks/__category_item.tpl.html" Item=$CategoriesArray[h]
+                      Aclass="nav-link"
+                      active=$active
+                      aria_current=$aria_current      }{/strip}
+        {assign var="active" value="" }
+        {assign var="aria_current" value="" }
+        {/section}
+                </nav>
+</div>
+
+<div class="d-flex flex-row d-md-none justify-content-center">
+    {* XS УЗКИЙ *}
+    {assign var="OneHalf" value=$CategoriesArray_count/1}
+    {assign var="ItemsPerColumn" value=$OneHalf|@ceil}
+    {* <div class="dropdown"> *}
+     <div class="btn-group w-100">
+        {if $Caption}
+        <button type="button" class="btn btn-outline-primary flex-grow-1">
+            <div class="px-2 d-flex justify-content-between align-items-baseline">{$Caption}<span class="badge bg-primary opacity-75">{$CategoriesArray_count}</span></div>
+        </button>
+        <button type="button" class="btn btn-primary flex-shrink-1 dropdown-toggle dropdown-toggle-split"
+        id="dropdownCategoryArray"
+        data-bs-toggle="dropdown"
+        data-bs-auto-close="true"
+        aria-expanded="false"
+        data-bs-offset="0,10"
+        data-bs-reference="parent"
+        title="Показать список"
+        >
+        <span class="visually-hidden">Toggle Dropdown</span>
+        </button>
+        {/if}
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownCategoryArray" style="z-index: 1030;">
+            {if $Caption}<li>
+                <h6 class="dropdown-header">{$Caption}</h6>
+            </li>{/if}
+            {section name=r loop=$CategoriesArray start=0 max=$ItemsPerColumn}
+            {if $product_category_path.0.categoryID == $CategoriesArray[r].categoryID}
+            {assign var="active" value=" active"}
+            {assign var="aria_current" value=" aria-current='page'"}
+            {/if}
+            {if $CategoriesArray[r].categoryID > 1}
+            {include file="blocks/__category_item.tpl.html" Item=$CategoriesArray[r] Aclass="dropdown" active=$active}
+            {/if}
+            {/section}
+        </ul>
+    </div>
+</div>
+
+
+
+
+{/if}
+{else}
+<div class="alert alert-danger" role="alert">{$smarty.const.STRING_NO_CATEGORIES}</div>
+{/if}
+
+{*             {strip}
+<a href="{$_href}" class="nav-link item-mini flex-md-fill text-md-center mb-1 me-1 border border-primary bg-light bg-gradient{if $active} text-primary fw-bolder{else} text-primary fw-lighter{/if}{$active}"{if $isadmin} data-bs-toggle="tooltip" data-bs-placement="bottom" title="id:{$CategoriesArray[h].categoryID}"{/if}{$aria_current}>{$CategoriesArray[h].name}</a>
+{/strip} *}
+
+{* {$CategoriesArray|@debug} *}

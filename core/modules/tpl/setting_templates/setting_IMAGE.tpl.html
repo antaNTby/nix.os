@@ -1,0 +1,97 @@
+{* setting_IMAGE_FILE.tpl.html *}
+<div class="p-1">
+    {* 1 *}
+    <div class="row mb-1 align-items-end">
+        <div class="col-sm-3">
+            {if $constantValue}
+            <svg style="height:96px;width:96px" class="img-thumbnail  border-danger text-danger d-none mx-auto" alt="Изображение отсутствует" fill-opacity="0.3" dataID="{$settingID}">
+                <title>нет фото {$products_to_show[i].name}</title>
+                <use xlink:href="#empty_images">
+            </svg>
+            <img src="{$image_fullpath}" id="thumbnail_{$settingID}" title="{$constantValue}" alt="IMAGE ID{$settingID}" class="img-thumbnail" style="height:96px;width:96px" dataID="{$settingID}">
+            {else}
+            <svg style="height:96px;width:96px" class="img-thumbnail border-danger text-danger d-block mx-auto" alt="Изображение отсутствует" fill-opacity="0.3" dataID="{$settingID}">
+                <title>нет фото {$products_to_show[i].name}</title>
+                <use xlink:href="#empty_images">
+            </svg>
+            <img src="{$image_fullpath}" id="thumbnail_{$settingID}" title="{$constantValue}" alt="IMAGE ID{$settingID}" class="img-thumbnail d-none" style="height:96px;width:96px" dataID="{$settingID}">
+            {/if}
+        </div>
+        <div class="col-sm-9">
+            <div class="table-responsive tableinfo" dataID="{$settingID}">
+                <table class="table table-sm text-secondary table-bordered border-light">
+                    <tbody>
+                        <tr>
+                            {if $constantValue}
+                            <td>{$W}x{$H} (<span id="infosize_{$settingID}">{$fileSize}</span>)</td>
+                        </tr>
+                        <tr>
+                            <td>{$bits}bits {$mime}</td>
+                        </tr>
+                        <tr>
+                            <td>{$image_fullpath}</td>
+                            {else}
+                            <td class="table-danger text-center text-danger lead">значение не установлено</td>
+                            {/if}
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {* 2 *}
+    <div class="row mb-1 align-items-end">
+        <div class="col-sm-4">
+            <label for="subfolder_{$settingID}" class="text-secondary text-center">Выбрать папку</label>
+            <select class="form-select form-select-sm" id="subfolder_{$settingID}" name="subfolder_{$settingID}" onchange="let bt=document.querySelector('button#doModal_'+{$settingID}+''); bt.attributes.dataSubfolder.value=this.value;return false;" dataID="{$settingID}">
+                <option {$is_selected} value="\">{$smarty.const.ADMIN_IMAGES_DEFAULT_PATH} - корень</option>
+                {foreach from=$subfolders item=dir}
+                {assign var="is_selected" value=""}
+                {if $dir eq $dir_is_selected}{assign var="is_selected" value="selected"}{/if}
+                <option {$is_selected} value="{$dir}">&nbsp;&nbsp;&nbsp;&nbsp;{$dir}</option>
+                {/foreach}
+            </select>
+        </div>
+        <div class="col-sm-8">
+            <button type="button" class="btn btn-primary btn-lg" id="doModal_{$settingID}" data-bs-toggle="modal" title="выбрать из картинок на сервере" data-bs-target="#myModal" data-bs-whatever="{$settingID}" dataName="{$constantName}" dataValue="{$constantValue}" dataSubfolder="{$dir_is_selected}" title="Выбрать на сервере" dataID="{$settingID}">Выбрать <i class="bi bi-images"></i></button>
+        </div>
+    </div>
+    {* 3 *}
+    <div class="row">
+        <div class="col-sm-12">
+            <label class="text-secondary text-center" for="fileElem_{$settingID}" dataID="{$settingID}">перетяните сюда новую картинку</label>
+            <div class="p-2 bg-secondary bg-opacity-10 text-bg-primary rounded-3 myDroparea" style="cursor: grab;border:2px dashed black;min-height: 4rem;height: 6rem;" id="myDroparea_{$settingID}" constantName="{$constantName}" dataID="{$settingID}">
+                <input class="form-control form-control-sm d-none myUploader" {* multiple *} type="file" id="fileElem_{$settingID}" accept=".jpg, .png, .gif, .bmp" {* accept="image/*" *} onchange="handleFiles(this.files)" dataID="{$settingID}">
+                <div class="progress d-none" dataID="{$settingID}">
+                    <div class="progress-bar progress-bar-striped bg-success" max="100" value="0" role="progressbar" aria-label="Success striped example" style="width: 2%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" dataID="{$settingID}"></div>
+                </div>
+                <div id="gallery_{$settingID}" class="p-4 align-middle gallery" dataID="{$settingID}">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{*
+<pre>
+{$smarty.const.ADMIN_IMAGES_DEFAULT_PATH}--1
+{$path}--2
+{$image_fullpath}--3
+
+</pre> *}
+{* {$subfolders|@debug} *}
+{*
+<div class="col-sm-6">
+    <label for="fileUploader_{$settingID}" class="form-label">Загрузить новый файл </label>
+    <input class="form-control form-control-sm myUploader" data-id="{$settingID}" id="fileUploader_{$settingID}" type="file" accept=".jpg, .png">
+</div>
+*}
+{*
+<div class="col">
+    <label for="fileUploader_{$settingID}" class="form-label">Выбрать на сервере </label>
+    <div class="input-group mb-3">
+        {$aButtonClear}
+        <input type="text" id="setting_{$settingID}" name="setting_{$constantName}" class="form-control form-control-sm font-monospace text-end" value="{if $constantValue}{$constantValue}{else}{$smarty.const.ADMIN_EMPTY_IMAGE_NAME}{/if}">
+        {$aButtonBrowse}
+    </div>
+</div>
+*}

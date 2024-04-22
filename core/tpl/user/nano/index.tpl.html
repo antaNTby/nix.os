@@ -1,0 +1,226 @@
+<!doctype html>
+{if ($smarty.const.CONF_SHOP_BILD eq 0) or ($isadmin eq "yes") }
+<html class="h-100 bg-white" lang="ru-RU" dir="ltr">
+{*
+
+<head> ссылки и скрипты в голове </head> *}
+
+<head>
+    {include file="index__head.tpl.html"}
+</head>
+
+<body class="d-flex flex-column h-100 bg-white">
+    {include file="index__svg.tpl.html"}
+    <header>
+        <div class="py-1 bg-light multi-collapse el-0">
+            <div class="container-fluid">
+                {* {if $smarty.const.CONF_DISPLAY_INFO eq 1 and $isadmin eq "yes"} *}
+                {if $smarty.const.CONF_DISPLAY_INFO == 1}
+                <div class="my-1 alert alert-secondary alert-dismissible fade show" role="alert">
+                    {$smarty.const.STRING_EXE_DATA}: <span class="mark" id="tgenexe">0.000</span> {$smarty.const.TIME_SEK};&nbsp;&nbsp;{$smarty.const.STRING_PREEXE_DATA}: <span class="mark" id="tgencompile">0.000</span> {$smarty.const.TIME_SEK};&nbsp;&nbsp;{$smarty.const.BD_DO_TIME}: <span class="mark" id="tgendb">0.000</span> {$smarty.const.TIME_SEK};&nbsp;&nbsp;{$smarty.const.STRING_ALL_EXETIME}: <span class="mark" id="tgenall">0.000</span> {$smarty.const.TIME_SEK};&nbsp;&nbsp;{$smarty.const.STRING_DO_COUNT}: <span class="mark" id="tgensql">0</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <script>doLStat('do=stat');</script>
+                {/if}
+                {if $cookie_policy_show eq 1}
+                <div class="my-4 alert alert-primary alert-dismissible fade show" role="alert">
+                    <h4 class="alert-heading">Настройка файлов cookie и политика обмена персональными данными
+                    </h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" title="Согласится" onclick='setCookie( "COOKIE_POLICY", "1","1", "/");return false;'></button>
+                    <p>На нашем сайте используются файлы <strong>cookie</strong> и другие технологии, которые позволяют нам идентифицировать вас, а также изучать, как вы используете веб-сайт. <a class="alert-link" href="politika-konfidentsialnosti.html" target="_blank">Подробнее ...</a> </p>
+                    <hr>
+                    <p class="mb-0">Дальнейшее использование этого сайта подразумевает ваше согласие на использование этих технологий и полное согдасие с нашей политикой обмена персональными данными.
+                        <span class="text-danger">Покиньте сайт, если для Вас это не приемлимо</span></p>
+                </div>
+                {/if}
+                {include file="blocks/nanoShowRootCategories.tpl.html" Caption="Основные разделы" CategoriesArray=$categories_tree}
+            </div>
+        </div>
+        <div class="m-0" id="dashboardHeader">
+            {include file="index__header_dashboard.tpl.html"}
+        </div>
+    </header>
+    <div class="sticky-top bg-light pb-1" id="stickyHeader">
+        {include file="index__header_sticky.tpl.html"}
+        {include file="index__servicePanel.tpl.html"}
+    </div>
+    {*
+    <!-- Vertically centered modal --> *}
+    <div id="modalAuth" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+            <div class="modal-content">
+                <div class="modal-header bg-navbar">
+                    <h4 class="modal-title text-white">{$smarty.const.AUTH_TH}</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="index.php" method="post" role="form">
+                        <div class="mb-2">
+                            <label for="user_login_id">{$smarty.const.CUSTOMER_LOGIN}</label>
+                            <input type="text" class="form-control" name="user_login" id="user_login_id">
+                        </div>
+                        <div class="mb-2">
+                            <label for="user_pw_id">{$smarty.const.CUSTOMER_PASSWORD}</label>
+                            <div class="mb-3 input-group">
+                                <input type="text" class="form-control" name="user_pw" id="user_pw_id">
+                                <div class=input-group-text><input class="form-check-input mt-0" type=checkbox aria-label="Checkbox for user_pw_id" onclick="return show_hide_password(this,'user_pw_id')"></div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center g-3 mb-3">
+                            <button type="submit" class="btn btn-success btn-lg w-100"><i class="bi bi-person-check"></i> {$smarty.const.BUTTON_ENTER_AUTH}</button>
+                        </div>
+                        {if $smarty.const.CONF_USER_SYSTEM > 0}
+                        <div class="d-flex justify-content-between">
+                            <a class="btn btn-link" href="index.php?register=yes" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="{$smarty.const.REGISTER_LINK}">{$smarty.const.REGISTER_LINK}</a>
+                            <a class="btn btn-link" href="index.php?logging=yes" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Восстановить пароль">{$smarty.const.FORGOT_PASSWORD_LINK}</a>
+                        </div>
+                        {/if}
+                        <input type="hidden" name="enter" value="1">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {*
+    <!-- Vertically centered modal --> *}
+    <div class="text-center my-3 visually-hidden" id="spinnerLoadData">
+        <span class="h1 text-primary">Loading...</span>
+        <div class="spinner-border text-primary" role="status"></div> {* SPINNER *}
+    </div>
+    <!-- Begin page content -->
+    <main class="flex-shrink-0">
+        {* <div class="clearfix"></div> *}
+        <div class="container-fluid" id="filterResult">
+            {include file="$main_content_template"}
+        </div>
+    </main>
+    <footer class="d-block mt-auto bg-dark p-0 my-2" id="footer">
+        <div class="container-fluid">
+            <div class="d-flex flex-wrap justify-content-between align-items-center py-1 px-2 px-xl-0">
+                <p class="col-md-6 mb-0 text-muted"><span class="nix-brand">nix.by</span></p>
+                <ul class="nav col-md-6 justify-content-end">
+                    <li class="nav-item"><a href="#" class="nav-link disabled px-2 text-muted">Home</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link disabled px-2 text-muted">Features</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link disabled px-2 text-muted">Pricing</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link disabled px-2 text-muted">FAQs</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link disabled px-2 text-muted">About</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container-sm">
+            <p class="mb-0 text-center text-danger">Сайт <span class="font-monospace">nix.by</span> не является интернет-магазином и не работает с физлицами.</p>
+            <p class="mb-0 text-center text-muted">©1997-2022, antaNT64</p>
+        </div>
+        <p class="my-1 text-center text-muted">Использование информации сервера www.nix.ru <a class="text-center text-muted" href="https://www.nix.ru/rights.html">Copyright © 1991-2022 НИКС - Компьютерный Супермаркет</a></p>
+        {* {include file="index-footer.tpl.html"} *}
+    </footer>
+    <div class="container-fluid">
+        {* ---{$cookie_policy_show}--- *}
+        <div class="py-1 px-2 px-xl-0 text-muted text-small">
+            Вся информация, опубликованная на сайте {$smarty.const.SITE_URL}, в т.ч. цены товаров, описания, характеристики и комплектации, извещения об оформлении, а также обработке заказа не являются публичной офертой и носит исключительно справочный характер. Договор заключается только после предварительного согласования наличия, наименования и количества товара, а так же подтверждения исполнения заказа сотрудником {$smarty.const.SITE_URL}.
+        </div>
+    </div>
+
+
+
+{*  *}
+    <script src="/lib/bootstrap/bootstrap-5.3.2-dist/js/bootstrap.bundle.min.js" defer></script>
+    <script src="/lib/jquery-3.6.0.min.js" defer></script>
+    <!-- JavaScript Bundle with Popper -->
+    {* <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script> *}
+{*  *}
+
+    {* КАСТОМНЫЕ СКРИТЫ *}
+
+
+{*  *}
+    {if $isadmin eq "yes"}
+    {* <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script> *}
+    {* <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/languages/sql.min.js"></script> *}
+    {/if}
+{*  *}
+
+{*  *}
+    {if $main_content_template eq "category.tpl.html" or $main_content_template eq "search_simple.tpl.html"}
+    {include file="blocks/nanoOffcanvasFilter.tpl.html"}
+    <script src="/lib/DataTables/datatables.min.js" defer></script>
+    <script src="/core/tpl/user/nano/js/productsFilter.js" defer></script>
+    <script src="/core/tpl/user/nano/js/productsDataTableColumns.js" defer></script>
+    <script src="/core/tpl/user/nano/js/productsDataTable.js" defer></script>
+        {if $main_content_template eq "category.tpl.html"}
+    <script src="/core/tpl/user/nano/js/category.js" defer></script>
+        {/if}
+
+        {if $main_content_template eq "search_simple.tpl.html"}
+    <script src="/core/tpl/user/nano/js/search_simple.js" defer></script>
+        {/if}
+    {/if}
+{*  *}
+
+{*  *}
+    {if $main_content_template eq "product_detailed.tpl.html"}
+    <script src="/lib/lightgallery/lightgallery.min.js" defer></script>
+    <!-- lightgallery plugins -->
+    <script src="/lib/lightgallery/plugins/fullscreen/lg-fullscreen.min.js" defer></script> <!-- {* для полноэкранного режима *} -->
+    <script src="/lib/lightgallery/plugins/rotate/lg-rotate.min.js" defer></script>
+    <script src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.js" defer></script>
+    <script src="/lib/lightgallery/plugins/zoom/lg-zoom.min.js" defer></script>
+    <script src="/core/tpl/user/nano/js/product_detailed.js" charset="utf-8" defer></script>
+    {/if}
+{*  *}
+
+
+
+
+{*  *}
+    {if $main_content_template eq "shopping_cart.tpl.html"}
+        {if $cart_content}
+    {* <script src="/lib/bootstrap-select-1.14.0-beta3/bootstrap-select.min.js" defer></script> *}
+    {* fix .selectpicker('refresh') duplicates data
+    https://github.com/snapappointments/bootstrap-select/issues/2801
+    *}
+
+    <script src="/lib/bootstrap-select-1.14.0-beta3/bootstrap-select.js" defer></script>
+    <script src="/lib/bootstrap-select-1.14.0-beta3/defaults-ru_RU.min.js" defer></script>
+    <!-- Подключение jQuery плагинов MaskedInput bootstrap-select -->
+    <script src="/lib/jquery.maskedinput.min.js" defer></script>
+
+
+    <script src="/core/tpl/user/nano/js/cart_functions.js" charset="utf-8" defer></script>
+    <script src="/core/tpl/user/nano/js/invoice_functions.js" charset="utf-8" defer></script>
+    <script src="/core/tpl/user/nano/js/cart_processing.js" charset="utf-8" defer></script>
+        {/if}
+    {/if}
+{*  *}
+
+
+    <script src="/core/tpl/user/nano/js/nano.js" defer></script>
+    <script src="/lib/toastr/toastr.min.js" defer></script>
+    <script src="/core/tpl/user/nano/js/nano-toasts.js" defer></script>
+
+{*  *}
+    {if $livesearch} {* "Активный живой поиск" *}
+    {* <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" charset="utf-8" defer></script> *}
+    <script src="/lib/jquery-ui-1.13.1.custom/jquery-ui.min.js" charset="utf-8" defer></script>
+    <script src="/core/tpl/user/nano/js/nano-livesearch.js" charset="utf-8" defer></script>
+    {/if}
+{*  *}
+
+    <script src="/lib/jquery.blockui.js" charset="utf-8" defer></script>
+
+    <input type="hidden" id="tpl_categoryID" value="{$categoryID}">
+    <input type="hidden" id="tpl_currency_value" value="{$currency_details.currency_value}">
+    <input type="hidden" id="tpl_CID" value="{$currency_details.CID}">
+    <input type="hidden" id="tpl_currency_code" value="{$currency_details.code}">
+    {* {$currency_details|@debug} *}
+</body>
+
+</html>
+{else}
+<html lang="by">
+{include file="index__head_empty.tpl.html"}
+
+<body class="shop-build">{$smarty.const.BUILD_WRAP_HTML}</body>
+
+</html>
+{/if}

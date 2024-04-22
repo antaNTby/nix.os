@@ -1,0 +1,87 @@
+<form action="{$smarty.const.ADMIN_FILE}" method=post name="curform" id="curform">
+    <div class="table-responsive-md">
+        <table class="table table-hover table-striped align-middle">
+            <thead>
+                <tr>
+                    <th class="text-end">CID</th>
+                    <td class="text-start" width="40%">{$smarty.const.ADMIN_CURRENCY_NAME}</td>
+                    <td class="text-start">{$smarty.const.ADMIN_CURRENCY_ID}</td>
+                    <td class="text-start">{$smarty.const.CUR_TX}</td>
+                    <td class="text-start">код&nbsp;ISO3</td>
+                    <td class="text-end" width="30%">{$smarty.const.ADMIN_CURRENCY_EXCHANGERATE}</td>
+                    <td class="text-start" width="10%">+/-НДС</td>
+                    <td class="text-start">{$smarty.const.ADMIN_ROUNDVAL}</td>
+                    <td class="text-start">{$smarty.const.ADMIN_SORT_ORDER}</td>
+                    <th class="text-center fs-5"><i class="bi bi-terminal-x"></i></th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                {section name=i loop=$currencies}
+                <tr>
+                    <th class="text-end">{$currencies[i].CID}</th>
+                    <td class="text-start" width="40%"><input type="text" class="form-control form-control-sm font-monospace text-start" name=curr_name_{$currencies[i].CID} value="{$currencies[i].Name|replace:'"':' &quot;'}"></td>
+                    <td class="text-start"><input type="text" class="form-control form-control-sm font-monospace{if $currencies[i].where2show eq 1} text-end{else} text-start{/if}" name=curr_code_{$currencies[i].CID} value="{$currencies[i].code|replace:'"':' &quot;'}"></td>
+                    <td class="text-start">
+                        <select name=curr_where_{$currencies[i].CID} class="form-select form-select-sm">
+                            <option value=0{if $currencies[i].where2show eq 0} selected{/if}> {$smarty.const.STRING_BEFORE} </option> <option value=1{if $currencies[i].where2show eq 1} selected{/if}> {$smarty.const.STRING_AFTER} </option> </select>&nbsp;{$smarty.const.STRING_NUMBER} </td> <td class="text-start"><input type="text" class="form-control form-control-sm font-monospace text-center" name=curr_currencyIso3_{$currencies[i].CID} value="{$currencies[i].currency_iso_3|replace:'"':' &quot;'}"></td>
+                    <td class="text-start" width="10%"><input type="text" class="form-control form-control-sm font-monospace text-end" name=curr_value_{$currencies[i].CID} value="{$currencies[i].currency_value|invoiceUSDformat|replace:'"':' &quot;'}"></td>
+                    <td class="text-start" width="10%">
+                        <div class="d-grid gap-0 lh-1 fw-lighter font-monospace text-muted text-opacity-50">
+                            <sub class="m-0 p-0">{(1/1.2*$currencies[i].currency_value)|invoiceUSDformat}</sub>
+                            <sup class="m-0 p-0">{(1.2*$currencies[i].currency_value)|invoiceUSDformat}</sup>
+                        </div>
+                    </td>
+                    <td class="text-start"><input type="text" class="form-control form-control-sm font-monospace text-end" name=curr_roundval_{$currencies[i].CID} value="{$currencies[i].roundval|replace:'"':' &quot;'}"></td>
+                    <td class="text-start"><input type="text" class="form-control form-control-sm font-monospace text-end" name=curr_sort_{$currencies[i].CID} value="{$currencies[i].sort_order|replace:'"':' &quot;'}"></td>
+                    <th class="text-center">
+                        <button class="btn btn-outline-danger" onclick="confirmDelete({$currencies[i].CID},'{$smarty.const.QUESTION_DELETE_CONFIRMATION}', '{$smarty.const.ADMIN_FILE}?dpt=conf&amp;sub=currencies&amp;delete='); return false;"><i class="bi bi-x-lg"></i></button>
+                    </th>
+                </tr>
+                {/section}
+            </tbody>
+        </table>
+    </div>
+    <div class="my-3 d-grid gap-2 d-md-flex justify-content-md-end">
+        <button class="btn btn-success btn-lg text-nowrap" onclick="document.getElementById('curform').submit(); return false">{$smarty.const.SAVE_BUTTON}&nbsp;<i class="bi bi-save"></i></button>
+    </div>
+    <hr>
+    <div class="table-responsive-md">
+        <table class="mt-3 table table-sm table-borderless table-light align-top">
+            <caption>Добавление новой валюты</caption>
+            <thead>
+                <tr>
+                    <td class="text-start" width="40%">{$smarty.const.ADMIN_CURRENCY_NAME}</td>
+                    <td class="text-start">{$smarty.const.ADMIN_CURRENCY_ID}</td>
+                    <td class="text-start">{$smarty.const.CUR_TX}</td>
+                    <td class="text-start">код&nbsp;ISO3</td>
+                    <td class="text-end" width="10%">{$smarty.const.ADMIN_CURRENCY_EXCHANGERATE}</td>
+                    <td class="text-start">{$smarty.const.ADMIN_ROUNDVAL}</td>
+                    <td class="text-start">{$smarty.const.ADMIN_SORT_ORDER}</td>
+                    <td class="text-center fs-5"><i class="bi bi-terminal-plus"></i></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-start" width="40%"><input type="text" class="form-control form-control-sm font-monospace text-end" name="curr_new_name"></td>
+                    <td class="text-start"><input type="text" class="form-control form-control-sm font-monospace text-end" name="curr_new_code"></td>
+                    <td class="text-start"><select name=curr_new_where class="form-select form-select-sm">
+                            <option value=0> {$smarty.const.STRING_BEFORE} </option>
+                            <option value=1> {$smarty.const.STRING_AFTER} </option>
+                        </select>&nbsp;{$smarty.const.STRING_NUMBER}</td>
+                    <td class="text-start"><input type="text" class="form-control form-control-sm font-monospace text-end" name="curr_new_currencyIso3"></td>
+                    <td class="text-start" width="10%"><input type="text" class="form-control form-control-sm font-monospace text-end" name="curr_new_value"></td>
+                    <td class="text-start"><input type="text" class="form-control form-control-sm font-monospace text-end" name="curr_new_roundval"></td>
+                    <td class="text-start"><input type="text" class="form-control form-control-sm font-monospace text-end" name="curr_new_sort"></td>
+                    <td class="text-center"><button class="btn btn-outline-primary btn-sm text-nowrap" onclick="document.getElementById('curform').submit(); return false"><i class="bi bi-plus-lg"></i></button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <input type=hidden name=save_currencies value=1>
+    <input type=hidden name=dpt value="conf">
+    <input type=hidden name=sub value="currencies">
+</form>
+<div class="my-5 alert alert-success alert-dismissible fade show" role="alert">
+    <span class="fw-bold">{$smarty.const.USEFUL_FOR_YOU}</span><br>{$smarty.const.ADMIN_DS2}<br><br>{$smarty.const.ADMIN_ROUNDVAL_DESK}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>

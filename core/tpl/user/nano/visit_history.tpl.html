@@ -1,0 +1,37 @@
+{* шаблон журнала посещений *}
+
+
+{if $visits}
+
+{if $navigator}
+      <div class="d-flex justify-content-center py-3">
+      <ul class="pagination" style="margin: 0">{$navigator}</ul>
+      </div>
+{/if}
+<caption>Всего {$count} {$count|@say_to_russian:"посещение":"посещения":"посещений"}</caption>
+<table class="table table-bordered table-striped table-hover table-sm">
+    <thead class="table-secondary">
+        <tr>
+            <th class="text-end">#</th>
+            <th>{$smarty.const.ADMIN_CUSTOMER_ENTER_TIME}.</th>
+            <th class="text-center">{$smarty.const.ADMIN_SECURE_2}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {section name=i loop=$visits}
+        <tr>
+            <td class="text-end"><span class="badge bg-secondary">{$smarty.section.i.iteration}</span></td>
+            <td>{$visits[i].customer_logtime}</td>
+            <td class="text-center">{$visits[i].customer_ip}</td>
+        </tr>
+        {/section}
+    </tbody>
+</table>
+
+{if $navigator}
+      <div class="d-flex justify-content-center py-3">
+      <ul class="pagination" style="margin: 0">{$navigator}</ul>
+      </div>
+{/if}
+
+{else}{$smarty.const.STRING_EMPTY_LIST}{/if}

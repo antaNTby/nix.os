@@ -1,0 +1,69 @@
+{* custord_companies.tpl.html *}
+{* custord_companies_table.tpl.html *}
+<div class="col-12 p-3 mb-3 bg-light shadow-lg border border-2">
+    <div class="row row-cols-lg-auto mb-3 g-3 align-items-center btn-toolbar justify-content-between">
+        {* LEFT *}
+        <div class="col-md">
+            <div class="btn-group" role="group">
+                <button type="button" id="btn_AddCompany" name="btn_AddCompany" class="btn btn-outline-secondary" title="Добавить Новую организацию " data-app="AdminCompany" data-operation="AddCompany">
+                    <i class="bi bi-plus"></i> Добавить реквизиты новой компании
+                </button>
+            </div>
+        </div>
+        {* CENTER *}
+        <div class="col-md">
+            <label class="form-text" for="showDT">Поиск (слова в любом порядке)</label>
+            <div class="btn-group" role="group">
+                <div class="input-group">
+                    <button class="btn btn-outline-danger" type="button" role="button" onclick="onClearClick('input#app_searchstring')"><i class="bi bi-x-lg"></i></button>
+                    <input type="text" class="form-control" id="app_searchstring" placeholder="Искать в реквизитах" style="min-width: 40rem">
+                    <div class="input-group-text" title="волшебный поиск по всем полям">
+                        <input class="form-check-input mt-0" type="checkbox" id="isFullTextSearch" value="0" aria-label="Checkbox for following text input">
+                        <label for="isFullTextSearch" class="form-check-label px-1"> <i class="bi bi-magic"></i> </label>
+                    </div>
+                    <button class="btn btn-success" id="btn_search"><i class="bi bi-search"></i></button>
+                </div>
+            </div>
+        </div>
+        {* RIGHT *}
+        <div class="col-md">
+        </div>
+    </div>
+    {* TABLE *}
+    {* TABLE *}
+    <table id="CompaniesDataTable" class="table table-light table-sm table-striped" style="width:100%">
+        <thead class="table-dark">
+            <tr class="text-center">
+                <th width="1%" data-orderable=false>#</th>
+                <th width="1%">id</th>
+                <th width="10%">Описание</th>
+                {* <th width="40%">Наименование <sup>1</sup></th> *}
+                <th>УНП</th>
+                <th width="60%">Реквизиты для договора</th>
+                {* <th>Адреса <sup>3</sup></th> *}
+                {* <th style="min-width: 50rem">Полное Наименование <sup>2</sup></th> *}
+                {* <th>ОКПО</th> *}
+                {* <th>Банковские реквизиты <sup>4</sup></th> *}
+                {* <th>Расчетные счета</th> *}
+                {* <th>Код банка</th> *}
+                {* <th>Наименование и адрес банка</th> *}
+                {* <th>Контакты Организации</th> *}
+                {* <th>Руководитель должность, ФИО</th> *}
+                {* <th>В лице...</th> *}
+                {* <th>На основании...</th> *}
+                <th width="1%" class="px-3 align-middle text-nowrap text-center"><i class="bi bi-lock-fill"></i>/<i class="bi bi-unlock-fill"></i> &nbsp; </th>
+                <th width="1%" class="px-3 align-middle text-nowrap text-primary text-center"><i class="bi bi-pencil-square"></i> &nbsp; </th>
+                <th width="1%" class="px-3 align-middle text-nowrap text-warning text-center" id="tdFilterUNP"><i class="bi bi-funnel"></i>УНП &nbsp;<button class="btn btn-secondary btn-sm visually-hidden" id="btn_resetFilterUNP"><i class="bi bi-x"></i></button></th>
+                <th width="1%" class="px-3 align-middle text-nowrap text-success"><i class="bi bi-cart-plus"></i> &nbsp; </th>
+                <th width="1%" class="px-3 align-middle text-nowrap text-center"><i class="bi bi-clock-history"></i> Добавлен.&nbsp; </th>
+                <th width="1%" class="px-3 align-middle text-nowrap text-center"><i class="bi bi-stopwatch"></i> Изменен.&nbsp; </th>
+                <th width="1%" class="px-3 align-middle text-nowrap text-bg-danger text-center"><i class="bi bi-trash3-fill"></i> &nbsp; </th>
+                {* <th>Время создания</th> *}
+                {* <th>userData</th> *}
+                {* <th>adminData</th> *}
+            </tr>
+        </thead>
+        <tbody class="table-light"></tbody>
+    </table>
+</div>
+<script src="./core/tpl/admin/apps/AdminCompanies/appAdminCompaniesTable.js" type="module"></script>

@@ -1,0 +1,98 @@
+{* antaNT64 шаблон по умолчанию счета на оплату *}
+<html>
+
+<head>
+    <title>{$smarty.const.CONF_SHOP_URL} {$invoice_dates.ff4}{if invoiceID}/{$invoiceID}{/if} от {$invoice_dates.DateRU}</title>
+    {*<meta http-equiv="Content-Type" content="text/html; charset={$smarty.const.DEFAULT_CHARSET}">*}
+    <meta charset="{$smarty.const.DEFAULT_CHARSET_HTML}">
+    <link rel="stylesheet" href="/data/Payment_temlplate.css" type="text/css">
+    <style>    {include file="data/Payment_temlplate.css"}
+    </style>
+</head>
+
+<body>
+
+    <bookmark content="СЧЁТ-ФАКТУРА" level="0" />
+            <!--    ШАПКА -->
+    <bookmark content="Реквизиты поставщика" level="1" />
+            {* <hr style="float:left;color:red; height:1px; width:99%;margin-top: 0;"> *}
+            {include file="Payment_temlplate__SHAPKA.tpl.html"}
+            {* <hr style="float:left;color:red; height:1px; width:99%;margin-bottom: 5mm;"> *}
+            <!--        конец ШАПКА    -->
+{if $BILL_PRINT eq 1}
+            <!--    Заголовок счета -->
+    <bookmark content="Заголовок" level="1" />
+            {include file="Payment_temlplate__ZAGOLOVOK_SCHETA.tpl.html"}
+            {*
+            <hr style="color:whitesmoke; height:0.1em; width:90%;"> *}
+            <!--        конец Заголовок счета    -->
+            <!--    Payment_temlplate__REKVIZITY_VSHAPKE -->
+            <hr style="color:whitesmoke; height:0.1em; width:10%;">
+            {include file="Payment_temlplate__REKVIZITY_VSHAPKE.tpl.html"}
+            <!--        конец Payment_temlplate__REKVIZITY_VSHAPKE    -->
+
+            <!--         ТАБЛИЦА ТОВАРОВ    -->
+            <hr style="color:whitesmoke; height:0.1em; width:10%;">
+    <bookmark content="Таблица Товаров" level="1" />
+            {include file="Payment_temlplate__TABLITSA_TOVAROV_S_TEKSTOVIMI_ITOGAMI.tpl.html"}
+            <!--        конец ТАБЛИЦА ТОВАРОВ    -->
+    <bookmark content="Условия" level="1" />
+            <!--         ТЕСТ СЧЕТА    -->
+            <div  class="ultra-compact" style="font-size:1em;margin-top:10px;text-align:justify-all;">
+                {$TEXT.schet_body}
+            </div>
+            <!--        конец ТЕСТ СЧЕТА    -->
+
+            <!--         Подписи и печати СЧЕТА    -->
+
+            <hr style="color:whitesmoke; height:0.1em; width:10%;">
+    <bookmark content="Подписи и печати" level="1" />
+
+                    {* {include file="Payment_temlplate__PODPISI_STORON.tpl.html"} *}
+                    {* {include file="Payment_temlplate__PECHAT_POSTAVSCHIKA_S_NAPOLZANIEM.tpl.html"} *}
+{/if}
+
+{if ($DOGOVOR_PRINT eq 1) && ($TEXT.schet_body neq "")}<pagebreak>{/if}
+    {*<formfeed />*}
+
+
+{if $DOGOVOR_PRINT eq 1}
+    <bookmark content="ДОГОВОР" level="0" />
+                <!--    Заголовок договора -->
+    <bookmark content="Предмет договора" level="1" />
+                {* {include file="Payment_temlplate__ZAGOLOVOK_DOGOVORA.tpl.html"} *}
+                {include file="Payment_temlplate__ZAGOLOVOK_DOGOVORA_LINE1.tpl.html"}
+                {include file="Payment_temlplate__ZAGOLOVOK_DOGOVORA_LINE2_WITH_DATE.tpl.html"}
+                <!--        конец Заголовок договора    -->
+                {* <div style="font-size:0.7em;margin-top:5px;text-align:justify-all; background-color: #ffeeee">
+                    {$TEXT.dogovor_body}
+                </div>            *}
+                <div class="semi-compact" style="margin-top:5px;text-align:justify-all; ">
+                    {$TEXT.dogovor_body}
+                </div>
+    <bookmark content="Реквизиты и подписи" level="1" />
+{/if}
+
+{* WARRANTY_PRINT *}
+{if $WARRANTY_PRINT eq 1}
+<bookmark content="Гарантия" level="0" />
+    {if (($DOGOVOR_PRINT eq 1) || ($BILL_PRINT eq 1)) && ($TEXT.warranty_body neq "")}<pagebreak>{/if}
+    {$TEXT.warranty_body}
+
+
+    <div>
+        <p>{$smarty.const.WARRANTY_TEXT1}</p>
+        <p>__________________________________________________________________________________________</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+        <p style="text-align: right; font-size: 150%">{$smarty.const.WARRANTY_SIGN}</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+        <p>{$smarty.const.WARRANTY_TEXT2}</p>
+        {* <p>{$smarty.const.WARRANTY_ADDRESS}</p> *}
+    </div>
+{/if}
+
+</body>
+
+</html>

@@ -1,0 +1,36 @@
+<table class='footblock' border="0" style="margin: 0;">
+    <tr>
+        <th align="left" text-rotate="90" style="font-size: 3mm;  background-color: #fff; color:#aaa; padding:2.50mm 2.50mm;;">Поставщик</th>
+        <th align="left" text-rotate="90" style="font-size: 3mm;  background-color: #fff; color:#aaa; padding:2.50mm 2.50mm;;">Лицензиат</th>
+        <td width="85mm" valign="top" align="left" style="padding-left: 1.25mm;">
+            {$seller.company_name} / УНП&nbsp;{$seller.company_unp};<br> {$seller.company_adress}; {$seller.company_bank}; {$seller.company_contacts}.
+        </td>
+        <th align="left" text-rotate="90" style="font-size: 3mm;  background-color: #fff; color:#aaa; padding:2.50mm 2.50mm;">Покупатель</th>
+        <th align="left" text-rotate="90" style="font-size: 3mm;  background-color: #fff; color:#aaa; padding:2.50mm 2.50mm;">Сублицензиат</th>
+        <td width="85mm" valign="top" align="left" style="padding-left: 1.25mm;">
+            {$buyer.company_name} / УНП&nbsp;{$buyer.company_unp};<br> {$buyer.company_adress}; {$buyer.company_bank}; {$buyer.company_contacts}
+        </td>
+        {* <!-- {/if} --> *}
+    </tr>
+</table>
+
+       {* <td width="5mm"></td> *}
+
+{* <!--         {if $sponsor}
+        <td width="90mm">
+            <table>
+                <tr>
+                        <th align="left" text-rotate="90" style="font-size: 2.50mm;  background-color: #fff; color:#aaa; padding:2.50mm 2.50mm;">Покупатель</th>
+                        <td valign="top" align="left" style="padding-left: 1.25mm;">
+                            {$buyer.company_name} / УНП&nbsp;{$buyer.company_unp};<br> {$buyer.company_adress}; {$buyer.company_bank}; {$buyer.company_contacts}.
+                        </td>
+                </tr>
+                <tr>
+                        <th align="left" text-rotate="90" style="font-size: 2.50mm;  background-color: #fff; color:#aaa; padding:2.50mm 2.50mm;">Плательщик</th>
+                        <td valign="top" align="left" style="padding-left: 1.25mm;">
+                            {$sponsor.company_name} / УНП&nbsp;{$sponsor.company_unp};<br> {$sponsor.company_adress}; {$sponsor.company_bank}; {$sponsor.company_contacts}.
+                        </td>
+                </tr>
+            </table>
+        </td>
+        {else} --> *}

@@ -1,0 +1,246 @@
+body {
+    min-height: 800px
+}
+
+div.hover-shadow-on:hover,
+div.hover-shadow-on:active {
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075) !important;
+    /*box-shadow: 0 .125rem .25rem #5a77a1 !important;*/
+    border-color: var(--bs-white);
+}
+
+
+.bg-white {
+    background-color: #fff;
+}
+
+.bg-ornament {
+    background: url('../images/orn.gif')
+}
+
+.container-fluid {
+    max-width: 1600px
+}
+
+.bg-navbar {
+    background-color: #5a77a1
+}
+
+.nix-brand {
+    color: #c00;
+    letter-spacing: 4px;
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-weight: 900;
+    font-size: 2.4rem;
+    text-shadow: 1px 1px 2px #fff, 0 0 1em #000, 0 0 .2em #000;
+    cursor: grab
+}
+
+.form-control-dark {
+    color: #fff;
+    background-color: var(--bs-dark);
+    border-color: var(--bs-gray)
+}
+
+.form-control-dark:focus {
+    color: #fff;
+    background-color: var(--bs-dark);
+    border-color: #fff;
+    box-shadow: 0 0 0 .25rem rgba(255, 255, 255, .25)
+}
+
+svg.bi {
+    vertical-align: -.125em;
+    fill: currentColor
+}
+
+.text-small {
+    font-size: 85%
+}
+
+.dropdown-toggle {
+    outline: 0
+}
+
+html .ui-autocomplete {
+    width: 1px
+}
+
+.ui-menu {
+    list-style: none;
+    padding: .5rem .5rem;
+    margin: .5rem;
+    display: flex;
+    outline: 0
+}
+
+.ui-menu .ui-menu-item-wrapper {
+    position: relative;
+    padding: 0 !important;
+    margin: 0 !important
+}
+
+.ui-menu .ui-menu-item {
+    margin: 0;
+    cursor: pointer;
+    list-style-image: none !important
+}
+
+.ui-widget {
+    font-size: .9rem;
+    font-weight: lighter;
+    font-family: inherit
+}
+
+.ui-widget-content {
+    border: none;
+    border-radius: 0;
+    background: 0 0;
+    background-color: #fff;
+    color: inherit
+}
+
+.ui-widget.ui-widget-content {
+    border: 1px solid #f5f5f5;
+    border-radius: 0;
+    box-shadow: 4px 4px 4px #5a77a1
+}
+
+.ui-button.ui-state-active:hover,
+.ui-button:active,
+.ui-state-active,
+.ui-widget-content .ui-state-active,
+.ui-widget-header .ui-state-active,
+a.ui-button:active {
+    border: none !important;
+    background: 0 0 !important;
+    color: #222 !important
+}
+
+.ui-menu .ui-state-active,
+.ui-menu .ui-state-focus {
+    margin: 0
+}
+
+*.adminlink {
+    color: coral !important
+}
+
+
+a.pname:link {
+    color: #000;
+    text-decoration: none
+}
+
+a.pname:visited {
+    color: #555;
+    text-decoration: none
+}
+
+a.pname:hover {
+    color: #0d6efd;
+    text-decoration: underline
+}
+
+a.pname:visited:hover {
+    color: #5a77a1;
+    text-decoration: underline
+}
+
+a.pname:active {
+    color: #fd0011;
+    text-decoration: underline
+}
+
+.w-1 {
+    width: 1% !important
+}
+
+.w-5 {
+    width: 5% !important
+}
+
+.w-10 {
+    width: 10% !important
+}
+
+.w-12 {
+    width: 12% !important
+}
+
+#filterResult {
+    min-height: 32rem;
+    background-color: #fff
+}
+
+#asideResult {
+    min-height: 32rem;
+    background-color: #f5f5f5
+}
+
+.ntCompactPadding {
+    padding: .05rem .2rem
+}
+
+.fs-7 {
+    font-size: .7rem !important
+}
+
+.fs-8 {
+    font-size: .8rem !important
+}
+
+.fs-9 {
+    font-size: .9rem !important
+}
+
+.item-mini {
+    padding: .2rem .2rem !important
+}
+
+.overflow-scroll-y {
+    overflow-y: scroll !important
+}
+
+.overflow-scroll-x {
+    overflow-x: scroll !important
+}
+
+.breadcrumb-category {
+    margin-top: -87px;
+    color: #2e448c;
+    background-color: transparent
+}
+
+div.dataTables_wrapper div.dataTables_processing {
+    text-align: center;
+    padding: 1rem;
+    font: 1.5rem sans-serif;
+    color: #fff;
+    background-color: #000;
+    opacity: .5
+}
+
+div.dataTables_wrapper div.dataTables_info {
+    padding: 0;
+    margin: 0
+}
+
+.bootstrap-select .dropdown-menu {
+    min-width: 80%;
+    max-width: 99%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box
+}
+
+
+.lg-backdrop.in {
+    background: url('../images/orn.gif');
+    background-color: #fff;
+    opacity: 0.95;
+    /*filter: invert(0.30);*/
+    /*z-index: 3;*/
+}

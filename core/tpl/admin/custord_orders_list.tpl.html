@@ -1,0 +1,99 @@
+{* custord_orders_list.tpl.html *}
+{*
+<pre>
+    urlToSort::
+    {$urlToSort}
+    <hr>
+    urlToReturn::
+    {$urlToReturn}
+    <hr>
+</pre> *}
+{if $orders}
+<form method=POST action="" name="status_cpast_f" id="status_cpast_f">
+    <input type="hidden" name="dpt" value="custord">
+    <input type="hidden" name="sub" value="orders">
+    <input type="hidden" name="none" value="" id="ant">
+    <div class="input-group flex-nowrap mb-0">
+        <label class="input-group-text" for="telemac">с отмеченными</label>
+        <select class="form-select" name="status_cpast" id="telemac">
+            <option value='-1' selected>{$smarty.const.ADMIN_PROMPT_TO_SELECT}</option>
+            {section name=i loop=$order_statuses}
+            <option value='{$order_statuses[i].statusID}'> {$order_statuses[i].status_name} </option>
+            {/section}
+        </select>
+        <button class="btn btn-outline-dark" onclick="document.getElementById('status_cpast_f').submit(); return false">{$smarty.const.ADMIN_STATUS_LINK} <i class="bi bi-shield-exclamation"></i></button>
+        <button class="btn btn-outline-danger" onclick="document.getElementById('telemac').name = 'orders_delete'; document.getElementById('status_cpast_f').submit(); return false">{$smarty.const.DELETE_BUTTON} <i class="bi bi-trash"></i></button>
+    </div>
+    <div id="status_cpastHelpBlock" class="form-text mt-0 mb-4">
+        {$smarty.const.ADMIN_DELORD_NOTICE}
+    </div>
+    <div class="table-responsive-xl">
+        <table class="table table-hover table-striped table-bordered align-middle">
+            <thead class="table-primary">
+                <tr>
+                    <th class="text-nowrap text-start" colspan=2>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="id_chall" name="chk" value="">
+                            <label class="form-check-label text-secondary fw-bold" for="id_chall">все</label>
+                        </div>
+                        <a href='{$urlToSort}&amp;sort=orderID&amp;direction=ASC' class="btn btn-link"><i class="bi bi-sort-up-alt"></i></a>{$smarty.const.STRING_ORDER_ID}<a href='{$urlToSort}&amp;sort=orderID&amp;direction=DESC' class="btn btn-link"><i class="bi bi-sort-down"></i></a>
+                    </th>
+                    <th class="text-nowrap text-center"><a href='{$urlToSort}&amp;sort=order_time&amp;direction=ASC' class="btn btn-link"><i class="bi bi-sort-up-alt"></i></a>{$smarty.const.TABLE_ORDER_TIME}<a href='{$urlToSort}&amp;sort=order_time&amp;direction=DESC' class="btn btn-link"><i class="bi bi-sort-down"></i></a></th>
+                    <th class="text-nowrap text-center"><a href='{$urlToSort}&amp;sort=shipping_type&amp;direction=ASC' class="btn btn-link"><i class="bi bi-sort-up-alt"></i></a>{$smarty.const.ADMIN_ORD_SHIPPING_TYPE}<a href='{$urlToSort}&amp;sort=shipping_type&amp;direction=DESC' class="btn btn-link"><i class="bi bi-sort-down"></i></a></th>
+                    <th class="text-nowrap text-center"><a href='{$urlToSort}&amp;sort=payment_type&amp;direction=ASC' class="btn btn-link"><i class="bi bi-sort-up-alt"></i></a>{$smarty.const.ADMIN_ORD_PAYMENT_TYPE}<a href='{$urlToSort}&amp;sort=payment_type&amp;direction=DESC' class="btn btn-link"><i class="bi bi-sort-down"></i></a></th>
+                    <th class="text-nowrap text-center"><a href='{$urlToSort}&amp;sort=order_amount&amp;direction=ASC' class="btn btn-link"><i class="bi bi-sort-up-alt"></i></a>{$smarty.const.TABLE_ORDER_TOTAL}<a href='{$urlToSort}&amp;sort=order_amount&amp;direction=DESC' class="btn btn-link"><i class="bi bi-sort-down"></i></a></th>
+                    <th class="text-nowrap text-center"><a href='{$urlToSort}&amp;sort=statusID&amp;direction=ASC' class="btn btn-link"><i class="bi bi-sort-up-alt"></i></a>{$smarty.const.ADMIN_ORDER_STATUS_NAME}<a href='{$urlToSort}&amp;sort=statusID&amp;direction=DESC' class="btn btn-link"><i class="bi bi-sort-down"></i></a></th>
+                    {* <th class="text-nowrap text-center">{$smarty.const.STR_ACTSTATE}</th> *}
+                    {* <th class="text-nowrap text-center fs-5"><i class="bi bi-terminal-x"></i></th> *}
+                </tr>
+            </thead>
+            <tbody>
+                {section name=i loop=$orders}
+                <tr class="table-group-divider">
+                    <td class="text-end">
+                        <div class="form-check order_chk">
+                            <input type="checkbox" id="ordsel_{$orders[i].orderID}" name="ordsel_{$orders[i].orderID}" class="form-check-input" data-orderID="{$orders[i].orderID}">
+                            <label class="form-check-label text-muted text-end" for="ordsel_{$orders[i].orderID}" data-orderID="{$orders[i].orderID}">#{$orders[i].orderID}
+                            </label>
+                        </div>
+                    </td>
+                    <td class="text-start">
+                        <div class="btn-group btn-group-sm align-self-center" role="group" aria-label="Small button group">
+                            {if !($orders[i].statusID == "2" or $orders[i].statusID == "3")}  {* не новый  и не активный *}
+                            <a class="btn btn-outline-secondary btn-sm" href='{$smarty.const.ADMIN_FILE}?dpt=custord&amp;sub=orders&amp;orders_detailed=yes&amp;read_only=yes&amp;orderID={$orders[i].orderID}&amp;urlToReturn={$urlToReturn}' title="{$smarty.const.ADMIN_ORDER_NAMEN2}&nbsp;&nbsp;#&nbsp;{$orders[i].orderID}"><i class="bi bi-eye-fill"></i></a>
+                            {else}
+                            <a class="btn btn-outline-secondary btn-sm" href='{$smarty.const.ADMIN_FILE}?dpt=custord&amp;sub=orders&amp;orders_detailed=yes&amp;orderID={$orders[i].orderID}&amp;urlToReturn={$urlToReturn}' title="Редактировать {$orders[i].orderID}"><i class="bi bi-pencil-square text-dark"></i></a>
+                            {/if}
+                            {if $orders[i].statusID neq "6"}
+                            <button onclick="document.getElementById('ant').name = 'delete_single_order'; confirmDelete( '{$orders[i].orderID}', '{$smarty.const.QUESTION_DELETE_CONFIRMATION} заказ #{$orders[i].orderID} от {$orders[i].order_time}', '{$smarty.const.ADMIN_FILE}?dpt=custord&amp;sub=orders&amp;urlToReturn={$urlToReturn}&amp;delete_single_order=yes&amp;killID='); return false;" class="btn btn-danger btn-sm" title="{$smarty.const.DELETE_BUTTON}"><i class="bi bi-trash"></i></button>
+                            {/if}
+                        </div>
+                    </td>
+                    <td class="text-end">{$orders[i].order_time}</td>
+                    <td class="text-start">{if $orders[i].shipping_type}{$orders[i].shipping_type}{else}---{/if}</td>
+                    <td class="text-start">{if $orders[i].payment_type}{$orders[i].payment_type}{else}---{/if}</td>
+                    <td class="text-end">{$orders[i].order_amount}</td>
+                    <td class="text-end">{$orders[i].OrderStatus}</td>
+                    {* <td class="text-start">{if $orders[i].ActivationCode}{$smarty.const.STR_NOTACTIVATED}<br><a href="{" activateID=`$orders[i].customerID`"|set_query}" onclick="return confirm('{$smarty.const.STR_QACTIVATE_ACCOUNT|replace:'[email]':$orders[i].Email}');">{$smarty.const.ACTIVATE_BUTTON}</a>{else}{$smarty.const.STR_ACTIVATED}{/if}
+                    </td>
+                    <td class="text-center">{if $orders[i].allowToDelete}<button class="btn btn-outline-danger" onclick="confirmDelete({$orders[i].customerID}, '{$smarty.const.QUESTION_DELETE_CONFIRMATION}', '{$smarty.const.ADMIN_FILE}?dpt=custord&amp;sub=custlist&amp;encodedReturnUrl={$encodedReturnUrl}&amp;deleteCustomerID=')"><i class="bi bi-x-lg"></i></button>{/if}
+                    </td> *}
+                </tr>
+                {/section}
+            </tbody>
+            <caption>Показано {$orders|@count} / {$ordersCount} заказов</caption>
+        </table>
+        {if $navigator}
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                {$navigator}
+            </ul>
+        </nav>
+        {/if}
+    </div>
+</form> {* method=POST action="" name="status_cpast_f" id="status_cpast_f" *}
+{else}
+<div class="m-5 p-5 text-bg-danger">
+    <h2>Нет заказов</h2>
+</div>
+{/if}

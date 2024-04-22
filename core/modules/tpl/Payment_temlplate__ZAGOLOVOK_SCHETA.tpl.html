@@ -1,0 +1,18 @@
+<h2 style="{if $HolidayDateInvoice}color:#ff0000;{else}color:#093ba3;{/if}">
+{$pm_invoice_string} {$invoice_dates.ff4} от {$invoice_dates.stringRU}{if !$ORDER_IN_BASE_FLAG}<sup style="color:white;background-color: red;">&nbsp;E&nbsp;</sup>{/if}</h2>
+
+{if ($contract_dates.dt neq $invoice_dates.dt) or ($order_dates.dt neq $invoice_dates.dt) or ($order_dates.dt neq $contract_dates.dt)}
+{* <br> *}
+<h2 class="small" style="font-weight:normal; color:#333;">
+    к заказу
+    <em>№{$order_id} от {$order_dates.stringRU}</em>
+    по договору
+    <em>{$contract_dates.ff4} от {$contract_dates.stringRU}</em>
+</h2>
+{/if}
+
+{* #076ad8; *}
+{* #056df2;  *}
+{* #093ba3 *}
+{* C:\MyProjects\hoster.by\www.nixminsk.by\core\modules\tpl\Payment_temlplate__ZAGOLOVOK_SCHETA.tpl.html *}
+        {* C:\MyProjects\hoster.by\www.nixminsk.by\core\tpl\admin\controls\CONTROL_ORDERCONTENT.tpl.html *}

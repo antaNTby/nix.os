@@ -1,0 +1,16 @@
+{* custord_orders.tpl.html *}
+
+{if $order_detailed}
+{include file="admin/custord_orders_edit.tpl.html"}
+{else}
+{include file="admin/custord_orders_list.tpl.html"}
+{/if}
+
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <p>{$smarty.const.ADMIN_ABOUT_PRICES}</p>
+    <p>Редактировать можно АКТИВНЫЙ или НОВЫЙ заказ</p>
+    <p>Удалять можно только ОТМЕНЕННЫЙ заказ</p>
+    <p>из Таблицы можно удалять любые, кроме АРХИВНЫХ заказов</p>
+ <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+

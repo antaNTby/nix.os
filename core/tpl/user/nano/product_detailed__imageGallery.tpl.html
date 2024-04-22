@@ -1,0 +1,57 @@
+{strip}
+{if !$product_info.USE_NIX_PICTURES }
+<div id="gallery-container">
+    <div class="light-gallery mb-4" data-id="picture" lg-uid="lg00">
+        {if $product_info.thumbnail}
+        {if $product_info.big_picture}<a class="gallery-link" href="/data/big/{$product_info.big_picture}"><img src="/data/medium/{$product_info.thumbnail}" alt="{$product_info.name}" class="img-fluid rounded-start lg-item"></a>{else}<img src="/data/medium/{$product_info.thumbnail}" alt="{$product_info.name}" class="img-fluid rounded-start lg-item">{/if}
+        {elseif $product_info.picture}
+        {if $product_info.big_picture}<a class="gallery-link" href="/data/big/{$product_info.big_picture}"><img src="/data/small/{$product_info.picture}" alt="{$product_info.name}" class="img-fluid rounded-start lg-item"></a>{else}<img src="/data/small/{$product_info.picture}" alt="{$product_info.name}" class="img-fluid rounded-start lg-item">{/if}
+        {else}
+        {if $smarty.const.CONF_DISPLAY_NOPHOTO eq 1}<img src="/data/images/noimage.gif" alt="no photo" class="img-thumbnail">{/if}
+        {/if}
+    </div>
+    {if $all_product_pictures|@count > 0}
+    <div class="light-gallery gallery-thumbs" lg-uid="lg00">
+        {section name=i loop=$all_product_pictures}
+        {if $all_product_pictures[i].enlarged}<a class="gallery-link" href="/data/big/{$all_product_pictures[i].enlarged}"><img src="{if $all_product_pictures[i].thumbnail}data/medium/{$all_product_pictures[i].thumbnail}{else}data/small/{$all_product_pictures[i].filename}{/if}" alt="{$product_info.name}" class="thumbnail gallery-item mb-1"></a>{else}<img src="/data/medium/{if $all_product_pictures[i].thumbnail}{$all_product_pictures[i].thumbnail}{else}/data/small/{$all_product_pictures[i].filename}{/if}" alt="{$product_info.name}" class="thumbnail gallery-item mb-1" style="width: 80px; height: 80px; margin: 0">{/if}
+        {/section}
+    </div>
+    {/if}
+</div>
+{else}
+<div>
+    {if $product_info.thumbnail or $product_info.big_picture or $product_info.big_picture or $all_product_pictures|@count > 0}
+    <div class="mb-4 pb-2 border-bottom" data-id="picture">
+        {* {if $product_info.thumbnail}
+        {if $product_info.big_picture}<a class="gallery-link" href="{$product_info.big_picture}"><img src="{$product_info.thumbnail}" alt="{$product_info.name}" class="img-fluid rounded-start lg-item"></a>{else}<img src="{$product_info.thumbnail}" alt="{$product_info.name}" class="img-fluid rounded-start lg-item">{/if}
+        {elseif $product_info.picture}
+        {if $product_info.big_picture}<a class="gallery-link" href="{$product_info.big_picture}"><img src="{$product_info.picture}" alt="{$product_info.name}" class="img-fluid rounded-start lg-item"></a>{else}<img src="{$product_info.picture}" alt="{$product_info.name}" class="img-fluid rounded-start lg-item">{/if}
+        {/if} *}
+        <img src="{$product_info.big_picture}" alt="{$product_info.name}" class="img-fluid rounded-start lg-item startGalleryBtn" role="button">
+        {* <img src="https://static.nix.ru/images/ASRock-X299-Extreme-4-33568015675.jpg?good_id=335680&width=draft&height=draft&view_id=2254" alt="{$product_info.name}" class="img-fluid rounded-start lg-item startGalleryBtn" role="button"> *}
+    </div>
+    {if $all_product_pictures|@count > 0}
+    <div class="light-gallery gallery-thumbs" lg-uid="lg11">
+        {section name=i loop=$all_product_pictures}
+        <a class="gallery-link firstGalleryItem" href="{$all_product_pictures[i].enlarged}">
+            <img src="{if $all_product_pictures[i].thumbnail}{$all_product_pictures[i].thumbnail}{else}{$all_product_pictures[i].filename}{/if}" class="img-thubnail thumbnail gallery-item mb-1" alt="{$product_info.name}" style="max-width: 288px; height:64px;" data-width="180">
+        </a>
+        {/section}
+    </div>
+    {* </div> *}
+{/if}
+{else}
+<div class="mb-4" data-id="picture">
+    {* {if $smarty.const.CONF_DISPLAY_NOPHOTO eq 1}<img src="/data/images/noimage.gif" alt="{$product_info.name} no photo" class="img-thumbnail">{/if} *}
+    {if $smarty.const.CONF_DISPLAY_NOPHOTO eq 1}
+    <svg class="bi d-block mx-auto mb-1" width="400" height="400" fill-opacity="0.3" alt="{$product_info.name}" role="image">
+        {* <use xlink:href="#nophoto" /> *}
+        <title>Фотографии товара {$product_info.name} не готовы</title>
+        <use xlink:href="#empty_images" />
+    </svg>
+    {/if}
+</div>
+{/if}
+</div>
+{/if}
+{/strip}

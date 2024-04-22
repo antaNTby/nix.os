@@ -1,0 +1,97 @@
+<div class="px-3 py-2 text-white bg-navbar">
+    <div class="container-fluid">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a href="/" class="d-flex d-inline-flex my-2 my-md-0 me-md-auto align-items-center text-decoration-none">
+                <img alt="nix.by logo" src="/{$smarty.const.ADMIN_IMAGES_DEFAULT_PATH}/{$smarty.const.CONF_LOGO_FILE}" height="64" />
+                <span class="d-none d-md-flex px-3 nix-brand">nix.by</span>
+            </a>
+            <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 ms-md-5 text-small">
+                <li class="d-none d-md-block me-md-5 pe-md-5 navbar-text">
+                    <span class="lh-1" data-bs-toggle="collapse" data-bs-target="#navbarToggleContacts" aria-controls="navbarToggleContacts" aria-expanded="false" role="button" aria-label="Toggle Contacts">
+                        <i class="bi bi-telephone"></i> tel. +375 (17) 2708895<br>
+                        <i class="bi bi-envelope"></i> e-mail: 2842895@gmail.com
+                    </span>
+                </li>
+                {if $currencies|@count > 1}
+                <li>
+                    <a class="nav-link dropdown-toggle text-white pb-0" role="button" id="currencytopDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                        {if $isadmin eq "yes"}<svg class="bi d-block mx-auto mb-1" width="32" height="32">
+                            <use xlink:href="#coin">
+                        </svg>
+                        {else}<svg class="bi d-block mx-auto mb-1" width="32" height="32">
+                            <use xlink:href="#calculator">
+                        </svg>{/if}
+                        {section name=d loop=$currencies}{if $currencies[d].CID eq $current_currency}{$currencies[d].Name}{/if}{/section}</a>
+                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="currencytopDropdown" role="menu" style="z-index: 2000;">
+                        {section name=d loop=$currencies}
+                        {if ($currencies[d].CID ne $current_currency) }
+                        {if ($log eq "" && !(($currencies[d].CID eq 4) || ($currencies[d].CID eq 5)) )}
+                        <a class="dropdown-item d-flex justify-content-between align-items-center disabled" aria-disabled="true">{$currencies[d].Name}<span class="badge bg-secondary">{$currencies[d].code}</span></a>
+                        {else}
+                        <a class="dropdown-item d-flex justify-content-between align-items-center" href="#" onclick="document.getElementById('Cart_ChangeCurrencyFormPrice_{$smarty.section.d.index}').submit(); return false">{$currencies[d].Name}<span class="badge bg-success">{$currencies[d].code}</span></a>
+                        {/if}
+                        {/if}
+                        {/section}
+                    </ul>
+                </li>
+                {section name=d loop=$currencies}
+                <form method="post" name='ChangeCurrencyForm' id='Cart_ChangeCurrencyFormPrice_{$smarty.section.d.index}' role="form" style="display: inline"><input type="hidden" name='current_currency' value="{$currencies[d].CID}">
+                    {if $order}<input type="hidden" name="InvId" value="{$order.orderID}">{/if}
+                </form>
+                {/section}
+                {/if}
+                {if $log ne ""}
+                <li>
+                    <a class="nav-link dropdown-toggle text-white pb-0" role="button" id="cabinetDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                        {if $isadmin eq "yes"}
+                        <svg class="bi d-block mx-auto mb-1" width="32" height="32">
+                            <use xlink:href="#isadmin" /></svg>
+                        Admin
+                        {else}
+                        <svg class="bi d-block mx-auto mb-1" width="32" height="32">
+                            <use xlink:href="#people-circle" /></svg>
+                        Кабинет
+                        {/if}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="cabinetDropdown" role="menu" style="z-index: 2000;">
+                        <li><span class="dropdown-item-text">{$log}</span></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href='index.php?contact_info=yes'>{$smarty.const.STRING_CONTACT_INFORMATION_DOWN_CASE}</a></li>
+                        <li><a class="dropdown-item" href='index.php?address_book=yes'>{$smarty.const.STRING_ADDRESS_BOOK}</a></li>
+                        <li><a class="dropdown-item" href='index.php?order_history=yes'>{$smarty.const.STRING_ORDER_HISTORY}</a></li>
+                        <li><a class="dropdown-item" href='index.php?visit_history=yes'>{$smarty.const.STRING_VISIT_HISTORY}</a></li>
+                        {if $isadmin eq "yes"}
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item adminlink" href='admin.php'>Администрирование</a></li>
+                        {/if}
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="index.php?logout=yes">{$smarty.const.LOGOUT_LINK}</a>
+                    </ul>
+                </li>
+                {else}
+                <li>
+                    <a class="nav-link opacity-50 text-white login" href="#" data-bs-toggle="modal" data-bs-target="#modalAuth" title="{$smarty.const.AUTH_TH}">
+                        <svg class="bi d-block mx-auto mb-1" width="32" height="32">
+                            <use xlink:href="#people-circle" /></svg>
+                        Кабинет
+                    </a>
+                </li>
+                {/if}
+                {*
+                <li>
+                    <a href="/" class="nav-link text-white">
+                        <svg class="bi d-block mx-auto mb-1" width="32" height="32">
+                            <use xlink:href="#home" /></svg>
+                        Home
+                    </a>
+                </li> *}
+            </ul>
+        </div>
+    </div>
+</div>

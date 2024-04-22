@@ -1,0 +1,286 @@
+{* шаблон страницы истории заказов в личном аккаунте *}
+{if !$order_detailed}
+<div class="container">
+    <form class="d-flex flex-column mt-2" name='MainForm' id="MainForm" action="index.php?order_history=yes" method="GET" role="form">
+        <div class="d-flex flex-row justify-content-center mb-2">
+            <div class="form-check form-check-inline">
+                <input type="radio" class="btn-check" name="order_search_type" id="flexRadioDefault1" value="SearchByOrderID" {if $order_search_type=='SearchByOrderID' || $order_search_type==null} checked{/if} autocomplete="off">
+                <label class="btn btn-outline-secondary" for="flexRadioDefault1">Поиск по номеру заказа</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input type="radio" class="btn-check" name="order_search_type" id="flexRadioDefault2" value="SearchByStatusID" {if $order_search_type=='SearchByStatusID' } checked{/if} autocomplete="off">
+                <label class="btn btn-outline-secondary" for="flexRadioDefault2">Поиск по статусу заказа</label>
+            </div>
+        </div>
+        <div class="d-flex flex-row justify-content-center">
+            <fieldset class="w-50{if $order_search_type!='SearchByOrderID' && $order_search_type!=null} visually-hidden{/if}" id="SearchByOrderID">
+                <div class="input-group">
+                    <input type="text" class="form-control form-control-sm" name="orderID_textbox" id="orderID_textbox" value="{$orderID}" placeholder="введите номер заказа">
+                    <button type="submit" class="btn btn-secondary"><i class="bi bi-search"></i>{$smarty.const.FIND_BUTTON}</button>
+                </div>
+            </fieldset>
+            <fieldset class="w-50{if $order_search_type!='SearchByStatusID'} visually-hidden{/if}" id="SearchByStatusID">
+                <div class="list-group" id="statuses">
+                    {if $order_statuses}
+                    <label class="list-group-item text-nowrap">
+                        <input type="checkbox" class="form-check-input" name='id_checkall_statuses' id="id_checkall_statuses">
+                        <span class="text-end text-lg-center">{$smarty.const.ADMIN_SHOW_ALLL}</span>
+                    </label>
+                    {section name=i loop=$order_statuses}
+                    <label class="list-group-item text-nowrap item-mini">
+                        <input type="checkbox" class="form-check-input" data-statusID="{$order_statuses[i].statusID}" name='checkbox_order_status_{$order_statuses[i].statusID}' id="checkbox_order_status_{$order_statuses[i].statusID}" {if $order_statuses[i].selected==1} checked {/if} value='1' />
+                        <span class="text-end text-lg-center" data-statusID="{$order_statuses[i].statusID}">{$order_statuses[i].status_name}</span>
+                    </label>
+                    {/section}
+                    <label class="list-group-item text-center">
+                        <button type="submit" class="btn btn-secondary"><i class="bi bi-search"></i>{$smarty.const.FIND_BUTTON}</button>
+                    </label>
+                    {/if}
+                </div>
+            </fieldset>
+        </div>
+        <input type="hidden" name="order_history" value="yes">
+        <input type="hidden" value="1" name="search">
+    </form>
+</div>
+<script>
+    <!--
+// order_search_typeClickHandler();
+//-->
+</script>
+{if $user_orders}
+<hr class="dropdown-divider">
+<div class="my-2 d-flex flex-column">
+    {if $orders_navigator}
+    <nav class="d-flex justify-content-center" aria-label="Page navigation example">
+        <ul class="pagination">{$orders_navigator}</ul>
+    </nav>
+    {/if}
+    <table class="table table-striped align-middle my-2">
+        <thead class="table-secondary">
+            <tr class="text-nowrap">
+                <th>
+                    Номер
+                    <a class="text-end text-decoration-none" href='{$urlToSort}&amp;sort=orderID&amp;direction=ASC'>
+                        <i class="bi bi-sort-up text-danger"></i>
+                    </a>
+                    <a class="text-end text-decoration-none" href='{$urlToSort}&amp;sort=orderID&amp;direction=DESC'>
+                        <i class="bi bi-sort-down"></i>
+                    </a>
+                </th>
+                <th class="text-end">
+                    <small>{$smarty.const.TABLE_ORDER_TIME}</small>
+                    <a class="text-end text-decoration-none" href='{$urlToSort}&amp;sort=order_time&amp;direction=ASC'>
+                        <i class="bi bi-sort-up text-danger"></i>
+                    </a>
+                    <a class="text-end text-decoration-none" href='{$urlToSort}&amp;sort=order_time&amp;direction=DESC'>
+                        <i class="bi bi-sort-down"></i>
+                    </a>
+                </th>
+                <th class="text-center text-nowrap">
+                    <small>{$smarty.const.STRING_SUM}</small>
+                    <a class="text-end text-decoration-none" href='{$urlToSort}&amp;sort=order_amount&amp;direction=ASC'>
+                        <i class="bi bi-sort-up text-danger"></i>
+                    </a>
+                    <a class="text-end text-decoration-none" href='{$urlToSort}&amp;sort=order_amount&amp;direction=DESC'>
+                        <i class="bi bi-sort-down"></i>
+                    </a>
+                </th>
+                <th class="w-50"><small>Товары (первые 2 позиции)</small></th>
+                <th><small>{$smarty.const.ADMIN_ORDER_STATUS_NAME}</small></th>
+                <th><small>Доставка / Оплата</small></th>
+            </tr>
+        </thead>
+        <tbody>
+            {section name=i loop=$user_orders}
+            <tr>
+                <td>
+                    <a class="btn btn-outline-primary" href='index.php?order_detailed={$user_orders[i].orderID}&amp;urlToReturn={$urlToReturn}' title="Просмотреть"><strong>#{$user_orders[i].orderID|@zeroFill}</strong></a>
+                </td>
+                <td class="text-end text-nowrap text-small">
+                    {$user_orders[i].order_time}
+                </td>
+                <td class="text-center text-nowrap text-small">
+                    {$user_orders[i].order_amount} {if $user_orders[i].calculate_tax ne 0 && $user_orders[i].tax ne 0}
+                    <br />
+                    ({$smarty.const.STRING_TAX} {$user_orders[i].tax}){/if}
+                </td>
+                <td class="w-50 p-3 bg-light">
+                    <span class="text-end text-small">Количество позиций товара: {$user_orders[i].content|@count} </span>
+                    <table class="table table-sm align-middle p-1">
+                        <tbody>
+                            {section name=j loop=2}
+                            {if $user_orders[i].content[j]}
+                            <tr class="text-small text-secondary">
+                                <td title="название">
+                                    {$user_orders[i].content[j].name}
+                                </td>
+                                <td title="кол-во">
+                                    {$user_orders[i].content[j].Quantity}
+                                </td>
+                            </tr>
+                            {/if}
+                            {/section}
+                        </tbody>
+                    </table>
+                </td>
+                <td class="text-center text-nowrap text-small">
+                    {$user_orders[i].OrderStatus}
+                </td>
+                <td style="width: 10%;padding:1px;">
+                    <small>
+                        {$user_orders[i].shipping_type}
+                        <br />
+                        {$user_orders[i].payment_type}
+                    </small>
+                </td>
+            </tr>
+            {/section}
+        </tbody>
+    </table>
+    {if $orders_navigator}
+    <nav class="d-flex justify-content-center" aria-label="Page navigation example">
+        <ul class="pagination">{$orders_navigator}</ul>
+    </nav>
+    {/if}
+    <hr class="dropdown-divider">
+</div>
+{else}
+<hr class="dropdown-divider">
+<h3>{$smarty.const.STRING_NO_ORDERS}</h3>
+<hr class="dropdown-divider">
+{/if}
+{else}
+<h4>{$smarty.const.STRING_ORDERING_INFO} #{$order.orderID}</h4>
+<hr style="margin-top: 10px" />
+<form name='MainForm' method="POST" role="form">
+    {$smarty.const.TABLE_ORDER_TIME}
+    <span class="text-end">
+        <strong>{$order.order_time}</strong>
+    </span>
+    <br />
+    {$smarty.const.CUSTOMER_FIRST_NAME}
+    <span class="text-end">
+        <strong>{$order.customer_firstname}</strong>
+    </span>
+    <br />
+    {$smarty.const.CUSTOMER_LAST_NAME}
+    <span class="text-end">
+        <strong>{$order.customer_lastname}</strong>
+    </span>
+    <br />
+    {section name=i loop=$order.reg_fields_values}{$order.reg_fields_values[i].reg_field_name}
+    <span class="text-end">
+        <strong>{$order.reg_fields_values[i].reg_field_value}</strong>
+    </span>
+    <br />
+    {/section}
+    {$smarty.const.CUSTOMER_ADRESL}
+    <span class="text-end">
+        <strong>
+            {if $order.shipping_address ne ""}{$order.shipping_address}{/if}
+            {if $order.shipping_city ne ""}, {$order.shipping_city}{/if}
+            {if $order.shipping_state ne ""}, {$order.shipping_state}{/if}
+            {if $order.shipping_country ne ""}, {$order.shipping_country}{/if}
+        </strong>
+    </span>
+    <br />
+    {if $order.shipping_type}{$smarty.const.STRING_SHIPPING_TYPE_MAKE}
+    <span class="text-end">
+        <strong>{$order.shipping_type} {if $order.shippingServiceInfo} ({$order.shippingServiceInfo}){/if}</strong>
+    </span>
+    <br />
+    {/if}
+    {if $order.payment_type}{$smarty.const.STRING_PAYMENT_TYPE_MAKE}
+    <span class="text-end">
+        <strong>{$order.payment_type}</strong>
+    </span>
+    <br />
+    {/if}
+    <h4 style="margin-top: 20px">{$smarty.const.ADMIN_ORDERED_PRODUCTS}</h4>
+    <hr style="margin-top: 10px" />
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th style="width: 60%">{$smarty.const.ADMIN_PRODUCT_NAME}</th>
+                <th>{$smarty.const.ADMIN_NOTEF2}</th>
+                <th>{$smarty.const.STRING_SUM}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {section name=i loop=$orderContent}
+            <tr>
+                <td class="" style="width: 60%">
+                    {$orderContent[i].name} {if $orderContent[i].eproduct_filename}
+                    {if $completed_order_status} {if $completed_order_status ==
+                    $order.statusID}
+                    <a href='index.php?do=get_file&amp;getFileParam={$orderContent[i].getFileParam}'>
+                        {$smarty.const.ADMIN_DOWN_LOAD} ({$orderContent[i].file_size}
+                        MB)
+                    </a>
+                    {if $orderContent[i].day_count_remainder>
+                    0} - {$smarty.const.ADMIN_EPRODUCT_AVAILABLE_DAYS} {$orderContent[i].day_count_remainder} {$smarty.const.ADMIN_DAYS}{if $orderContent[i].load_counter_remainder != 0}, {$smarty.const.ADMIN_REMANDER_EPRODUCT_DOWNLOAD_TIMES} {$orderContent[i].load_counter_remainder} {$smarty.const.ADMIN_DOWNLOAD_TIMES}{/if}{/if}{/if}{/if}{/if}
+                </td>
+                <td>{$orderContent[i].Quantity}</td>
+                <td>{$orderContent[i].PriceToShow}</td>
+            </tr>
+            {/section}
+            <tr>
+                <td class="text-end align-middle" colspan="2">{$smarty.const.STRING_PRED_TOTAL}:</td>
+                <td>{$order.clear_total_priceToShow}</td>
+            </tr>
+            {if $order.order_discount>0}
+            <tr class="liney">
+                <td class="text-end align-middle" colspan="2">{$smarty.const.ADMIN_DISCOUNT} {$order.order_discount}%:</td>
+                <td>{$order.order_discount_ToShow}</td>
+            </tr>
+            {/if}
+            <tr>
+                <td class="text-end" colspan="2">{$smarty.const.ADMIN_SHIPPING_COST}:</td>
+                <td>{$order.shipping_costToShow}</td>
+            </tr>
+            <tr>
+                <td class="text-end align-middle" colspan="2">{$smarty.const.TABLE_TOTAL}:</td>
+                <td>{$order.order_amountToShow}</td>
+            </tr>
+        </tbody>
+    </table>
+    {if $order_status_report}
+    <h4>{$smarty.const.ADMIN_ORDER_EXECUTING}</h4>
+    <hr style="margin-top: 10px" />
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th style="width: 60%">{$smarty.const.ADMIN_TIME}</th>
+                <th>{$smarty.const.ADMIN_ORDER_STATUS_NAME}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {section name=i loop=$order_status_report}
+            <tr>
+                <td style="width: 60%">{$order_status_report[i].status_change_time}</td>
+                <td>{if $order_status_report[i].status_name != 'STRING_CANCELED_ORDER_STATUS'}{$order_status_report[i].status_name} {else}{$smarty.const.STRING_CANCELED_ORDER_STATUS}{/if}</td>
+            </tr>
+            {/section}
+        </tbody>
+    </table>
+    {/if}
+    <input type=hidden name='orders_detailed' value='yes' />
+</form>
+{if $order_detailed && $urlToReturn}
+{* {$order|@debug} *}
+<div class="d-flex flex-row-inline justify-content-between g-3 my-3">
+    <a href='{$urlToReturn}' class="btn btn-outline-dark justify-content-start"><i class="bi bi-table"></i> {$smarty.const.ADMIN_ORDER_LIST_GO_BACK}</a>
+    {if $order.invoice}
+    <span class="flex-row justify-content-end">
+        {assign var="order_invoice" value=$order.invoice}
+        {section name=jj loop=$order_invoice}
+        <a class="btn btn-outline-danger justify-content-end me-1" href='{$order.invoice[jj].btnlink}'><i class="bi bi-file-pdf"></i> {$order.invoice[jj].ff4} от {$order.invoice[jj].invoice_time_RU}</a>
+        {/section}
+    </span>
+    {else}
+    {* создать счет *}
+    {/if}
+</div>
+{/if}
+{/if} {* !$order_detailed *}

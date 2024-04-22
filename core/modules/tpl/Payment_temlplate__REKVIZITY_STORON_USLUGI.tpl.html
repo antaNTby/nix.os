@@ -1,0 +1,38 @@
+<table class='footblock' border="0" style="margin: 0;">
+    <tr>
+        <th align="left" text-rotate="90" style="font-size: 3mm;  background-color: #fff; color:#aaa; padding:2.50mm 2.50mm;;">Исполнитель</th>
+        {* <th align="left" text-rotate="90" style="font-size: 3mm;  background-color: #fff; color:#aaa; padding:2.50mm 2.50mm;;">Лицензиат</th> *}
+        <td width="85mm" valign="top" align="left" style="padding-left: 1.25mm;">
+            {$seller.company_name} / УНП&nbsp;{$seller.company_unp};<br> {$seller.company_adress}; {$seller.company_bank}; {$seller.company_contacts}.
+        </td>
+        <th align="left" text-rotate="90" style="font-size: 3mm;  background-color: #fff; color:#aaa; padding:2.50mm 2.50mm;">Клиент</th>
+        {* <th align="left" text-rotate="90" style="font-size: 3mm;  background-color: #fff; color:#aaa; padding:2.50mm 2.50mm;">Сублицензиат</th> *}
+        <td width="85mm" valign="top" align="left" style="padding-left: 1.25mm;">
+            {$buyer.company_name} / УНП&nbsp;{$buyer.company_unp};<br> {$buyer.company_adress}; {$buyer.company_bank}; {$buyer.company_contacts}
+        </td>
+        {* <!-- {/if} --> *}
+    </tr>
+</table>
+
+
+<hr style="color:#fff; height:0.25mm; width:1%;">
+<hr style="color:#fff; height:0.25mm; width:1%;">
+
+<div style="width: 87.5mm; padding-left:0; float:left; text-align: left;">
+    <b>Исполнитель:</b>
+    &nbsp;&nbsp;&nbsp;
+{if !$stampsBYTE}
+{$pm_placeholder}
+{else}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+{/if}
+&nbsp;&nbsp;&nbsp;{$seller.company_director0|replace:" ":"&nbsp;"}
+</div>
+
+<div style="width:47.5mm; padding-left:0; float:left; text-align: left; ">
+    <b>Клиент:</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$pm_placeholder}&nbsp;&nbsp;&nbsp;
+</div>
+<div style="width:50mm; padding-left:0; float:left; text-align: left; ">
+    {$buyer.company_director0|replace:" ":"&nbsp;"}
+</div>

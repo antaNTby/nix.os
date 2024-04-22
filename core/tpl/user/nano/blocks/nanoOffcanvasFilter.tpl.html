@@ -1,0 +1,145 @@
+<div class="offcanvas offcanvas-start bg-light bg-gradient" tabindex="-1" id="offcanvasFilter" aria-labelledby="offcanvasFilterLabel" data-bs-scroll="true" data-bs-backdrop="true">
+    <div class="offcanvas-header text-dark">
+        <h5 id="offcanvasFilterLabel">
+            <a class="text-danger pull-start" type="button" data-action="reset-filter"><i class="bi bi-x-square text-danger" aria-hidden="true" title="Сбросить все фильтры"></i></a>
+            Фильтр товаров
+            <span class="badge bg-danger" id="json_data_count">{$operation_result.recordsFiltered}</span>
+        </h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    {if $searchstring}
+    <div class="col-auto mb-2 mx-1" style="padding:0 1rem;">
+        <label for="staticSearchstring" class="form-label mb-0 text-dark">Строка поиска</label>
+        <input type="text" readonly disabled class="form-control form-control-plaintext" id="staticSearchstring" value="{$searchstring}" style="padding: .375rem .75rem">
+        {if $main_content_template eq "search_simple.tpl.html"}
+        <label class="form-check-label text-dark" for="selectParentCategory">
+            <a type="button" class="text-danger pull-start" data-action="reset-select"><i class="bi bi-x-square text-danger" aria-hidden="true"></i></a>
+            Область поиска</label>
+        <select class="form-select form-control-sm" name="selectParentCategory" id="selectParentCategory" data-default-value="1">
+            <option value="1" selected>Весь каталог товаров</option>
+            {section name=h loop=$categories_tree start=1}
+            <option value="{$categories_tree[h].categoryID}">{$categories_tree[h].name}</option>
+            {/section}
+        </select>
+        {/if}
+    </div>
+    {/if}
+    {if $main_content_template eq "category.tpl.html"}
+    {include file="blocks/nanoBreadcrumbsVertical.tpl.html"}
+    {/if}
+    <div class="offcanvas-body align-items-center">
+        <div class="col-auto mb-4">
+            <label class="form-label mb-0 text-dark" for="filter_stock">
+                <a type="button" class="text-danger pull-start" data-action="reset-select"><i class="bi bi-x-square text-danger" aria-hidden="true"></i></a>
+                Наличие</label>
+            <select class="form-select form-select-lg text-primary" name="filter_stock" id="filter_stock" aria-label="in_stock select" data-column="in_stock" data-default-value="2">
+                <option value="0" selected>Без разницы</option>
+                <option value="1">Есть на складе</option>
+                <option value="2" selected>Доступно для заказа</option>
+                <option value="3">Только Предзаказ</option>
+                <option value="4">Ожидаем/В резерве</option>
+                <option value="5">Нет на складе</option>
+                <option value="6">Поставка прекращена</option>
+                <option value="7">Много - больше 10шт</option>
+                <option value="8">Мало - меньше 5шт</option>
+                <option value="9">Под заказ менее 2-х недель</option>
+                <option value="10">Под заказ более 2-х недель</option>
+            </select>
+        </div>
+        <div class="col-auto mb-0">
+            <label for="product_code" class="form-label mb-0 text-dark">
+                <a type="button" class="text-danger pull-start" data-action="reset-column-filter"><i class="bi bi-x-square text-danger" aria-hidden="true"></i></a>
+                Артикул\Код товара</label>
+            <div class="input-group">
+                <input type="text" class="form-control column-filter" name="product_code" id="product_code" placeholder="Искать внутри артикула" data-column="product_code" value="">
+                <span class="input-group-text"><i class="bi bi-funnel"></i></span>
+            </div>
+            <div class="form-text text-secondary mt-0 fs-7">
+                содержит искомую фразу
+            </div>
+        </div>
+        <div class="col-auto mb-0">
+            <label for="product_name" class="form-label mb-0 text-dark">
+                <a type="button" class="text-danger pull-start" data-action="reset-column-filter"><i class="bi bi-x-square text-danger" aria-hidden="true"></i></a>
+                Название товара</label>
+            <div class="input-group">
+                <input type="text" class="form-control column-filter" name="product_name" id="product_name" placeholder="Искать внутри названия" data-column="product_name" value="">
+                <span class="input-group-text"><i class="bi bi-funnel"></i></span>
+            </div>
+            <div class="form-text text-secondary mt-0 fs-7">
+                содержит искомую фразу
+            </div>
+        </div>
+{* {if $view_type eq 0} *}
+        <div class="col-auto mb-0">
+            <label for="brief_description" class="form-label mb-0 text-dark">
+                <a type="button" class="text-danger pull-start" data-action="reset-column-filter"><i class="bi bi-x-square text-danger" aria-hidden="true"></i></a>
+                Краткое описание</label>
+            <div class="input-group">
+                <input type="text" class="form-control column-filter" name="brief_description" id="brief_description" placeholder="Искать в описании" data-column="brief_description" value="">
+                <span class="input-group-text"><i class="bi bi-funnel"></i></span>
+            </div>
+            <div class="form-text text-secondary mt-0 fs-7">
+                содержит искомую фразу
+            </div>
+        </div>
+{* {/if} *}
+        <div class="col-auto mb-0 mt-3">
+            <label for="crosswords" class="form-label mb-0 text-dark">
+                <a type="button" class="text-danger pull-start" data-action="reset-text-filter"><i class="bi bi-x-square text-danger" aria-hidden="true"></i></a>
+                Проходные слова</label>
+            <input type="text" class="form-control form-control-sm text-filter" name="crosswords" id="crosswords" placeholder='Добавьте "волшебные" слова' value="">
+            <div class="form-text text-secondary mt-0 fs-7">
+                любое из этих слов добавляет товар в результат выбора
+            </div>
+        </div>
+        <div class="col-auto mb-4">
+            <label for="stopwords" class="form-label mb-0 text-dark">
+                <a type="button" class="text-danger pull-start" data-action="reset-text-filter"><i class="bi bi-x-square text-danger" aria-hidden="true"></i></a>
+                Исключить слова</label>
+            <input type="text" class="form-control form-control-sm text-filter" name="stopwords" id="stopwords" placeholder="Добавьте исключаемые слова" value="">
+            <div class="form-text text-secondary mt-0 fs-7">
+                исключается каждое слово
+            </div>
+        </div>
+        <div class="col-auto mb-0 text-dark">Стоимость</div>
+        {* <div class="col-auto mb-1 justify-content-center fw-bold">
+            от <span class="form-label mb-0" for="number_price_from"></span> {$priceUnit} до <span class="form-label mb-0" for="number_price_to"></span> {$priceUnit}
+        </div> *}
+        <div class="row g-2 mb-1">
+            <div class="col-6">
+                <label for="number_price_from" class="form-label mb-0 text-dark">
+                    <a type="button" class="text-danger pull-start" data-action="reset-range"><i class="bi bi-x-square text-danger" aria-hidden="true"></i></a>
+                    от <span class="form-label mb-0 text-dark" for="number_price_from"></span> {$priceUnit}</label>
+                <input type="number" min="0" max="100000" value="0" class="form-control form-control-sm text-end" name="number_price_from" id="number_price_from" data-column="Price">
+            </div>
+            <div class="col-6">
+                <label for="number_price_to" class="form-label mb-0 text-dark">
+                    <a type="button" class="text-danger pull-start" data-action="reset-range"><i class="bi bi-x-square text-danger" aria-hidden="true"></i></a>
+                    до <span class="form-label mb-0 text-dark" for="number_price_to"></span> {$priceUnit}</label>
+                <input type="number" min="0" max="100000" value="100000" class="form-control form-control-sm text-end" name="number_price_to" id="number_price_to" data-column="Price">
+            </div>
+        </div>
+        <div class="mb-1">
+            <input type="range" min="0" max="100000" value="0" class="form-range" name="price_from" id="price_from" data-column="Price">
+            <input type="range" min="0" max="100000" value="100000" class="form-range" name="price_to" id="price_to" data-column="Price">
+        </div>
+        <hr>
+        <div class="d-flex align-items-center align-middle mb-1">
+            <button type="button" id="pageFilterConfirm" class="btn btn-outline-primary btn-lg mx-auto"><i class="bi bi-funnel"></i> Применить фильтр</button>
+        </div>
+
+        <div class="my-1 d-none" id="catsList"></div>
+
+        <hr>
+        <div class="my-1">
+            {if $main_content_template eq "category.tpl.html" && $smarty.const.CONF_SHOW_PARENCAT}
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" checked value="1" id="searchInSubcategories">
+                <label class="form-check-label text-dark" for="searchInSubcategories">Искать в дочерних подкатегориях </label>
+            </div>{/if}
+        </div>
+    </div>
+</div>
+
+

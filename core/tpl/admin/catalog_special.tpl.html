@@ -1,0 +1,45 @@
+<form action="{$smarty.const.ADMIN_FILE}" method=POST name="form5412" id="form5412">
+    <div class="table-responsive-md">
+        <table class="table table-hover table-striped align-middle">
+            <thead>
+                <tr>
+                    <th class="text-start" width="1%">#</th>
+                    <th class="text-start" width="90%">{$smarty.const.ADMIN_PRODUCT_NAME}</th>
+                    <th class="text-end" width="10%">PR приоритет</th>
+                    <th class="text-center fs-5"><i class="bi bi-terminal-x"></i></th>
+
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                {section name=i loop=$offers}
+                <tr>
+                    <td class="text-end">{$smarty.section.i.iteration}</td>
+                    <td class="text-start"><a class="link-dark" href="{$smarty.const.ADMIN_FILE}?productID={$offers[i][3]}&amp;eaction=prod" title="{$smarty.const.ADMIN_ADMIN_MENUNEW31}">{$offers[i][4]}</a></td>
+                    <td class="text-center">
+                        <input type="text" class="form-control form-control-sm font-monospace text-end" name="offer_sort_{$offers[i][0]}" value="{$offers[i][2]}"><input type=hidden name="offer_productID_{$offers[i][0]}" value="{$offers[i][1]}">
+                    </td>
+                    <th class="text-center">
+                        <button class="btn btn-outline-danger" onclick="confirmDelete({$offers[i][0]},'{$smarty.const.DELETE_BUTTON}?','{$smarty.const.ADMIN_FILE}?dpt=catalog&amp;sub=special&amp;delete='); return false" title="{$smarty.const.ADMIN_ADMIN_MENUNEW8}"><i class="bi bi-x-lg"></i></button>
+                    </th>
+                </tr>
+                {sectionelse}
+                <tr>
+                    <td colspan="3" class="text-center text-danger">{$smarty.const.ADMIN_NO_SPECIAL_OFFERS}</td>
+                </tr>
+                {/section}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="my-3 d-grid gap-2 d-md-flex justify-content-md-end">
+        <button class="btn btn-success btn-lg text-nowrap" onclick="document.getElementById('form5412').submit(); return false">{$smarty.const.SAVE_BUTTON}&nbsp;<i class="bi bi-save"></i></button>
+    </div>
+    <input type=hidden name="dpt" value="catalog">
+    <input type=hidden name="sub" value="special">
+    <input type=hidden name="save_offers" value="yes">
+</form>
+
+	<div class="my-5 alert alert-success alert-dismissible fade show" role="alert">
+    <span class="fw-bold">{$smarty.const.USEFUL_FOR_YOU}</span> {$smarty.const.ADMIN_SPECIAL_OFFERS_DESC}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>

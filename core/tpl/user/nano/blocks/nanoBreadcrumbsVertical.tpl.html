@@ -1,0 +1,18 @@
+<nav class="col-auto mb-2 mx-1" style="--bs-breadcrumb-divider: '>';padding:0 0.7rem;" aria-label="breadcrumb">
+            <ol class="breadcrumb justify-content-start mb-0 lh-1 fs-7">
+{section name=i loop=$product_category_path}
+{if $smarty.const.CONF_MOD_REWRITE eq 1}
+{assign var="_href" value="category_`$product_category_path[i].categoryID`.html"}
+{else}
+{assign var="_href" value="index.php?categoryID=`$product_category_path[i].categoryID`"}
+{/if}
+{if $product_category_path[i].categoryID != 1}
+{if $main_content_template eq "category.tpl.html" and $smarty.section.i.last}
+                    <li class=" bg-light bg-gradient p-1 breadcrumb-item active" aria-current="page">{$product_category_path[i].name}</li>
+{else}
+                    <li class=" bg-light bg-gradient p-1 breadcrumb-item"><a href="{$_href}">{$product_category_path[i].name}</a></li>
+{/if}
+{/if}
+{/section}
+            </ol>
+        </nav>

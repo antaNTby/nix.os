@@ -1,0 +1,138 @@
+
+{* {$seller.company_adress|@debugfile} *}
+
+<table class="headblock" style="margin-left: -45px; margin-top:5px;">
+    {* <caption>table title and/or explanatory text</caption> *}
+{*     <thead>
+        <tr>
+            <th>header</th>
+        </tr>
+    </thead> *}
+    <tbody>
+        <tr>
+            <td class="logocell" rowspan=4><img style="width: 90px; height: 90px;" src="{$pm_logo}" /></td>
+
+             <td colspan=3 align="left" style="padding: 0 30px;font-size: 1.5em; font-weight:bold; color:#ee0000;">{$seller.company_name}</td>
+
+            <td align="right" style="font-size: 1.5em; font-weight:bold; color:#ee0000;">УНП {$seller.company_unp}</td>
+
+            <td rowspan=4 class="barcodecell"><barcode class="barcode" code="{$smarty.const.CONF_SHOP_URL}/index.php?do=invoice_new_proc&moduleID={$moduleID}&orderID={$orderID}" type="QR" class="barcode" size="0.9" /></td>
+        </tr>
+        <tr>
+            {* <td>data [2-1]</td> *} <td class="reqcell" colspan=4><strong>{$seller.company_adress|replace:"\r\n":"<br>"}</strong></td>{*  <td>data [2-6]</td> *}
+        </tr>
+        <tr>
+            {* <td>data [3-1]</td> *} <td class="reqcell" colspan=4>р/с:&nbsp;{$seller.company_bank|replace:"\r\n":"<br>"}</td>{*  <td>data [3-6]</td> *}
+        </tr>
+        <tr>
+            {* <td>data [4-1]</td> *} <td class="reqcell" colspan=4>{$seller.company_contacts|replace:"\r\n":"<br>"}</td>{*  <td>data [4-6]</td> *}
+        </tr>
+    </tbody>
+</table>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<td colspan="" rowspan="" headers=""></td>
+
+<table class="headblock" border=1>
+    {* <caption>table title and/or explanatory text</caption> *}
+{*     <thead>
+        <tr>
+            <th>header</th>
+        </tr>
+    </thead> *}
+    <tbody>
+        <tr>
+            <td rowspan=4>data [1-1]</td> <td colspan=3>data [1-2] data [1-3] data [1-4]</td> <td>data [1-5]</td> <td rowspan=4>data [1-6]</td>
+        </tr>
+        <tr>
+            {* <td>data [2-1]</td> *} <td colspan=4>data [2-2] data [2-3] data [2-4] data [2-5]</td>{*  <td>data [2-6]</td> *}
+        </tr>
+        <tr>
+            {* <td>data [3-1]</td> *} <td colspan=4>data [3-2] data [3-3] data [3-4] data [3-5]</td>{*  <td>data [3-6]</td> *}
+        </tr>
+        <tr>
+            {* <td>data [4-1]</td> *} <td colspan=4>data [4-2] data [4-3] data [4-4] data [4-5]</td>{*  <td>data [4-6]</td> *}
+        </tr>
+    </tbody>
+</table>
+
+<hr style="float:left;color:red; height:1px; width:99%;margin-top: 5;">
+
+<table class="headblock" border=1>
+    {* <caption>table title and/or explanatory text</caption> *}
+{*     <thead>
+        <tr>
+            <th>header</th>
+        </tr>
+    </thead> *}
+    <tbody>
+        <tr>
+            <td>data [1-1]</td> <td colspan=3>data [1-2] data [1-3] data [1-4]</td> <td>data [1-5]</td> <td>data [1-6]</td>
+        </tr>
+        <tr>
+            <td>data [2-1]</td> <td colspan=4>data [2-2] data [2-3] data [2-4] data [2-5]</td> <td>data [2-6]</td>
+        </tr>
+        <tr>
+            <td>data [3-1]</td> <td colspan=4>data [3-2] data [3-3] data [3-4] data [3-5]</td> <td>data [3-6]</td>
+        </tr>
+        <tr>
+            <td>data [4-1]</td> <td colspan=4>data [4-2] data [4-3] data [4-4] data [4-5]</td> <td>data [4-6]</td>
+        </tr>
+    </tbody>
+</table>
+
+<hr style="float:left;color:red; height:1px; width:99%;margin-top: 5;">
+
+<table class="headblock" border=1>
+    {* <caption>table title and/or explanatory text</caption> *}
+{*     <thead>
+        <tr>
+            <th>header</th>
+        </tr>
+    </thead> *}
+    <tbody>
+        <tr>
+            <td>data [1-1]</td> <td>data [1-2]</td> <td>data [1-3]</td> <td>data [1-4]</td> <td>data [1-5]</td> <td>data [1-6]</td>
+        </tr>
+        <tr>
+            <td>data [2-1]</td> <td>data [2-2]</td> <td>data [2-3]</td> <td>data [2-4]</td> <td>data [2-5]</td> <td>data [2-6]</td>
+        </tr>
+        <tr>
+            <td>data [3-1]</td> <td>data [3-2]</td> <td>data [3-3]</td> <td>data [3-4]</td> <td>data [3-5]</td> <td>data [3-6]</td>
+        </tr>
+        <tr>
+            <td>data [4-1]</td> <td>data [4-2]</td> <td>data [4-3]</td> <td>data [4-4]</td> <td>data [4-5]</td> <td>data [4-6]</td>
+        </tr>
+    </tbody>
+</table>
+
+<hr style="float:left;color:red; height:1px; width:99%;margin-top: 0;">
+
+<table class="headblock">
+    {* <caption>table title and/or explanatory text</caption> *}
+    <thead>
+        <tr>
+            <th colspan="4" align="justify" style="font-size: 1.5em; font-weight:bold; color:red;">{$seller.company_name}</th>
+            <th colspan="1" align="justify" style="font-size: 1.5em; font-weight:bold; color:black;">УНП {$seller.company_unp}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="logocell"><img style="width:90px;height: 90px;" src="{$pm_logo}" /></td>
+            <td colspan="3" align="left" valign="bottom">
+                <strong>{$seller.company_adress}</strong>. <br>
+                р/с:&nbsp;
+                <span style="font-size: 3.00mm;">{$seller.company_bank}</span>
+                <br>
+                {$seller.company_contacts}
+            </td>
+            <td class="barcodecell">
+                <barcode class="barcode" code="{$smarty.const.CONF_SHOP_URL}/index.php?do=invoice_new_proc&moduleID={$moduleID}&orderID={$orderID}" type="QR" class="barcode" size="0.9" />
+            </td>
+        </tr>
+    </tbody>
+</table>

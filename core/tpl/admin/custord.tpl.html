@@ -1,0 +1,79 @@
+{assign var=admin_departments_name value="Торговля, счета, заказы, клиенты"}
+
+{section name=i loop=$admin_sub_departments}
+{if $current_sub eq $admin_sub_departments[i].id}
+<nav class="my-1 d-flex flex-column-inverse flex-md-row-inverse justify-content-start justify-content-md-end" style="--bs-breadcrumb-divider: '::';" aria-label="breadcrumb">
+    <ol class="my-0 px-1 breadcrumb text-small lh-1">
+        <li class="breadcrumb-item"><a class="text-decoration-none" href="{$smarty.const.ADMIN_FILE}"><i class="bi bi-house-gear"></i></a></li>
+        <li class="breadcrumb-item"><a href="{$smarty.const.ADMIN_FILE}">{$admin_departments_name}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{$admin_sub_departments[i].name}</li>
+    </ol>
+</nav>
+{if $toOrderID}
+<h1 class="h1 fw-lighter text-warning" data-id="PageH1">Выбор компании для заказа #{$toOrderID}</h1>
+{else}
+<h1 class="h1 fw-lighter text-body" data-id="PageH1">{$admin_sub_departments[i].name}</h1>
+{/if}
+{/if}
+{/section}
+<div id="preproc"></div>
+{if !$safemode}
+{include file="admin/$admin_sub_dpt"}
+{else}
+<div class="alert alert-danger alert-dismissible fade show mb-1" role="alert">
+    <strong>Внимание! {$smarty.const.USEFUL_FOR_YOU}</strong> {$smarty.const.ERROR_MODULE_ACCESS_DES2}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{/if}
+
+{* {$admin_departments|@debug} *}
+{* {$admin_sub_departments|@debug} *}
+{*
+{section name=i loop=$admin_sub_departments}
+{if $current_sub eq $admin_sub_departments[i].id}
+<div class="page-header" style="margin: 0">
+    <h1>
+        {$admin_sub_departments[i].name}
+        <small>{$admin_departments[1].name}</small>
+        <small class="info"></small>
+        {if $EDIT_MODE && $editID>0 && $current_sub eq "invoices"}
+        <label class="pull-right">{if $Invoice}<small class="text-muted"> orderID #{$Invoice.orderID}{if $CONTROL_order_aka_number->data.current_value neq 0 and $CONTROL_order_aka_number} aka "{$CONTROL_order_aka_number->data.current_value}"{/if}</small>{/if} invoiceID #{$editID}</label>
+        {/if}
+        {if $order_detailed && !!$order_detailed && $current_sub eq "new_orders"}
+        <label class="pull-right">
+            {if $countAllInvoices}
+            <small class="text-muted">invoiceIDs:
+                {section name=ii loop=$AllInvoices}
+                #{$AllInvoices[ii].invoiceID}{if !$smarty.section.ii.last}, {/if}
+                {/section}
+            </small>
+            {/if}
+            orderID #{$order.orderID} {if $order.order_aka neq 0 and $order.order_aka} aka "{$order.order_aka}"{/if}
+        </label>
+        {/if}
+    </h1>
+</div>
+{/if}
+{/section}
+<div id="preproc"></div>
+{if !$safemode}
+{include file="admin/$admin_sub_dpt"}
+{else}
+<div class="alert alert-danger" role="alert">
+    <h2 class="sr-only">{$smarty.const.USEFUL_FOR_YOU}</h2>
+    {$smarty.const.ERROR_MODULE_ACCESS_DES2}
+</div>
+{/if}
+*}
+{*
+    <div class="dropdown float-end">
+      <button class="btn btn-danger dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Сверхсекретное меню команд
+      </button>
+      <ul class="dropdown-menu">
+        <li><button class="dropdown-item text-bg-danger" name="btn_TerminateCompany" title="Удалить компанию" data-kill_id="{$c.companyID}" data-app="AdminCompany" data-operation="TerminateCompany">УДАЛИТЬ ЭТУ КОМПАНИЮ БЕЗ ВСЯКИХ НЕЖНОСТЕЙ</button></li>
+        <li><button class="dropdown-item" type="button">Action</button></li>
+        <li><button class="dropdown-item" type="button">Another action</button></li>
+        <li><button class="dropdown-item" type="button">Something else here</button></li>
+      </ul>
+    </div> *}

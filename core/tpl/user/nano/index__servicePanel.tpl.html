@@ -1,0 +1,54 @@
+{* {if $main_content_template eq "category.tpl.html" or $main_content_template eq "product_brief.tpl.html" or $main_content_template eq "product_detailed.tpl.html"} *}
+{* шаблон вывода категории BREADCRUMB-category*}
+<div class="container-sm" id="liveSearchResultContainer" style="max-width:576px!important;">
+    <div class="row">
+        <div class="col">
+            <div id="liveSearchResult"></div>
+        </div>
+    </div>
+</div>
+        {if $PageH1}
+<div class="container-fluid">
+        {if $main_content_template eq "category.tpl.html" or $main_content_template eq "product_brief.tpl.html" or $main_content_template eq "product_detailed.tpl.html"}
+        {include file="blocks/nanoBreadcrumbs.tpl.html"}
+        {/if}
+    <div class="mt-2 d-flex flex-column flex-md-row justify-content-center justify-content-md-between" id="servicePanel">
+        <h1 class="h3 fw-lighter{if $main_content_template eq "category.tpl.html"} text-primary{/if}" data-id="PageH1">{$PageH1}</h1>
+        <div class="btn-toolbar d-flex flex-row justify-content-center justify-content-md-end align-items-baseline">
+        {if $main_content_template eq "category.tpl.html" or $main_content_template eq "search_simple.tpl.html"}
+            <a class="btn {if $view_type eq 1}btn-outline-secondary{else}btn-primary{/if} btn-sm ms-2" type="button" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Таблица" title="Вид страницы товаров" onclick="changeViewType(0)"><i class="bi bi-table"></i></a>
+            <a class="btn {if $view_type eq 0}btn-outline-secondary{else}btn-primary{/if} btn-sm ms-1 me-5" type="button" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Витрина" title="Вид страницы товаров" onclick="changeViewType(1)"><i class="bi bi-columns-gap"></i></a>
+        {/if}
+
+            {if ($main_content_template eq "shopping_cart.tpl.html" && ($shopping_cart_value > 0))}<a class="btn btn-outline-danger btn-sm ms-2" href="{$cart_reguest}&amp;shopping_cart=yes&amp;clear_cart=yes" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="{$smarty.const.CART_CLEAR}"><i class="bi bi-trash"></i></a>{/if}
+
+            {if $Parent.parent > 1}
+            {if $smarty.const.CONF_MOD_REWRITE eq 1}{assign var="ahref" value="category_`$Parent.parent`.html"}{else}{assign var="ahref" value="index.php?categoryID=`$Parent.parent`"}{/if}
+                <a href="{$ahref}" class="btn btn-secondary btn-sm ms-2"><i class="bi bi-arrow-up-short" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="На уровень выше"></i></a>
+            {/if}
+
+            <a class="btn btn-secondary btn-sm ms-2" type="button" data-bs-toggle="collapse" data-bs-target=".multi-collapse" aria-expanded="true" aria-controls=".el-0 .el-1 .el-2 .el-3"><i class="bi bi-arrows-expand" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Скрыть лишнее"></i></a>
+
+        </div>
+    </div>
+</div>
+        {/if}
+
+<input type="hidden" id="tpl_view_type" value="{$view_type}">
+
+
+{* не работает *}
+{* <input type="hidden" id="session_view_type" value="{$smarty.session.view_type}">
+<input type="hidden" id="session_myLength" value="{if $smarty.session.myLength >0}{$smarty.session.myLength}{else}16{/if}">
+<input type="hidden" id="session_myOffset" value="{if $smarty.session.myOffset >=0}{$smarty.session.myOffset}{else}0{/if}"> *}
+{* не работает *}
+
+
+{if 0 && $isadmin eq "yes"}
+
+{* {$smarty.session|@debug} *}
+<b>this smarty.template is {$smarty.template}</b>
+
+{/if}
+
+{* {debug} *}

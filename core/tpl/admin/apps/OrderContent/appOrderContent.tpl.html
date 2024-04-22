@@ -1,0 +1,257 @@
+{* ***{$antSUB}*** *}
+{* --{$MyOrderContent.orderCurrencyCode}-- *}
+{assign var=oc value=$MyOrderContent.OrderedCarts}
+{* {$oc[0]|@debug}<BR> *}
+{* {$oc[1]|@debug}<BR> *}
+{* {$oc[2]|@debug}<BR> *}
+<div class="table-responsive bg-secondary bg-opacity-25 p-2 mb-4 shadow-lg">
+
+    <table id="OrderContentTable" class="table table-sm table-bordered align-top mb-0 pt-0">
+        {* <caption>#{$MyOrderContent.orderID}</caption> *}
+        <thead class="table-primary">
+            <tr class="collapse multi-collapse js-collapse-old">
+                <td colspan=10>
+                    Курс $1 = {if $MyOrderContent.hasVATIncluded eq 0}{$MyOrderContent.targetCurrencyRate}+{$MyOrderContent.VAT_Rate}%={/if}{$MyOrderContent.outCurrencyRate}{$MyOrderContent.targetCurrencyCode}&nbsp;|&nbsp;
+                    Скидка/Надбавка,%:&nbsp;{if $MyOrderContent.Discount.discountPercent <>0}
+                        {$MyOrderContent.Discount.discountPercent}%
+                        {else}0{/if}&nbsp;|&nbsp;
+                        СтоимостьДоставки/Скидка:&nbsp;
+                        {if $MyOrderContent.Discount.discountValue <>0}${$MyOrderContent.Discount.discountValue}={$MyOrderContent.Discount.outDiscountValue}{$MyOrderContent.targetCurrencyCode}{else}0{/if}&nbsp;|&nbsp;
+                            Максимальная задержка поставки:&nbsp;
+                            {$MyOrderContent.maximalShippingDelayString}&nbsp;[{$MyOrderContent.maximalShippingDelayValue}]
+                </td>
+            </tr>
+            <tr>
+                <th class="text-center" rowspan=2>#</th>
+                <th colspan=8 class="text-center">
+                    {$smarty.const.TABLE_PRODUCT_NAME}
+                </th>
+                <th class="text-center text-nowrap bg-secondary bg-opacity-25">
+                    <button class="btn{if $order.statusID ==2 || $order.statusID ==3 } btn-success{else} btn-outline-secondary{/if} btn-lg" title="Сохранить учитывая скидки"{if $order.statusID ==2 || $order.statusID ==3 } {* //архивный *} data-action="Save" data-app="OrderContent" data-operation="SaveSimplePrices" {/if} data-orderid="{$MyOrderContent.orderID}"{if $order.statusID !=2 || $order.statusID !=3} disabled{/if}> <i class="bi bi-save2"></i></button>
+                </th>
+            </tr>
+            <tr>
+                {* <th class="text-center">Prior.</th> *}
+                <th class="text-center">{$smarty.const.TABLE_PRODUCT_QUANTITY}</th>
+                <td class="text-end">Цена,у.е (БЕЗ доставки)<br>+доставка,у.е </td>
+                <td class="text-center">Цена с Доставкой,у.е <br><sup>цена+доставка=Цена с Доставкой</sup></td>
+                <td class="text-center">точн.Цена,<span class="BYN">{$MyOrderContent.targetCurrencyCode}</span></td>
+                <th class="text-center">Цена,<span class="BYN">{$MyOrderContent.targetCurrencyCode}</span></th>
+                <th class="text-center">Стоимость,<span class="BYN">{$MyOrderContent.targetCurrencyCode}</span></th>
+                <th class="text-center">НДС,<span class="BYN">{$MyOrderContent.targetCurrencyCode}</span></th>
+                <th class="text-center">Всего,<span class="BYN">{$MyOrderContent.targetCurrencyCode}</span></th>
+                {* <th class="text-center">СуммаИзКорзины PriceToShow</th> *}
+                <th class="text-center text-nowrap"><i class="bi bi-terminal-fill"></i></th>
+            </tr>
+        </thead>
+        <tbody class="bg-body">
+            {section name=i loop=$oc}
+            <tr>
+                <td colspan=10 class="bg-secondary bg-opacity-25 lh-1"></td>
+            </tr>
+            <tr>
+                <th class="text-center text-nowrap" title="id:{$oc[i].productID} #{$oc[i].product_code_regex}">-{$smarty.section.i.iteration}-</th>
+                <td colspan=8 class="align-middle text-bg-light bg-opacity-75">
+                    {* <span class="content">{$oc[i].name}</span> *}
+                    <span class="content" data-control="Name" data-itemid="{$oc[i].itemID}" data-orderid="{$MyOrderContent.orderID}" data-row-index="{$smarty.section.i.index}">{$oc[i].name}</span>
+                        {* {$oc[i].name|replace:"&lt;":"<"|replace:"&gt;":">"|replace:"&quot;":'"'} *}
+                    {* <textarea class="form-control" name="itemName" id="itemName" title="Новое Наименование">{$oc[i].name}</textarea> *}
+
+
+                </td>
+                <td class="text-center"> {* "Активный" *}
+                    {if $order.statusID == 2 || $order.statusID == 3}
+                    <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#modalOrderContentItem" data-itemid="{$oc[i].itemID}" data-orderid="{$MyOrderContent.orderID}"><i class="bi bi-pencil-square"></i></button>
+                    {/if}
+                </td>
+            </tr>
+            <tr id="ocrow_{$oc[i].itemID}">
+                <td class="text-start">
+                    {* <span class="text-muted bg-light border border-1 rounded-1 px-3 content itemPriority" title="Позиция в таблице: чем больше - тем выше">{$oc[i].itemPriority}</span> *}
+                    {if $order.statusID == 2 || $order.statusID == 3}
+                    <button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#modalOrderContentItem" data-control="itemPriority" data-itemid="{$oc[i].itemID}" data-orderid="{$MyOrderContent.orderID}">
+                        <span class="px-1 content" data-control="itemPriority" data-itemid="{$oc[i].itemID}" data-orderid="{$MyOrderContent.orderID}" title="Позиция в таблице: чем больше - тем выше">{$oc[i].itemPriority}</span>
+                    </button>
+                    {/if}
+                    <button class="btn btn-light btn-sm" type="button" data-bs-toggle="collapse" data-bs-target=".multi-collapse" aria-expanded="false" aria-controls=".js-collapse-old .js-collapse-vat"><i class="bi bi-info-circle"></i></button>
+                    {if $oc[i].productID}
+                    <a class="btn-link adminlink" href="{$smarty.const.ADMIN_FILE}?productID={$oc[i].productID}&amp;eaction=prod" title="{$smarty.const.STRING_EDITPR}"><i class="bi bi-apple opacity-25"></i></a>
+                    {if $smarty.const.CONF_MOD_REWRITE}
+                    <a class="btn-link" href="product_{$oc[i].productID}.html" target="_blank" title="{$smarty.const.ADMIN_BACK_TO_SHOP}"><i class="bi bi-house"></i></a>
+                    {else}
+                    <a class="btn-link" href="index.php?productID={$oc[i].productID}" target="_blank" title="{$smarty.const.ADMIN_BACK_TO_SHOP}"><i class="bi bi-house"></i></a>
+                    {/if}
+                    {/if}
+                </td>
+                <td class="text-end">
+                    <div class="input-group input-group-sm flex-nowrap">
+                        <button type="button" class="btn btn-outline-secondary" onclick="_input_minus1('Quantity_{$oc[i].itemID}'); return false">
+                            <i class="bi bi-dash"></i>
+                        </button>
+                        <input type="text" data-control="Quantity" data-itemid="{$oc[i].itemID}" data-orderid="{$MyOrderContent.orderID}" data-row-index="{$smarty.section.i.index}" name="Quantity_{$oc[i].itemID}" id="Quantity_{$oc[i].itemID}" input-numbers="0" class="form-control form-control-sm text-end text-bg-light bg-opacity-75 d-inline" style="max-width: 50px; width:50px" value="{$oc[i].Quantity}">
+                        <span class="input-group-text text-bg-light bg-opacity-75 content" data-control="itemUnit" data-itemid="{$oc[i].itemID}" data-orderid="{$MyOrderContent.orderID}">{$oc[i].itemUnit}</span>
+                        <button class="btn btn-outline-secondary" type="button" onclick="_input_plus1('Quantity_{$oc[i].itemID}');  return false">
+                            <i class="bi bi-plus"></i>
+                        </button>
+                    </div>
+                    <div class="text-muted text-center fs-7 collapse multi-collapse js-collapse-old">{$oc[i].Quantity}</div>
+                    {if $oc[i].Quantity < $oc[i].min_order_amount} <div class="text-warning text-center">{$smarty.const.STRING_MIN_ORDER_AMOUNT} {$oc[i].min_order_amount}&nbsp;{$oc[i].itemUnit}
+</div>{/if}
+</td>
+<td class="text-end">
+    <input type="text" data-control="purePrice" data-itemid="{$oc[i].itemID}" data-orderid="{$MyOrderContent.orderID}" data-row-index="{$smarty.section.i.index}" name="purePrice_{$oc[i].itemID}" id="purePrice_{$oc[i].itemID}" input-numbers="8" class="form-control form-control-sm text-end text-bg-light d-inline" style="max-width: 9em; width:9em" value="{$oc[i].purePrice}">
+    {* {if $oc[i].ship pingPay neq 0} *}
+    <input type="text" data-control="shippingPay" data-itemid="{$oc[i].itemID}" data-orderid="{$MyOrderContent.orderID}" data-row-index="{$smarty.section.i.index}" name="shippingPay_{$oc[i].itemID}" id="shippingPay_{$oc[i].itemID}" input-numbers="8" class="form-control-plaintext fw-lighter form-control-sm pe-2 text-end text-bg-light d-inline text-opacity-50" style="max-width: 9em; width:9em" readonly value="+{$oc[i].shippingPay}">
+    {* {/if} *}
+    <div class="text-muted text-center fs-7 collapse multi-collapse js-collapse-old" data-control="purePrice">{($oc[i].purePrice)|@invoiceUSDformat} + {($oc[i].shippingPay)|@invoiceUSDformat}</div>
+</td>
+<td class="text-end">
+    <input type="text" data-control="Price" data-itemid="{$oc[i].itemID}" data-orderid="{$MyOrderContent.orderID}" data-row-index="{$smarty.section.i.index}" name="Price_{$oc[i].itemID}" id="Price_{$oc[i].itemID}" input-numbers="8" class="form-control form-control-sm text-end text-bg-light d-inline" style="max-width: 9em; width:9em" value="{$oc[i].Price}">
+    <div class="text-muted text-center fs-7 collapse multi-collapse js-collapse-old" data-control="Price">={($oc[i].Price)|@invoiceUSDformat}</div>
+    <div class="text-danger text-center text-opacity-50 lh-1 collapse multi-collapse js-collapse-vat" data-helpid="{$oc[i].itemID}">
+        <small class="fs-7" data-help="sub" data-control="Price">{($oc[i].Price*100/120)|@invoiceUSDformat}</small><br>
+        <small class="fs-7" data-help="sup" data-control="Price">{($oc[i].Price*120/100)|@invoiceUSDformat}</small>
+    </div>
+</td>
+<td class="text-end">
+    <input type="text" data-control="outPrice" data-itemid="{$oc[i].itemID}" data-orderid="{$MyOrderContent.orderID}" data-row-index="{$smarty.section.i.index}" name="outPrice_{$oc[i].itemID}" id="outPrice_{$oc[i].itemID}" class="form-control form-control-sm text-end text-bg-light bg-opacity-75 d-inline" style="max-width: 9em; width:9em" value="{$oc[i].outPrice|@invoiceBYformat}">
+    <div class="text-muted text-center fs-7 collapse multi-collapse js-collapse-old" data-control="outPrice">{$oc[i].outPrice|@invoiceBYformat}</div>
+    <div class="text-danger text-center text-opacity-50 lh-1 collapse multi-collapse js-collapse-vat" data-helpid="{$oc[i].itemID}">
+        <small class="fs-7" data-help="sub" data-control="outPrice">{($oc[i].outPrice*100/120)|@invoiceUSDformat}</small><br>
+        <small class="fs-7" data-help="sup" data-control="outPrice">{($oc[i].outPrice*120/100)|@invoiceUSDformat}</small>
+    </div>
+</td>
+<td class="text-end">
+    <input type="text" name="outPriceFix_{$oc[i].itemID}" id="outPriceFix_{$oc[i].itemID}" data-control="outPriceFix" readonly class="form-control-plaintext fw-lighter form-control-sm text-end px-1 d-inline" style="max-width: 9em; width:9em" value="">
+</td>
+<td class="text-end"><input type="text" readonly data-control="outCost" data-itemid="{$oc[i].itemID}" data-orderid="{$MyOrderContent.orderID}" data-row-index="{$smarty.section.i.index}" name="outCost_{$oc[i].itemID}" id="outCost_{$oc[i].itemID}" class="form-control-plaintext fw-lighter form-control-sm text-end px-1 d-inline" style="max-width: 9em; width:9em" value="{$oc[i].outCost|@invoiceBYformat}"></td>
+<td class="text-end"><input type="text" readonly data-control="outVAT_Value" data-itemid="{$oc[i].itemID}" data-orderid="{$MyOrderContent.orderID}" data-row-index="{$smarty.section.i.index}" name="outVAT_Value_{$oc[i].itemID}" id="outVAT_Value_{$oc[i].itemID}" class="form-control-plaintext fw-lighter form-control-sm text-end px-1 d-inline" style="max-width: 9em; width:9em" value="{$oc[i].outVAT_Value|@invoiceBYformat}"></td>
+<td class="text-end"><input type="text" readonly data-control="outCost_WITH_VAT" data-itemid="{$oc[i].itemID}" data-orderid="{$MyOrderContent.orderID}" data-row-index="{$smarty.section.i.index}" name="outCost_WITH_VAT_{$oc[i].itemID}" id="outCost_WITH_VAT_{$oc[i].itemID}" class="form-control-plaintext fw-lighter form-control-sm text-end px-1 d-inline" style="max-width: 9em; width:9em" value="{$oc[i].outCost_WITH_VAT|@invoiceBYformat}"></td>
+<td class="text-center">
+    {if $order.statusID == 2 || $order.statusID == 3}
+    <button class="btn btn-outline-danger btn-sm" data-app="OrderContent" data-operation="DeleteCartItem" data-action="Delete" data-itemid="{$oc[i].itemID}" data-orderid="{$MyOrderContent.orderID}" title="Удалить"><i class="bi bi-x-lg"></i></button>{/if}
+</td>
+</tr>
+{sectionelse}
+<tr style="border-top:none;">
+    <td class="text-center">1</td>
+    <td class="p-2 text-start name">
+        <div class="alert alert-info">
+            <strong>в Заказе нет Товаров</strong> можно добавить из панели ... а потом сделаю буфер
+        </div>
+    </td>
+    <td class="text-center">0.00</td>
+    <td class="text-end">0.00</td>
+    <td class="text-end">0.00</td>
+    <td class="text-end">0.00</td>
+    <td class="text-end">0.00</td>
+    <td class="text-end">0.00</td>
+    <td class="text-end">0.00</td>
+    {* <td class="text-end">&nbsp;</td> *}
+    {* <td class="text-end">&nbsp;</td> *}
+</tr>
+{/section}
+<tr>
+    <td colspan=9 class="bg-secondary bg-opacity-25 lh-1"></td>
+</tr>
+</tbody>
+<tfoot class="table-primary table-group-divider align-top">
+    <tr>
+        <th colspan=1 class="text-center">
+            <input type="text" readonly name="countOrderedCarts" id="countOrderedCarts" class="form-control-plaintext fw-lighter px-2 fw-bold text-end d-inline" data-orderid="{$MyOrderContent.orderID}" style="max-width: 9em; width:9em" value="{$MyOrderContent.countOrderedCarts}">
+        </th>
+        <th class="text-center">
+            <input type="text" readonly name="totalItemsQuantity" id="totalItemsQuantity" class="form-control-plaintext fw-lighter px-2 fw-bold text-end d-inline" data-orderid="{$MyOrderContent.orderID}" style="max-width: 9em; width:9em" value="{$MyOrderContent.Total.totalItemsQuantity}"><br>
+            <div class="text-muted text-center fs-7 collapse multi-collapse js-collapse-old">{$MyOrderContent.Total.totalItemsQuantity}</div>
+        </th>
+        <th colspan=4 class="text-center pt-2 h2">
+            ИТОГО
+        </th>
+        <th class="text-end">
+            <input type="text" readonly name="totalCost_WITHOUT_VAT" id="totalCost_WITHOUT_VAT" class="form-control-plaintext fw-lighter px-2 fw-bold text-end d-inline" data-orderid="{$MyOrderContent.orderID}" style="max-width: 9em; width:9em" value="{$MyOrderContent.Total.totalCost_WITHOUT_VAT|@invoiceBYformat}"><br>
+            <div class="text-muted text-center fs-7 collapse multi-collapse js-collapse-old">{$MyOrderContent.Total.totalCost_WITHOUT_VAT|@invoiceBYformat}</div>
+        </th>
+        <th class="text-end">
+            <input type="text" readonly name="totalVAT_Amount" id="totalVAT_Amount" class="form-control-plaintext fw-lighter px-2 fw-bold text-end d-inline" data-orderid="{$MyOrderContent.orderID}" style="max-width: 9em; width:9em" value="{$MyOrderContent.Total.totalVAT_Amount|@invoiceBYformat}"><br>
+            <div class="text-muted text-center fs-7 collapse multi-collapse js-collapse-old">{$MyOrderContent.Total.totalVAT_Amount|@invoiceBYformat}</div>
+        </th>
+        <th class="text-end">
+            <input type="text" readonly name="totalCost_WITH_VAT" id="totalCost_WITH_VAT" class="form-control-plaintext fw-lighter px-2 fw-bold text-end d-inline" data-orderid="{$MyOrderContent.orderID}" style="max-width: 9em; width:9em" value="{$MyOrderContent.Total.totalCost_WITH_VAT|@invoiceBYformat}"><br>
+            <div class="text-muted text-center fs-7 collapse multi-collapse js-collapse-old">{$MyOrderContent.Total.totalCost_WITH_VAT|@invoiceBYformat}</div>
+        </th>
+        <td class="text-center text-nowrap bg-secondary bg-opacity-25">
+            <button class="btn{if $order.statusID ==2 || $order.statusID ==3 } btn-success{else} btn-outline-secondary{/if} btn-lg" title="{$smarty.const.SAVE_BUTTON}"{if $order.statusID ==2 || $order.statusID ==3 } data-action="Save" data-app="OrderContent" data-operation="SavePrices" {/if} data-orderid="{$MyOrderContent.orderID}"{if $order.statusID !=2 || $order.statusID !=3} disabled{/if}> <i class="bi bi-save"></i></button>
+        </td>
+    </tr>
+</tfoot>
+</table>
+
+{*
+<div id="success" class="alert alert-success d-none align-items-center alert-dismissible fade show" role="alert">
+    <h4 class="alert-heading"><i class="bi bi-emoji-smile"></i> Данные сохранены
+</div>
+<div id="error" class="alert alert-danger d-none align-items-center alert-dismissible fade show" role="alert">
+    <h4 class="alert-heading"><i class="bi bi-emoji-frown"></i> Что-то пошло не так.</h4>
+    <hr>Попробуйте еще раз
+</div>
+*}
+
+<ul class="list-group list-group-flush">
+    <li class="list-group-item">Общая стоимость без НДС, <span class="BYN">{$MyOrderContent.targetCurrencyCode}</span> : <span class="fw-bolder" id="totalCost_WITHOUT_VAT">{$MyOrderContent.Total.totalCost_WITHOUT_VAT|@invoiceBYformat}</span> (<span class="fw-lighter" id="totalCost_WITHOUT_VAT_STRING">{$MyOrderContent.Total.totalStrings.totalCost_WITHOUT_VAT_STRING}</span>)</li>
+    <li class="list-group-item">Общая сумма НДС, <span class="BYN">{$MyOrderContent.targetCurrencyCode}</span> : <span class="fw-bolder" id="totalVAT_Amount">{$MyOrderContent.Total.totalVAT_Amount|@invoiceBYformat}</span> (<span class="fw-lighter" id="totalVAT_Amount_STRING">{$MyOrderContent.Total.totalStrings.total_VAT_Amount_STRING}</span>)</li>
+    <li class="list-group-item">Полная стоимость с НДС, <span class="BYN">{$MyOrderContent.targetCurrencyCode}</span> : <span class="fw-bolder" id="totalCost_WITH_VAT">{$MyOrderContent.Total.totalCost_WITH_VAT|@invoiceBYformat}</span> (<span class="fw-lighter" id="totalCost_WITH_VAT_STRING">{$MyOrderContent.Total.totalStrings.totalCost_WITH_VAT_STRING}</span>)</li>
+    <li class="list-group-item">Всего товарных позиций: <span class="fw-bolder" id="countOrderedCarts">{$MyOrderContent.countOrderedCarts}</span> (<span class="fw-lighter" id="countOrderedCarts_STRING">{$MyOrderContent.Total.totalStrings.countOrderedCarts_STRING}</span>)</li>
+    <li class="list-group-item">Всего штук товара: <span class="fw-bolder" id="totalItemsQuantity">{$MyOrderContent.Total.totalItemsQuantity}</span> (<span class="fw-lighter" id="totalItemsQuantity_STRING">{$MyOrderContent.Total.totalStrings.totalItemsQuantity_STRING}</span>)</li>
+</ul>
+</div>
+{* Всплывающие окна*}
+{* {if ($orders[i].statusID == "2" or $orders[i].statusID == "3")} *}
+<div id="modalOrderContentItem" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-sm-down" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-success">
+                <h4 class="modal-title">Наименование, Приоритет и Единица измерения <small id="modal_itemID"></small></h4>
+                <button type="button" name="cancel_modal" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="modalItemID" id="modalItemID" value="">
+                <input type="hidden" name="modalOrderID" id="modalOrderID" value="{$MyOrderContent.orderID}">
+                <div class="m-1">
+                    <label for="modalItemName">Наименование</label>
+                    <textarea class="form-control" name="modalItemName" id="modalItemName" title="Новое Наименование"></textarea>
+                    <textarea class="form-control" id="modalOldName" readonly style="background-color: whitesmoke!important; color:dimgray!important; margin-top: 10px;" title="Старое Наименование"></textarea>
+                </div>
+                <div class="m-1">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <label for="modalTargetOrderID">Перенести в заказ</label>
+                            <input type="number" class="form-control" name="modalTargetOrderID" id="modalTargetOrderID" value="{$MyOrderContent.orderID}" step="1" title="Номер заказа для переноса товара в другой заказ" data-toggle="tooltip">
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="modalItemUnit">Единица измерения</label>
+                            <input type="text" class="form-control" name="modalItemUnit" id="modalItemUnit" list="itemUnitsList">
+                            <datalist id="itemUnitsList">
+                                <option>шт</option>
+                                <option>м</option>
+                                <option>бухта</option>
+                                <option>уп.</option>
+                                <option>кор.</option>
+                                <option>комплект</option>
+                            </datalist>
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="modaItemPriority">Приоритет</label>
+                            <input type="number" class="form-control" name="modaItemPriority" id="modaItemPriority" value="{$itemPriority}" step="1" maxlength="3" size="6" style="width:100%" title="Приоритет (чем больше тем выше в таблице)" data-toggle="tooltip">
+                        </div>
+                    </div>
+                </div>
+                <div class="my-3 d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button name="modaSave" type="button" class="btn btn-success" data-app="OrderContent" data-operation="ChangeItemProperties">Сохранить</button>
+                    <button type="button" name="modaCancel" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{* {/if} *}
+{* Всплывающие окна*}

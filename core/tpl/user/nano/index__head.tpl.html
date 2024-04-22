@@ -1,0 +1,47 @@
+<meta charset="utf-8">
+<!--[if IE]>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <![endif]-->
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<base href= />
+<script src="/core/tpl/user/nano/js/head.js"></script>
+<meta name="title" content="Минск продажа компьютер комплектующие принтер монитор" />
+{if $page_meta_tags eq ""}
+<meta name="description" content="{$smarty.const.CONF_HOMEPAGE_META_DESCRIPTION}">
+<meta name="keywords" content="{$smarty.const.CONF_HOMEPAGE_META_KEYWORDS}">
+{else}{$page_meta_tags}{/if}
+<link rel="icon" sizes=16x16 href="/media/nano/favicon.ico">
+<title>{$page_title}</title>
+{* <link rel="stylesheet" type="text/css" href="lib/bootstrap-icons-1.10.5/font/bootstrap-icons.css"> *}
+<link rel="stylesheet" type="text/css" href="lib/bootstrap-icons-1.11.1/font/bootstrap-icons.css">
+<!-- <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"> -->
+<!-- CSS only -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+<link href="lib/toastr/toastr.css" rel="stylesheet">
+{if $main_content_template eq "shopping_cart.tpl.html"}
+{if $cart_content}
+<link rel="stylesheet" type="text/css" href="lib/bootstrap-select-1.14.0-beta3/bootstrap-select.min.css">
+{/if}
+{/if}
+{if $main_content_template eq "category.tpl.html" or $main_content_template eq "search_simple.tpl.html"}
+<link type="text/css" rel="stylesheet" href="lib/DataTables/datatables.min.css">
+{/if}
+{if $main_content_template eq "product_detailed.tpl.html"}
+<link type="text/css" rel="stylesheet" href="lib/lightgallery/css/lightgallery.css" />
+<link type="text/css" rel="stylesheet" href="lib/lightgallery/css/lg-transitions.css" />
+<link type="text/css" rel="stylesheet" href="lib/lightgallery/css/lg-zoom.css" />
+<link type="text/css" rel="stylesheet" href="lib/lightgallery/css/lg-thumbnail.css" />
+<link type="text/css" rel="stylesheet" href="lib/lightgallery/css/lg-fullscreen.css" />
+<link type="text/css" rel="stylesheet" href="lib/lightgallery/css/lg-rotate.css" />
+{/if}
+{* {if $isadmin eq "yes"}
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/default.min.css">
+{/if} *}
+{*
+<link rel=icon type=image/png sizes=16x16 href=https://only-to-top.ru/img/favicon/favicon-16x16.png/> <link rel=icon type=image/png sizes=32x32 href=https://only-to-top.ru/img/favicon/favicon-32x32.png/> <link rel=apple-touch-icon sizes=180x180 href=https://only-to-top.ru/img/favicon/apple-touch-icon.png/> *} <link rel="stylesheet" type="text/css" href="lib/jquery-ui-1.13.1.custom/jquery-ui.min.css">
+<link href="/core/tpl/user/nano/css/nano.css" rel="stylesheet">
+{*
+{if $main_content_template eq "category.tpl.html" or $main_content_template eq "search_simple.tpl.html" or $main_content_template eq "product_detailed.tpl.html"}
+*}

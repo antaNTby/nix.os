@@ -1,0 +1,115 @@
+<!doctype html>
+<html class="h-100" lang="ru-RU" dir="ltr">
+
+<head>
+    {include file="admin/admin__head.tpl.html"}
+</head>
+
+<body class="d-flex flex-column bg-light h-100" style="max-height: 2500px;overflow-y: scroll;">
+    {include file="admin/admin__svg.tpl.html"}
+    <header>
+        <div class="m-0" id="dashboardHeader">
+            {include file="admin/admin__navbar.tpl.html"}
+        </div>
+        <div class="mt-1">
+            {* <div id="success" class="mx-4 alert alert-success alert-dismissible fade show d-none" role="alert">
+                Данные сохранены
+            </div>
+            <div id="error" class="mx-4 alert alert-danger alert-dismissible fade show d-none" role="alert">
+                Что-то пошло не так
+            </div> *}
+        </div>
+    </header>
+    {* <div class="sticky-top bg-light pb-1" id="stickyHeader"> *}
+        {* {include file="admin/admin__header_sticky.tpl.html"} *}
+        {* {include file="admin/admin__servicePanel.tpl.html"} *}
+        {* </div> *}
+    <!-- Begin page content -->
+    <main class="flex-shrink-0">
+        {* TOASTS *}
+        <div class="container-sm" id="appToastsContent">
+            <div class="row">
+                <div class="col">
+                    <button type="button" class="btn btn-success" id="btnSuccess">Показать Success</button>
+<button type="button" class="btn btn-danger" id="btnDanger">Show Error</button>
+                </div>
+            </div>
+        </div>
+        {* TOASTS *}
+        {if
+        $admin_main_content_template eq "default.tpl.html"
+        or
+        $antSUB eq "shipping"
+        or
+        $antSUB eq "payment"
+        or
+        $antSUB eq "setting"
+        or
+        $antSUB eq "companies"
+        }
+        <div class="container-fluid" id="indexMainContent">
+            {* <div class="container-xxl" id="indexMainContent"> *}
+                <div class="row">
+                    <div class="col">
+                        {include file="admin/$admin_main_content_template"}
+                    </div>
+                </div>
+            </div>
+            {elseif $smarty.get.orders_detailed}
+            <div class="container-fluid" id="indexMainContent">
+                <div class="row">
+                    <div class="col-12">
+                        {include file="admin/custord_orders_filter_form.tpl.html"}
+                    </div>
+                    <div class="col">
+                        {include file="admin/$admin_main_content_template"}
+                    </div>
+                </div>
+            </div>
+            {else}
+            <div class="container-fluid" id="indexMainContent">
+                <div class="row">
+                    <div class="col order-2  order-md-1 col-md-4">
+                        {include file="admin/admin__megamenu.tpl.html"}
+                    </div>
+                    <div class="col order-1  order-md-2 col-md-8">
+                        {include file="admin/$admin_main_content_template"}
+                    </div>
+                </div>
+            </div>
+            {/if}
+    </main>
+                    {include file="admin/apps/Toasts/appToasts.tpl.html"}
+    <footer class="p-0 my-2 d-block mt-auto bg-admin" id="footer">
+        <div class="container-fluid">
+            <div class="d-flex flex-wrap justify-content-between align-items-center py-1 px-2 px-xl-0">
+                <p class="col-md-6 mb-0 text-muted"><span class="nix-brand">nix.by</span></p>
+                <ul class="nav col-md-6 justify-content-end">
+                    <span class="navbar-text"> {$smarty.now|date_format:"%Y-%m-%d %H:%M"}</span>
+                    <li class="nav-item"><a href="#" class="nav-link disabled px-2 text-muted">Home</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link disabled px-2 text-muted">Features</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link disabled px-2 text-muted">Pricing</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link disabled px-2 text-muted">FAQs</a></li>
+                    <li class="nav-item dropdown">
+                        <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-command"></i></button>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            <li><a class="dropdown-item" target="_blank" href="\lib\tfm\etfm.php"><i class="bi bi-house-exclamation-fill"></i> TinyFileManager</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            {if $c}<li><button class="dropdown-item text-bg-danger" name="btn_TerminateCompany" title="УДАЛИТЬ ЭТУ КОМПАНИЮ БЕЗО ВСЯКИХ НЕЖНОСТЕЙ" data-kill_id="{$c.companyID}" data-app="AdminCompany" data-operation="TerminateCompany"><i class="bi bi-sign-dead-end"></i> Удалить компанию</button></li>{/if}
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item"><a href="#" class="nav-link disabled px-2 text-muted">About</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+    <div class="container-fluid">
+        <div class="py-1 px-2 px-xl-0 text-muted text-small">
+            Вся информация, опубликованная на сайте {$smarty.const.SITE_URL}, в т.ч. цены товаров, описания, характеристики и комплектации, извещения об оформлении, а также обработке заказа не являются публичной офертой и носит исключительно справочный характер. Договор заключается только после предварительного согласования наличия, наименования и количества товара, а так же подтверждения исполнения заказа сотрудником {$smarty.const.SITE_URL}.
+        </div>
+    </div>
+</body>
+{include file="admin/admin__bottom.tpl.html"}
+
+</html>

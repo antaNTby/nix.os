@@ -1,0 +1,116 @@
+{* customer groups *}
+<form action="{$smarty.const.ADMIN_FILE}" method=post id="disform">
+    <div class="my-3 table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr class="table-group-divider">
+                    <th class="text-center" width="100%">{$smarty.const.ADMIN_GROUP}</th>
+                    <th class="text-end">{$smarty.const.ADMIN_DISCOUNT}, %</th>
+                    <th class="text-end">{$smarty.const.ADMIN_SORT_ORDER}</th>
+                    <th class="text-center fs-5"><i class="bi bi-terminal-x"></i></th>
+                </tr>
+            </thead>
+            <tbody>
+                {section name=i loop=$custgroups}
+                <tr class="table-group-divider">
+                    <td class="text-center"><input type=text name='custgroup_name_{$custgroups[i].custgroupID}' value='{$custgroups[i].custgroup_name}' class="form-control" size="36"></td>
+                    <td class="text-end"><input type=text name='custgroup_discount_{$custgroups[i].custgroupID}' value='{$custgroups[i].custgroup_discount}' class="form-control text-end" size="6"></td>
+                    <td class="text-end"><input type=text name='sort_order_{$custgroups[i].custgroupID}' value='{$custgroups[i].sort_order}' class="form-control text-end" size="6"></td>
+                    <td class="text-center"><button class="btn btn-outline-danger" role="button" onclick="confirmDelete({$custgroups[i].custgroupID},'{$smarty.const.QUESTION_DELETE_CONFIRMATION}','{$smarty.const.ADMIN_FILE}?dpt=custord&amp;sub=custgroup&amp;delete=');return false;"><i class="bi bi-x-lg"></i></button>
+                    </td>
+                </tr>
+                {* BEGIN Discount-for-Categories *}
+                {section name=j loop=$custgroups[i].cat_discount}
+                <tr>
+                    <td>{$custgroups[i].cat_discount[j].name}</td>
+                    <td><input type=text name='custcat_{$custgroups[i].cat_discount[j].custcatID}' value='{$custgroups[i].cat_discount[j].discount}' class="form-control form-control-sm" size="6"></td>
+                    <td>&nbsp;</td>
+                    <td><button class="btn btn-outline-danger btn-sm" role="button" onclick="confirmDelete({$custgroups[i].cat_discount[j].custcatID},'{$smarty.const.QUESTION_DELETE_CONFIRMATION}','{$smarty.const.ADMIN_FILE}?dpt=custord&amp;sub=custgroup&amp;catdelete=');return false;"><i class="bi bi-x"></i></button></td>
+                </tr>
+                {/section}
+                {* END Discount-for-Categories *}
+                {sectionelse}
+                <tr>
+                    <td colspan="4" class="text-center text-danger">{$smarty.const.ADMIN_NO_VALUES}</td>
+                </tr>
+                {/section}
+            </tbody>
+        </table>
+    </div>
+    <div class="mb-5 d-grid gap-2 d-md-flex justify-content-md-end">
+        <button class="btn btn-success btn-lg text-nowrap" role="button" onclick="document.getElementById('disform').submit(); return false">{$smarty.const.SAVE_BUTTON}&nbsp;<i class="bi bi-save"></i></button>
+    </div>
+    <hr>
+    <div class="table-responsive-lg mb-3">
+        <table class="mt-3 table table-sm table-borderless table-light align-top">
+            <thead>
+                <tr>
+                    <th class="text-center" width="100%">{$smarty.const.ADMIN_GROUP}</th>
+                    <th class="text-end">{$smarty.const.ADMIN_DISCOUNT}, %</th>
+                    <th class="text-end">{$smarty.const.ADMIN_SORT_ORDER}</th>
+                    <th class="text-center fs-5"><i class="bi bi-terminal-plus"></i></th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                <tr>
+                    <td class="text-center"><input name='new_custgroup_name' type=text class="form-control" size="36">
+                    </td>
+                    <td class="text-end"><input name='new_custgroup_discount' type=text class="form-control text-end" size="6">
+                    </td>
+                    <td class="text-end"><input name='new_sort_order' type=text class="form-control text-end" size="6">
+                    </td>
+                    <td class="text-center"><button class="btn btn-outline-primary text-nowrap" onclick="document.getElementById('disform').submit(); return false"><i class="bi bi-plus-lg"></i></button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <input type=hidden name=dpt value=custord>
+    <input type=hidden name=sub value=custgroup>
+    <input type=hidden name=save_custgroups value=yes>
+
+    {* BEGIN Discount-for-Categories *}
+    <div class="table-responsive-lg mb-3">
+        <table class="mt-3 table table-sm table-borderless table-light align-top">
+            <thead>
+                <tr>
+                    <th class="text-center">Выберите категорию, задайте скидку</th>
+                    <th class="text-center">Выберите группу, задайте скидку</th>
+                    <th class="text-center">{$smarty.const.ADMIN_DISCOUNT}, %</th>
+                    <th class="text-center fs-5"><i class="bi bi-terminal-plus"></i></th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                <tr>
+                    <td class="text-center">
+                        <select class="selectpicker form-control" id="discount_category" name="discount_category" data-style="btn-outline-secondary"
+                         data-live-search="true" data-size="8" data-width="99%">
+                            <option value=0>Выберите категорию</option>
+                            {section name=cat loop=$cats}
+                            <option value="{$cats[cat].categoryID}">{$cats[cat].name}</option>
+                            {/section}
+                        </select>
+                    </td>
+                    <td class="text-center">
+                        <select class="form-select" name="discount_group">
+                            <option value=0>Выберите группу</option>
+                            {section name=grp loop=$custgroups}
+                            <option value="{$custgroups[grp].custgroupID}">{$custgroups[grp].custgroup_name}</option>
+                            {/section}
+                        </select>
+                    </td>
+                    <td class="text-center"><input name='new_custgroup_discount' type=text class="form-control text-end" size="6"></td>
+                    <td class="text-center">
+                        <button class="btn btn-outline-primary text-nowrap" onclick="document.getElementById('disform').submit(); return false" title="{$smarty.const.ADD_BUTTON}"><i class="bi bi-plus-lg"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</form>
+</table>
+{* END Discount-for-Categories *}
+
+<div class="my-5 alert alert-success alert-dismissible fade show" role="alert">
+    <span class="fw-bold">{$smarty.const.USEFUL_FOR_YOU}</span><br>{$smarty.const.ADMIN_DS2}<br><br>{$smarty.const.ADMIN_CUSTGROUP_DESCRIPTION}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>

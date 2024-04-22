@@ -1,0 +1,102 @@
+{* modules_shipping.tpl.html *}
+{if $constant_managment}
+<h2 class="fw-lighter">{$shipping_module->title}<sup class="text-danger">{$shipping_module->myClassName}</sup></h2>
+{if $settings}
+<form action="" method=POST name="formmodule" id="formmodule">
+    <div class="my-3 table-responsive-md">
+        <table class="table align-middle bg-body">
+            <caption>{$shipping_module->title}</caption>
+            <thead>
+                <tr>
+                    <th width="40%">Значение</th>
+                    <th class="text-center">Описание</th>
+                    <th class="text-center">
+                        <button onclick="document.getElementById('save').name='save';document.getElementById('formmodule').submit(); return false" class="btn btn-success btn-sm text-nowrap">{$smarty.const.STRING_DO_SAVE}&nbsp;<i class="bi bi-save2"></i></button>
+                        <a role="button" href='{$smarty.const.ADMIN_FILE}?dpt=modules&amp;sub=shipping' class="btn btn-dark btn-sm">{$smarty.const.GOBACK_BUTTON}&nbsp;<i class="bi bi-arrow-return-left"></i></a>
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                {section name=i loop=$settings}
+                <tr>
+                    <td class="text-start" width="40%">{$controls[i]}</td>
+                    <td class="text-start" colspan=3><b>{$settings[i].settings_title}</b> <sub class="text-danger"><var>{$settings[i].settings_constant_name}</var><sub>{$settings[i].settingsID}:{$settings[i].settings_groupID}</sub></sub><br>{$settings[i].settings_description}</td>
+                </tr>
+                {/section}
+            </tbody>
+        </table>
+    </div>
+    <input type="hidden" name="name" value="1" id="save">
+    <div class="my-3 d-grid gap-2 d-md-flex justify-content-md-end">
+        <button onclick="document.getElementById('save').name='save';document.getElementById('formmodule').submit(); return false" class="btn btn-success btn-lg">{$smarty.const.STRING_DO_SAVE}&nbsp;<i class="bi bi-save2"></i></button>
+        <a role="button" href='{$smarty.const.ADMIN_FILE}?dpt=modules&amp;sub=shipping' class="btn btn-dark btn-lg">{$smarty.const.GOBACK_BUTTON}&nbsp;<i class="bi bi-arrow-return-left"></i></a>
+    </div>
+</form>
+{else}
+<h3 class="text-danger text-uppercase"> Модуль не имеет настроек </h3>
+<div class="my-3 d-grid gap-2 d-md-flex justify-content-md-end">
+    <a role="button" href='{$smarty.const.ADMIN_FILE}?dpt=modules&amp;sub=shipping' class="btn btn-dark btn-lg">{$smarty.const.GOBACK_BUTTON}&nbsp;<i class="bi bi-arrow-return-left"></i></a>
+</div>
+{/if}
+{else}
+<hr>
+<h4>Установленные Модули доставки <span class="ms-2 badge bg-primary opacity-50">{$shipping_configs|@count}</span></h4>
+<div class="mb-3 table-responsive">
+    <table class="table table-hover align-middle bg-white">
+        <caption>Установленные Модули доставки</caption>
+        <thead>
+            <tr>
+                <th class="text-start">{$smarty.const.SHMODULES_INSTALLED_CONFIGS}</th>
+                <th class="text-center">{$smarty.const.STRING_MODULE_ACTIONS}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {foreach from=$shipping_configs item=_shConfig}
+            {assign var="InstalledModuleConfigs" value=1}
+            <tr>
+                <td width="50%">{$_shConfig.ConfigName}<sup class="text-danger">{$_shConfig.ConfigClassName}</sup></td>
+                <td class="d-grid gap-2 d-md-flex justify-content-end">
+                    <a role="button" href="{$smarty.const.ADMIN_FILE}?dpt=modules&sub=shipping&setting_up={$_shConfig.ConfigID}" class="btn btn-outline-primary">Настроить&nbsp;<i class="bi bi-gear-wide"></i></a>
+                    <button role="button" onclick="confirmDelete({$_shConfig.ConfigID},'{$smarty.const.QUESTION_DELETE_CONFIRMATION}', '{$smarty.const.ADMIN_FILE}?dpt=modules&sub=shipping&uninstall='); return false;" class="btn btn-danger" title="Деинсталлировать"><i class="bi bi-x"></i></button>
+                </td>
+            </tr>
+            {/foreach}
+            {if !$InstalledModuleConfigs}
+            <tr class="text-bg-danger">
+                <td class="text-center" colspan="2">{$smarty.const.ADMIN_NO_INSTALLED_MODULE_CONFS}</td>
+            </tr>
+            {/if}
+        </tbody>
+    </table>
+</div>
+<hr>
+<h4>Доступные Модули доставки <span class="ms-2 badge bg-secondary opacity-50">{$shipping_modules|@count}</span></h4>
+<div class="mb-3 row row-cols-1 row-cols-md-2 row-cols-lg-4 g-2">
+    {section name=i loop=$shipping_modules}
+    <div class="col">
+        <div class="card h-100 border-primary">
+            <svg class="m-3 card-img-top d-block mx-auto mb-1 text-primary" width="64" height="64">
+                <use xlink:href="#ship" /></svg>
+            <div class="card-body">
+                <h5 class="card-title text-primary text-center">{$shipping_modules[i]->title}</h5>
+                <p class="h-50 card-text">{$shipping_modules[i]->description}
+                    <br>
+                    <small class="badge bg-danger">{$shipping_modules[i]->myClassName}</small>
+                </p>
+            </div>
+            <div class="card-footer text-end bg-transparent">
+                {if $shipping_modules[i]->ModuleType || !$shipping_modules[i]->is_installed()}
+                <a role="button" href="{$smarty.const.ADMIN_FILE}?dpt=modules&amp;sub=shipping&amp;install={$smarty.section.i.index}" class="btn btn-outline-primary">{$smarty.const.STRING_MODULE_INSTALL}&nbsp;<i class="bi bi-download"></i></a>
+                {/if}
+            </div>
+        </div>
+    </div>
+    {/section}
+</div>
+{/if}
+<div class="my-5 alert alert-info alert-dismissible fade show" role="alert">
+    <span class="fw-bold">{$smarty.const.USEFUL_FOR_YOU}</span>
+    {$smarty.const.ALERT_ADMIN19}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{* {$shipping_modules[i]->MethodsTable} *}

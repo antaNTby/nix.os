@@ -1,0 +1,209 @@
+{* шаблон детального описания товара *}
+{* {$product_info|@debug} *}
+{if $product_info ne NULL}
+<input type="hidden" id="ProductID" value="{$product_info.productID}">
+<input type="hidden" id="CategoryID" value="{$product_info.categoryID}">
+
+
+<div class="mt-3 d-flex flex-column flex-md-row justify-content-center justify-content-md-between" data-id="AAAA">
+
+    <div class="d-flex flex-column w-100 pe-3" data-id="AABA">
+        <h2 class="h4 text-danger">{$smarty.const.STRING_PRODUCT_CODE} : #{$product_info.product_code}
+          {if $isadmin eq "yes"}
+            <a class="btn btn-link text-decoration-none float-end me-1 opacity-50 adminlink" {if !$product_info.enabled}disabled{/if} href="{$smarty.const.ADMIN_FILE}?dpt=catalog&amp;sub=special&amp;new_offer={$product_info.productID}" title="Добавить в список на главную страницу"><i class="bi bi-balloon-fill"></i><i class="bi bi-plus"></i></a>
+            <a class='btn btn-link text-decoration-none float-end me-1 opacity-50 adminlink' href='{$smarty.const.ADMIN_FILE}?dpt=catalog&amp;sub=special'><i class="bi bi-balloon-fill"></i></a>
+            <small class="badge bg-success float-end me-1"> <i class="bi bi-graph-up-arrow"></i> {$product_info.viewed_times} </span> <span class="d-none d-xxl-inline">{$product_info.viewed_times|@say_to_russian:"просмотр":"просмотра":"просмотров"}</span></small>
+          {/if}
+        </h2>
+      {if $product_info.nixru_options["НОВИНКА!!!"]}
+        <div class="m-3 p-3 alert alert-danger alert-dismissible fade show" role="alert" data-id="is_newproduct">
+            <strong>НОВИНКА!</strong> новый товар в прайсе
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {/if}
+    </div>
+
+  {if $currencies_count ne 0}
+    <div class="d-flex flex-column w-100" data-id="AABB">
+        <div class="shadow rounded" id="optionPrice">
+          <h2 class="p-3 h4 text-danger fw-lighter text-center">{if $product_info.Price <= 0}{$smarty.const.STRING_NOPRODUCT_IN}{else}Цена {$product_info.PriceWithUnit}{/if}</h2>
+        </div>
+
+        {if $product_info.shipping_freightUC || $product_info.min_order_amount> 1}
+        <div class="p-2 row g-2">
+          {if $product_info.shipping_freightUC}
+            <div class="col">
+            {$smarty.const.ADMIN_SHIPPING_FREIGHT}: <span class="badge bg-secondary">{$product_info.shipping_freightUC}</span>
+            </div>
+          {/if}
+          {if $product_info.min_order_amount > 1}
+            <div class="col">
+            {$smarty.const.STRING_MIN_ORDER_AMOUNT}: <span class="badge bg-secondary">{$product_info.min_order_amount}{$smarty.const.STRING_ITEM}</span>
+            </div>
+          {/if}
+        </div>
+        {/if}
+    </div>
+  {/if}
+
+</div>{* AAAA *}
+
+
+<div class="d-flex flex-column flex-md-row justify-content-center justify-content-md-between  mx-md-auto" data-id="BBBB">
+
+    <div id="gallery-container" class="d-flex flex-column w-100 pe-3" data-id="BBCA">
+                {include file="product_detailed__imageGallery.tpl.html"}
+    </div>
+
+    <div class="mt-5 d-flex flex-column w-100" data-id="BBCA">
+
+        <div class="shadow rounded p-3 text-center" data-id="buttonDoLoad">
+            {$product_info|@phpmakeBuyButtonBS5}
+        </div>
+
+        <div class="mt-3 p-3 text-center">
+            <h5 class="h5">Краткое описание: {$product_info.name}</h5>
+            <p class="fst-italic lh-sm text-wrap" data-id="brief_description">
+                {if $product_info.brief_description|@trim|@count>5}
+                {$product_info.brief_description}
+                {/if}
+                {if $product_info.nixru_params}
+                {section name=i loop= $product_info.nixru_params.index|@count }
+                    {if $product_info.nixru_params.title[i] eq "Краткое наименование"
+                    || $product_info.nixru_params.title[i] eq "Описание"
+                    || $product_info.nixru_params.title[i] eq "Наименование"
+                    }
+                    {$product_info.nixru_params.value[i]}
+                    {/if}
+                {/section}
+            </p>
+{*             <p class="text-end">
+                <a href="product_{$product_info.productID}.html#params_anchor"><i class="bi bi-info-circle"></i> подробнее ...</a>
+            </p> *}
+            {/if}
+        </div>
+
+      {if $isadmin eq "yes"}
+      <div class="mt-3 p-3 shadow rounded" data-id="adminTable">
+          {include file="product_detailed__adminTable.tpl.html"}
+      </div>
+      {/if}
+
+      {if $product_info.nixru_options}
+      <div class="mt-3 p-3 shadow rounded" data-id="nixru_options">
+          <ul class="list-group list-group-flush">
+              {foreach from=$product_info.nixru_options key=k item=v}
+              {if ($v) && ($k neq "href") && ($k neq "vendorID") && ($k neq "url") && ($k neq "НОВИНКА!!!") }
+              <li class="list-group-item"><strong>{$k}</strong> <span class="text-end">{$v}</span></li>
+              {/if}
+              {/foreach}
+              <li class="list-group-item" style='background-color:#F2F7FE; width:100%; text-align:center;'>
+                  <a class="btn-link" href='https://www.nix.ru/' style='font-weight:bold;color:#2E448C;'>НИКС - Компьютерный Cупермаркет полный каталог описаний</a>
+              </li>
+          </ul>
+      </div>
+      {/if}
+
+
+      {if $smarty.const.CONF_CHECKSTOCK == '1'}
+      <div class="mt-3 p-3 text-center shadow rounded" data-id="instock">
+          <h3>
+              {if $product_info.in_stock >0}
+              Наличие на складе:
+              {else}
+              Возможность поставки:
+              {/if}
+              <span class="{if $smarty.const.CONF_INSTOCK_REPLACE_BY_SYMBOLS || $smarty.const.CONF_EXACT_PRODUCT_BALANCE eq '0'}text-center{else}text-end{/if} badge {if $product_info.in_stock >0}bg-success{elseif $product_info.in_stock eq '0'}bg-warning{elseif $product_info.in_stock <= -500}bg-danger{else}bg-secondary{/if}">
+                  {if $smarty.const.CONF_EXACT_PRODUCT_BALANCE eq "0"}
+                  {if $smarty.const.CONF_INSTOCK_REPLACE_BY_SYMBOLS}
+                  {$product_info.in_stock_symbol}
+                  {else}
+                  {$product_info.in_stock_string}
+                  {/if}
+                  {else}
+                  {if $smarty.const.CONF_INSTOCK_REPLACE_BY_SYMBOLS}
+                  {$product_info.in_stock_symbol}
+                  {else}
+                  {$product_info.in_stock_string}
+                  {/if}
+                  {/if}
+              </span>
+          </h3>
+          <p class="text-end mb-0"><small class="text-muted">Продукт добавлен {$product_info.date_added} &nbsp; Продукт обновлен {$product_info.date_modified}</small></p>
+          <p class="text-end mb-0">
+              {if $product_info.date_old neq 0}
+              <span class="badge bg-danger text-end" title="товар устарел">устарел {$product_info.date_old}</span>
+              {else}
+              <span class="badge bg-success text-end" title="товар устарел">АКТУАЛЕН</span>
+              {/if}
+          </p>
+      </div>
+      {/if}
+
+      {if $product_info.description}
+      <div class="mt-3 p-3 text-center" style="overflow-x: auto" data-id="description"><p>{$product_info.description}</p></div>
+      {/if}
+
+    </div>
+
+</div>{* BBBB *}
+
+
+
+<div class="mt-5 d-flex flex-column flex-md-row justify-content-center justify-content-md-between  mx-md-auto align-items-center" data-id="CCCC">
+    {if $product_info.product_code && $smarty.const.CONF_DISPLAY_PRCODE eq 1}
+    <h3 class="text-danger w-100">{$smarty.const.STRING_PRODUCT_CODE} : #{$product_info.product_code}</h3>
+    {/if}
+    <div class="btn-toolbar w-100 justify-content-center">
+        {if $product_info.nixru_options["url"]}
+        <a class="btn btn-outline-secondary me-3 mb-1 mb-xl-0" type="button" target="_blank" href="{$product_info.nixru_options.url}">перейти на НИКС www.nix.ru</a>
+        {elseif $product_info.nixru_options["href"]}
+        <a class="btn btn-outline-secondary me-3 mb-1 mb-xl-0" type="button" target="_blank" href="{$product_info.nixru_options.href}">перейти на НИКС www.nix.ru</a>
+        {/if}
+        <a class="btn btn-outline-secondary me-3 mb-1 mb-xl-0" type="button" target="_blank" href="https://www.google.com/search?q={$product_info.name} nix.ru"> <i class="bi bi-google"></i> искать с помощью Google </a>
+    </div>
+</div>
+
+<div class="mt-3 row justify-content-center" data-id="nixru_params" name="params_anchor">
+      <h3 class=" pb-2 border-bottom">Технические характеристики {$product_info.name}</h3>
+      {if $product_info.nixru_params}
+        <div class="col col-xl-9 table-responsive-lg" style="overflow-x: auto" data-id="nixru_params">
+            <table class="table table-condensed table-striped">
+                <tbody>
+                    {section name=i loop= $product_info.nixru_params.index|@count }
+                    <tr data-paramID="{$product_info.nixru_params.paramID[i]}">
+                        <td class="text-muted">{$product_info.nixru_params.index[i]+1}</td>
+                        <th>{$product_info.nixru_params.title[i]}{if $isadmin eq "yes"}<a target="_blank" class="text-decoration-none float-end me-1 opacity-50 adminlink" href="/adminer.php?username={$smarty.const.DB_USER}&db={$smarty.const.DB_NAME}&edit=PRICE_Params&where%5BparamID%5D={$product_info.nixru_params.paramID[i]}"><img src="/adminer.php?file=favicon.ico"></a>{/if}</th>
+                        <td style="width:70%">{$product_info.nixru_params.value[i]}</td>
+                    </tr>
+                    {/section}
+                </tbody>
+            </table>
+        </div>
+      {else}
+
+      Данные уточняются ...
+      <div class="progress mb-1">
+          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+      </div>
+      {/if}
+</div>
+
+            <div class="alert alert-danger alert-dismissible fade show mb-1" role="alert">
+                <strong>Внимание!</strong> Xарактеристики, комплект поставки и внешний вид данного товара могут отличаться от указанных или могут быть изменены производителем без отражения в каталоге.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+{/if}
+
+
+{if $productslinkscat|@count > 0}
+<div class="card mb-3 mx-auto" data-id="productslinkscat">
+    <div class="card-body">
+        <h5 class="card-title">{$smarty.const.STRING_CAT_USE_AUX}</h5>
+        {section name=iprod loop=$productslinkscat}
+        <a class="card-link" href="{if $smarty.const.CONF_MOD_REWRITE eq 1}page_{$productslinkscat[iprod][0]}.html{else}index.php?show_aux_page={$productslinkscat[iprod][0]}{/if}">{$productslinkscat[iprod][1]}</a>
+        <br>
+        {/section}
+    </div>
+</div>
+{/if}

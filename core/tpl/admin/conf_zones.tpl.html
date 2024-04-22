@@ -1,0 +1,74 @@
+{* zones configuration *}
+<form action="{$smarty.const.ADMIN_FILE}?dpt=conf&amp;sub=zones&amp;countryID={$countryID}" method=post enctype="multipart/form-data" class="form-horizontal" name="MainForm" id="MainForm">
+    {if $countries}
+    <div class="form-group">
+        <label for="countryID_Select" class="col-xs-4 control-label">{$smarty.const.ADMIN_ZONE_INIT}</label>
+
+        <div class="col-xs-6">
+            <select name='countryID_Select' class="form-select form-control-sm font-monospace" onchange="window.location=document.getElementById('MainForm').countryID_Select.value">
+                {section name=i loop=$countries}
+                <option value='{$smarty.const.ADMIN_FILE}?dpt=conf&amp;sub=zones&amp;countryID={$countries[i].countryID}' {if $countryID==$countries[i].countryID} selected {/if}> {$countries[i].country_name} </option> {/section} </select> </div>
+         </div>
+
+         <div class="my-3 table-responsive">
+                    <table class="table table-hover table-striped align-middle">
+                        <caption>Зоны</caption>
+                        <thead>
+                            <tr>
+                                <th class="text-center" width="1%">#</th>
+                                <th class="text-center" width="1%">id</th>
+                                <th class="text-center">{$smarty.const.ADMIN_ZONE_NAME}</th>
+                                <th class="text-center" width="18%">{$smarty.const.ADMIN_ZONE_CODE}</th>
+                                <th class="text-center fs-5"><i class="bi bi-terminal-x"></i></th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            {section name=i loop=$zones}
+                            <tr>
+                                <td class="text-center">{$smarty.section.i.iteration}</td>
+                                <td class="text-center"><sub class="form-control-static"><em>{$zones[i].zoneID}</em></sub></td>
+                                <td class="text-center text-nowrap"><input type="text" class="form-control font-monospace text-start" name="zone_name_{$zones[i].zoneID}" value="{$zones[i].zone_name}"/></td>
+                                <td class="text-end"><input type="text" name="zone_code_{$zones[i].zoneID}" value="{$zones[i].zone_code}" class="form-control text-left" /></td>
+                                <td class="text-center"><button class="btn btn-outline-danger" role="button" onclick="confirmDelete({$zones[i].zoneID},'{$smarty.const.QUESTION_DELETE_CONFIRMATION}','{$smarty.const.ADMIN_FILE}?dpt=conf&amp;sub=zones&amp;countryID={$countryID}&amp;delete=');return false;" title="{$smarty.const.REMOVE}"><i class="bi bi-x-lg"></i></button></td>
+                            </tr>
+                            {sectionelse}
+                            <tr>
+                                <td class="text-center text-warning lead" colspan="6">{$smarty.const.ADMIN_NO_VALUES}</td>
+                            </tr>
+                            {/section}
+                        </tbody>
+                    </table>
+        </div>
+        <input type="hidden" name="dpt" value="conf">
+        <input type="hidden" name="sub" value="zones">
+        <input type="hidden" name="save_zones" value="yes">
+        {else}
+        <h4 class="text-danger">{$smarty.const.ADMIN_NO_COUNTRIES_PROMPT}</h4>
+        {/if}
+<div class="d-grid gap-2 d-md-flex justify-content-md-end">{if $countries}
+    <button class="btn btn-success btn-lg text-nowrap" role="button" onclick="document.getElementById('MainForm').submit(); return false" title="{$smarty.const.SAVE_BUTTON}">{$smarty.const.SAVE_BUTTON}&nbsp;<i class="bi bi-save"></i></button>{/if}
+</div>
+<hr>
+<div class="table-responsive-md">
+    <table class="mt-3 table table-sm table-borderless table-light align-top">
+        <caption>Добавление новой зоны</caption>
+        <thead>
+            <tr>
+                <td class="text-start" width="70%">{$smarty.const.ADMIN_ZONE_NAME}</td>
+                <td class="text-start" width="20%">{$smarty.const.ADMIN_ZONE_CODE}</td>
+                <td class="text-center fs-5"><i class="bi bi-terminal-plus"></i></td>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            <tr>
+                <td class="text-left" width="70%"><input type="text" class="form-control form-control-sm font-monospace" name="new_zone_name"></td>
+                <td class="text-left" width="20%"><input type="text" class="form-control form-control-sm font-monospace" name="new_zone_code"></td>
+                <td class="text-center"><button class="btn btn-outline-primary btn-sm text-nowrap" onclick="document.getElementById('MainForm').submit(); return false"><i class="bi bi-plus-lg"></i></button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</form>
+{if $countries[$current_country].country_iso_2 eq "BY"}
+{include file="admin/conf_zones__BY.tpl.html"}
+{/if}

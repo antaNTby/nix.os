@@ -1,0 +1,146 @@
+<h1 class="display-6 text-center">Приветствуем вас на сайте {$smarty.const.SITE_URL}</h1>
+{if $rand_products}
+<h4 class="fw-lighter">Случайно выбранные товары</h4>
+<div class="row row-cols-1 row-cols-md-3 row-cols-xl-4 g-1 mb-1 mb-md-3">
+    {section name=i loop=$rand_products}
+    {if $smarty.const.CONF_MOD_REWRITE eq 1}
+    {assign var="_href" value="product_`$rand_products[i].productID`.html"}
+    {else}
+    {assign var="_href" value="index.php?productID=`$rand_products[i].productID`"}
+    {/if}
+    {assign var="goto" value="index.php?productID=`$rand_products[i].productID`"}
+    <div class="col">
+        <div class="card h-100" role="button" onclick="let link=window.location='{$_href}'">
+            {* <a href="{$_href}"> *}
+                {if $rand_products[i].image_path neq ""}
+                <picture class="p-0 p-md-2 overflow-hidden align-middle position-relative" style="height: 300px;aspect-ratio: initial!important; background-image: url('{$rand_products[i].image_path}');box-shadow: 0 0 32px 32px white inset;" role="img" loading="lazy" aria-label="Random Products">
+                    {* <img class="card-img-top img-thumbnail" src="{$rand_products[i].image_path}" alt="{$rand_products[i].name}" style="height: 200px;aspect-ratio: initial!important;"> *}
+                    <svg class="bi position-absolute top-0 start-0 p-1 bg-white text-danger" width="40" height="32" role="img" aria-label="Random Products">
+                        <title>{$rand_products[i].name} купить в Минске</title>
+                        <text id="rand-{$smarty.section.i.iteration}-title">{$rand_products[i].brief_description}</text>
+                        <use xlink:href="#shuffle">
+                    </svg>
+                </picture>
+                {else}
+                <picture class="p-0 p-md-2 overflow-hidden align-middle position-relative" style="height: 300px;padding: 1rem" role="image">
+                    <svg class="bi d-block h-100" alt="{$rand_products[i].name}" fill-opacity="0.3">
+                        <title>нет фото {$rand_products[i].name}</title>
+                        <use xlink:href="#empty_images">
+                    </svg>
+                    <svg class="bi position-absolute top-0 start-0 p-1 bg-white text-danger" width="40" height="32" role="img" aria-label="Random Products">
+                        <title>{$rand_products[i].name} купить в Минске</title>
+                        <text id="rand-{$smarty.section.i.iteration}-title">{$rand_products[i].brief_description}</text>
+                        <use xlink:href="#shuffle">
+                    </svg>
+                </picture>
+                {/if}
+                {* </a> *}
+            <div class="card-body">
+                <h5 class="card-title fw-lighter" role="button"><span class="text-danger">[{$rand_products[i].product_code}]</span> {$rand_products[i].name}</h5>
+                {* <p class="card-text">{$rand_products[i].brief_description}</p> *}
+            </div>
+        </div>
+    </div>
+    {/section}
+</div>
+{/if}
+{if $special_offers}
+<h4 class="fw-lighter">Мы рекомендуем{if $isadmin eq "yes"}<a class='float-end me-1 opacity-50 adminlink' href='{$smarty.const.ADMIN_FILE}?dpt=catalog&amp;sub=special' title="Cписок рекомендованных на главной странице"><i class="bi bi-balloon-fill"></i></a>{/if}</h4>
+<div class="row row-cols-1 row-cols-md-3 row-cols-xl-4 g-1 mb-1 mb-md-3">
+    {section name=i loop=$special_offers}
+    {if $smarty.const.CONF_MOD_REWRITE eq 1}
+    {assign var="_href" value="product_`$special_offers[i].productID`.html"}
+    {else}
+    {assign var="_href" value="index.php?productID=`$special_offers[i].productID`"}
+    {/if}
+    {assign var="goto" value="index.php?productID=`$special_offers[i].productID`"}
+    <div class="col">
+        <div class="card h-100" role="button" onclick="let link=window.location='{$_href}'">
+            {* <a href="{$_href}"> *}
+                {if $special_offers[i].image_path neq ""}
+                <picture class="p-0 p-md-2 overflow-hidden align-middle position-relative" style="height: 300px;aspect-ratio: initial!important; background-image: url('{$special_offers[i].image_path}');box-shadow: 0 0 32px 32px white inset;" role="img" aria-label="Recomended Products">
+                    {* <img class="card-img-top img-thumbnail" src="{$special_offers[i].image_path}" alt="{$special_offers[i].name}" style="height: 200px;aspect-ratio: initial!important;"> *}
+                    <svg class="bi position-absolute top-0 start-0 p-1 bg-white text-danger" width="40" height="32" role="img" aria-label="Recomended Products">
+                        <title>{$special_offers[i].name} купить в Минске</title>
+                        <text id="rand-{$smarty.section.i.iteration}-title">{$special_offers[i].brief_description}</text>
+                        <use xlink:href="#activity">
+                    </svg>
+                </picture>
+                {else}
+                <picture class="p-0 p-md-2 overflow-hidden align-middle position-relative" style="height: 300px;padding: 1rem" role="image">
+                    <svg class="bi d-block h-100" alt="{$special_offers[i].name}" fill-opacity="0.3">
+                        <title>нет фото {$special_offers[i].name}</title>
+                        <use xlink:href="#empty_images">
+                    </svg>
+                    <svg class="bi position-absolute top-0 start-0 p-1 bg-white text-danger" width="40" height="32" role="img" aria-label="Random Products">
+                        <title>{$special_offers[i].name} купить в Минске</title>
+                        {* <text id="rand-{$smarty.section.i.iteration}-title">{$special_offers[i].brief_description}</text> *}
+                        <use xlink:href="#activity">
+                    </svg>
+                </picture>
+                {/if}
+                {* </a> *}
+            <div class="card-body">
+                <h5 class="card-title fw-lighter" role="button"><span class="text-danger">[{$special_offers[i].product_code}]</span> {$special_offers[i].name}</h5>
+                {* <p class="card-text">{$special_offers[i].brief_description}</p> *}
+            </div>
+        </div>
+    </div>
+    {/section}
+</div>
+{/if}
+{*
+{if $new_products}
+<h4 class="fw-lighter">Новые товары</h4>
+<div class="row row-cols-1 row-cols-md-3 g-3 mb-1 mb-md-3">
+    {section name=i loop=$new_products}
+    {if $smarty.const.CONF_MOD_REWRITE eq 1}
+    {assign var="_href" value="product_`$new_products[i].productID`.html"}
+    {else}
+    {assign var="_href" value="index.php?productID=`$new_products[i].productID`"}
+    {/if}
+    {assign var="goto" value="index.php?productID=`$new_products[i].productID`"}
+    <div class="col">
+        <div class="card h-100" role="button" onclick="let link=window.location='{$_href}'">
+            <a href="{$_href}">
+                {if $new_products[i].image_path neq ""}
+                <picture class="p-0 p-md-2 overflow-hidden align-middle" style="height: 300px;aspect-ratio: initial!important; background-image: url('{$new_products[i].image_path}');box-shadow: 0 0 16px 16px white inset;">
+                    <img class="card-img-top img-fluid" src="{$new_products[i].image_path}" alt="{$new_products[i].name}">
+                </picture>{/if}
+            </a>
+            <div class="card-body">
+                <h5 class="card-title fw-lighter" role="button"><span class="text-danger">[{$new_products[i].product_code}]</span> {$new_products[i].name}</h5>
+                <p class="card-text">{$rand_products[i].brief_description}</p>
+            </div>
+        </div>
+    </div>
+    {/section}
+</div>
+{/if}
+{if $popular_products}
+<h4 class="fw-lighter">Популярные товары</h4>
+<div class="row row-cols-1 row-cols-md-3 g-3 mb-1 mb-md-3">
+    {section name=i loop=$popular_products}
+    {if $smarty.const.CONF_MOD_REWRITE eq 1}
+    {assign var="_href" value="product_`$popular_products[i].productID`.html"}
+    {else}
+    {assign var="_href" value="index.php?productID=`$popular_products[i].productID`"}
+    {/if}
+    {assign var="goto" value="index.php?productID=`$popular_products[i].productID`"}
+    <div class="col">
+        <div class="card h-100" role="button" onclick="let link=window.location='{$_href}'">
+            <a href="{$_href}">
+                {if $popular_products[i].image_path neq ""}
+                <picture class="p-0 p-md-2 overflow-hidden align-middle" style="height: 300px;aspect-ratio: initial!important; background-image: url('{$popular_products[i].image_path}');box-shadow: 0 0 16px 16px white inset;">
+                    <img class="card-img-top img-fluid" src="{$popular_products[i].image_path}" alt="{$popular_products[i].name}">
+                </picture>{/if}
+            </a>
+            <div class="card-body">
+                <h5 class="card-title fw-lighter" role="button"><span class="text-danger">[{$popular_products[i].product_code}]</span> {$popular_products[i].name}</h5>
+                <p class="card-text">{$rand_products[i].brief_description}</p>
+            </div>
+        </div>
+    </div>
+    {/section}
+</div>
+{/if} *}

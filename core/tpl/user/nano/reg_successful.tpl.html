@@ -1,0 +1,29 @@
+{* шаблон сообщения об успешной регистрации *}
+{if $reg_terminated}
+    <div class="alert alert-success">{$smarty.const.STRING_SUCCESSFUL_ACCOUNT_TERMINATION}</div>
+{else}
+            {if $reg_updating}
+            <div class="alert alert-success">{$smarty.const.STRING_ACOOUNT_UPDATE_SUCCESSFUL}</div>
+            <a href="javascript:confirmUnsubscribe();" class="btn btn-danger me-3"><i class="bi bi-heartbreak"></i> {$smarty.const.TERMINATE_ACCOUNT_LINK}</a>
+            {else}
+                    {if $smarty.const.CONF_ENABLE_REGCONFIRMATION}
+                    <div class="card text-center w-50 mx-auto mt-5">
+                        <div class="card-header">{$smarty.const.REGACTIVATION}</div>
+                        <div class="card-body">
+                            {/if}
+                            <div class="alert alert-success">{$smarty.const.STRING_REGISTRATION_SUCCESSFUL}</div>
+                            {if $smarty.const.CONF_ENABLE_REGCONFIRMATION}
+                            <form method="get" id="regsuccform" role="form">
+                                <input type="hidden" name="act_customer" value="1">
+                                <div class="col-auto">
+                                    <label for="act_code">{$smarty.const.REGCONFIRM_TYPE_CODE}</label>
+                                    <input type="text" class="form-control" name="act_code" id="act_code" value="{$ActCode}">
+                                </div>
+                                <button type="submit" class="btn btn-primary">{$smarty.const.ACTIVATE_BUTTON}</button>
+                            </form>
+                        </div>
+                    </div>
+                    {/if}
+            {/if}
+{/if}
+

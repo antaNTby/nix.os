@@ -1,0 +1,136 @@
+{* {$MyCurrencies[0]|@debug} *}
+{* {$MyOrderContent|@debug} *}
+<div class="table-responsive bg-dark bg-opacity-25 p-1 shadow-lg mb-3">
+    <table id="CurrencyTable" class="table table-dark table-sm table-borderles align-top mb-0 pt-0">
+        <tbody>
+            <tr>
+                <th>
+                    {if $MyOrderContent.hasVATIncluded eq 0}
+                    <label class="" for="resultCurrencyValue">Валюта, курс БЕЗ НДС</label>
+                    <input type="text" data-orderid="{$MyOrderContent.orderID}" name="resultCurrencyValue" id="resultCurrencyValue" class="form-control-plaintext form-control-lg text-center d-inline text-bg-success mx-3" style="max-width: 6em; width:6em;" value="{$MyOrderContent.targetCurrencyRate|@invoiceUSDformat}" readonly="readonly">
+                    <label class="" for="resultCurrencyValueWithVAT">Валюта, курс с НДС</label>
+                    <input type="text" data-orderid="{$MyOrderContent.orderID}" name="resultCurrencyValueWithVAT" id="resultCurrencyValueWithVAT" class="form-control-plaintext form-control-lg text-center d-inline text-bg-success mx-3" style="max-width: 6em; width:6em;" value="{($MyOrderContent.targetCurrencyRate*($MyOrderContent.VAT_Rate+100)/100)|@invoiceUSDformat}" readonly="readonly">
+                    {else}
+                    <label class="" for="resultCurrencyValue">Валюта, курс БЕЗ НДС</label>
+                    <input type="text" data-orderid="{$MyOrderContent.orderID}" name="resultCurrencyValue" id="resultCurrencyValue" class="form-control-plaintext form-control-lg text-center d-inline text-bg-success mx-3" style="max-width: 6em; width:6em;" value="{($MyOrderContent.targetCurrencyRate/($MyOrderContent.VAT_Rate+100)*100)|@invoiceUSDformat}">
+                    <label class="" for="resultCurrencyValueWithVAT">Валюта, курс с НДС</label>
+                    <input type="text" data-orderid="{$MyOrderContent.orderID}" name="resultCurrencyValueWithVAT" id="resultCurrencyValueWithVAT" class="form-control-plaintext form-control-lg text-center d-inline text-bg-success mx-3" style="max-width: 6em; width:6em;" value="{$MyOrderContent.targetCurrencyRate|@invoiceUSDformat}">
+                    {/if}
+                </th>
+                <td>
+                    <select type="text" data-control="selectCurrency" data-orderid="{$MyOrderContent.orderID}" name="selectCurrency" id="selectCurrency" class="form-select form-select-lg text-center d-inline">
+                        <option disabled>--- Валюта на сайте ( на сегодняшний день) ---</option>
+                        {section name=d loop=$MyCurrencies}
+                        {if $MyOrderContent}
+                        {if $MyOrderContent.orderCurrencyCode eq $MyCurrencies[d].currency_iso_3}
+                        {assign var=attrSelected value=""}
+                        {assign var=check_mark value=">"}
+                        {assign var=selectedCurrencyCID value=$MyCurrencies[d].CID}
+                        {assign var=currencyName value=$MyCurrencies[d].Name}
+                        {assign var=orderHasVATIncluded value=$MyCurrencies[d].hasVATIncluded}
+                        {else}
+                        {assign var=attrSelected value=""}
+                        {assign var=check_mark value=""}
+                        {/if}
+                        {else}
+                        {if $MyCurrencies[d].CID eq '4'} {* BYN *}
+                        {assign var=attrSelected value=" selected='selected'"}
+                        {assign var=check_mark value=">"}
+                        {assign var=selectedCurrencyCID value=$MyCurrencies[d].CID}
+                        {assign var=currencyName value=$MyCurrencies[d].Name}
+                        {assign var=orderHasVATIncluded value=$MyCurrencies[d].hasVATIncluded}
+                        {else}
+                        {assign var=attrSelected value=""}
+                        {assign var=check_mark value=""}
+                        {assign var=selectedCurrencyCID value=$MyCurrencies[d].CID}
+                        {assign var=currencyName value=$MyCurrencies[d].Name}
+                        {assign var=orderHasVATIncluded value=$MyCurrencies[d].hasVATIncluded}
+                        {/if}
+                        {/if}
+                        <option value="{$MyCurrencies[d].CID}" data-Name="{$MyCurrencies[d].Name}" data-currency-value="{$MyCurrencies[d].currency_value|@invoiceUSDformat}" data-currency-iso3="{$MyCurrencies[d].currency_iso_3}" data-currency-precision="{$MyCurrencies[d].roundval}" data-has-vat="{$MyCurrencies[d].hasVATIncluded}" {$attrSelected}>{* {if $attrSelected}{$check_mark}{/if} *}
+                            "{$MyCurrencies[d].Name},{$MyCurrencies[d].code}" &nbsp;&nbsp;&nbsp;1:{$MyCurrencies[d].currency_value|@invoiceUSDformat} {$MyCurrencies[d].currency_iso_3} &nbsp;&nbsp;&nbsp;{$smarty.const.SITE_URL}
+                        </option>
+                        {/section}
+                        {if $MyOrderContent}
+                        {assign var=attrSelected value=" selected='selected'"}
+                        {assign var=check_mark value=">>"}
+                        <option disabled>--- Валюта заказа ( на день оформления) ---</option>
+                        <option value="{$selectedCurrencyCID}" data-Name="{$currencyName}" data-currency-value="{$MyOrderContent.orderCurrencyValue|@invoiceUSDformat}" data-currency-iso3="{$MyOrderContent.orderCurrencyCode}" data-currency-precision="{$MyOrderContent.orderCurrencyRound}" data-has-vat="{$MyOrderContent.hasVATIncluded}" {$attrSelected}>{* {if $attrSelected}{$check_mark}{/if} *}
+                            "{$currencyName},{$MyOrderContent.orderCurrencyCode}" &nbsp;&nbsp;&nbsp;1:{$MyOrderContent.orderCurrencyValue|@invoiceUSDformat} {$MyOrderContent.orderCurrencyCode} &nbsp;&nbsp;&nbsp;Заказ#{$MyOrderContent.orderID}
+                        </option>
+                        {/if}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="hasVATIncluded" {if $MyOrderContent.hasVATIncluded} checked="onLoad" {/if}> <label class="form-check-label" for="hasVATIncluded">НДС УЖЕ ВКЛЮЧЕН (!) В КУРС ВАЛЮТЫ</label>
+                    </div>
+                </td>
+                <td class="d-flex justify-content-end">
+                    <div class="input-group">
+                        <label class="input-group-text" for="targetCurrencyRate"><span class="BYN">{$MyOrderContent.targetCurrencyCode}</span></label>
+                        <input type="text" data-control="targetCurrencyRate" data-orderid="{$MyOrderContent.orderID}" name="targetCurrencyRate" id="targetCurrencyRate" class="form-control form-control-lg  text-end d-inline" style="max-width: 6em; width:6em" value="{$MyOrderContent.targetCurrencyRate|@invoiceUSDformat}">
+                        {* <button class="btn btn-light" type="button" id="buttonUpdateCurrencyRate" data-control="updateCurrencyValue"><i class="bi bi-check-square"></i></button> *}
+                    </div>
+                    <div class="form-text w-100">Валюта заказа:<br> "{$currencyName},{$MyOrderContent.orderCurrencyCode}" &nbsp;1:{$MyOrderContent.orderCurrencyValue|@invoiceUSDformat} {$MyOrderContent.orderCurrencyCode}</div>
+                </td>
+            </tr>
+            <tr>
+                <th>Ставка НДС, %</th>
+                <td>
+                    <div class="input-group">
+                        <input type="text" data-control="VAT_Rate" {if $MyOrderContent}data-orderid="{$MyOrderContent.orderID}" {/if}name="VAT_Rate" id="VAT_Rate" class="form-control text-end d-inline" style="max-width: 6em; width:6em" value="{if $MyOrderContent}{$MyOrderContent.VAT_Rate|@invoiceUSDformat}{else}{$smarty.const.DEFAULT_VAT_RATE|@invoiceUSDformat}{/if}" disabled>
+                        <span class="input-group-text"><i class="bi bi-percent"></i></span>
+                    </div>
+                </td>
+            </tr>
+            {if $MyOrderContent}
+            <tr class="table-light">
+
+                {assign var="discountPercent" value = $MyOrderContent.Discount.discountPercent|@floatval }
+                <td title="Скидка-уменьшение цены / Наценка-увеличение цены">
+                    <div class="d-flex justify-content-center">
+                        <div class="form-text">Скидка или наценка в %</div>
+                        <div class="input-group w-25 px-1">
+                             <button class="btn btn-outline-danger" type="button" role="button" onclick="onResetClick('input#discountPercent')"><i class="bi bi-x-lg"></i></button>
+                            <input type="text" data-control="discountPercent" data-orderid="{$MyOrderContent.orderID}" name="discountPercent" id="discountPercent" class="form-control text-end d-inline" value="{$discountPercent|@abs|@invoiceBYformat}">
+                            <span class="input-group-text"><i class="bi bi-percent"></i></span>
+                        </div>
+                        <div class="px-1">
+                            <input type="radio" class="btn-check" name="options-discountPercent" id="danger-discountPercent" autocomplete="off" {if $discountPercent <= 0}checked{/if}>
+                            <label class="btn btn-outline-danger px-1" for="danger-discountPercent">НАЦЕНКА,%</label>
+                        {* ======= *}
+                            <input type="radio" class="btn-check" name="options-discountPercent" id="success-discountPercent" autocomplete="off" {if $discountPercent > 0}checked{/if}>
+                            <label class="btn btn-outline-primary px-1" for="success-discountPercent">СКИДКА,%</label>
+                        </div>
+                    </div>
+                </td>
+
+                {assign var="discountValue" value = $MyOrderContent.Discount.discountValue|@floatval }
+
+                <td title="Скидка-уменьшение цены / Наценка-увеличение цены. Равномерно распределяем по заказу ">
+                    <div class="d-flex justify-content-center">
+                        <div class="form-text">Доставка в $</div>
+                        <div class="input-group w-25 px-1">
+                            <button class="btn btn-outline-danger" type="button" role="button" onclick="onResetClick('input#discountValue')"><i class="bi bi-x-lg"></i></button>
+                            <input type="text" data-control="discountValue" data-orderid="{$MyOrderContent.orderID}" name="discountValue" id="discountValue" class="form-control text-end d-inline" value="{if $discountValue neq 0}{-$discountValue|@invoiceBYformat}{else}0{/if}">
+                            <span class="input-group-text"><i class="bi bi-currency-dollar"></i></span>
+
+                        </div>
+                        <div class="px-1">
+                            <input type="radio" class="btn-check" name="options-discountValue" id="danger-discountValue" autocomplete="off" {if -$discountValue < 0}checked{/if}>
+                            <label class="btn btn-outline-danger px-1" for="danger-discountValue">MINUS, $</label>
+                        {* ======= *}
+                            <input type="radio" class="btn-check" name="options-discountValue" id="success-discountValue" autocomplete="off" {if -$discountValue >= 0}checked{/if}>
+                            <label class="btn btn-outline-primary px-1" for="success-discountValue">PLUS, $</label>
+                        </div>
+                    </div>
+                </td>
+
+            </tr>
+            {/if}
+        </tbody>
+    </table>
+</div>

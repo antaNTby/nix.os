@@ -1,0 +1,286 @@
+{* antaNT64 шаблон по умолчанию счета на оплату *}
+<html>
+
+<head>
+    <title>{$smarty.const.CONF_SHOP_URL} {$order_ff4}</title>
+    {* <meta http-equiv="Content-Type" content="text/html; charset={$smarty.const.DEFAULT_CHARSET}"> *}
+<meta charset="{$smarty.const.DEFAULT_CHARSET_HTML}">
+
+
+
+
+
+
+
+
+    {literal}
+
+    <style>
+
+    body {
+        padding: 0.1em;
+        margin: 0;
+        font-size: 1.00em;
+        color: #000000;
+        font-style: normal;
+        font-family: "PT Sans", Tahoma, Verdana, Arial, Helvetica;
+        background-color: #ffffff;
+        text-align: center;
+    }
+
+    form {
+        padding: 0 0 0 0;
+        margin: 0 0 0 0;
+    }
+
+    td {
+        font-family: "PT Sans", Tahoma, Verdana, Arial, Helvetica;
+        font-size: 0.9em;
+    }
+
+    div {
+        font-size: 1.00em;
+    }
+
+    a {
+        color: #000000;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    textarea {
+        border: 0.1em solid #7F9DB9;
+        font-size: 1.00em;
+        color: #000000;
+        font-family: "PT Sans", Tahoma, Verdana, Arial, Helvetica;
+    }
+
+    select {
+        font-size: 1.00em;
+        color: #000000;
+        font-family: "PT Sans", Tahoma, Verdana, Arial, Helvetica;
+    }
+
+    a img {
+        border: none;
+    }
+
+    p {
+        font-family: "PT Sans", Tahoma, Verdana, Arial, Helvetica;
+        font-size: 1.00em;
+        margin: 0;
+        padding: 0;
+    }
+
+    .big {
+        font-family: "PT Sans", Tahoma, Verdana, Arial, Helvetica;
+        font-size: 1.40em;
+    }
+
+    .small {
+        font-family: "PT Sans", Tahoma, Verdana, Arial, Helvetica;
+        font-size: 0.90em;
+    }
+
+    .dog {
+        font-family: Tahoma, Verdana, Arial, Helvetica;
+        font-size: 0.95em;
+    }
+
+    .nw {
+        white-space: nowrap
+    }
+
+    .pw {
+        white-space: pre-wrap
+    }
+
+    .bars {
+        border: 0.1mm solid #220044;
+        background-color: #f0f2ff;
+        border-radius: 2mm;
+        background-clip: border-box;
+        padding: 1em;
+    }
+
+    table {
+        padding: 0 0 0 0;
+        margin: 0 0 0 0;
+        border: none;
+    }
+
+    table.defaultwidth {
+        width: 800;
+    }
+
+    </style>
+
+    {/literal}
+</head>
+
+<body>
+    <hr>
+     TEST <b>{$TEST}</b> /TEST
+     <hr>
+    аупмьтлиав ьмлх4укьпо5нщш0=ь543здхбимздц<br>
+
+{$INVOICES|@debug}<br>
+{$INVOICES[0].sellerID}-srlid<br>
+
+
+    аупмьтлиав ьмлх4укьпо5нщш0=ь543здхбимздц<br>
+
+    <hr>
+    {$orderID}  -  {$order_time}   --  {$smarty.const.DEFAULT_CHARSET} --  {$smarty.const.DEFAULT_CHARSET_HTML}
+
+
+
+    {$smarty.const.ADMIN_IMAGES_DEFAULT_PATH}/{$InvoiceModule->getModuleSettingValue('PM_LOGO')}
+    <hr>
+    <!-- ШАПКА -->
+    <table class="defaultwidth">
+        <tr>
+            <td rowspan="3">
+                <img style="width:8em;height: 8em" src="{$smarty.const.ADMIN_IMAGES_DEFAULT_PATH}/{$InvoiceModule->getModuleSettingValue('PM_LOGO')}">
+            </td>
+            <td rowspan="3">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </td>
+            <td style="font-size: 1.5em; font-weight:bold; color:red;">
+                {$InvoiceModule->getModuleSettingValue('PM_NAME_STRING')}
+            </td>
+            <td rowspan="3">
+                <barcode code="{$smarty.const.CONF_SHOP_URL}index.php?do=invoice_new_proc&moduleID={$moduleID}&orderID={$orderID}" type="QR" class="barcode" size="0.8" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                юр.адр.:&nbsp;{$InvoiceModule->getModuleSettingValue('PM_ADDRESS_STRING')}. УНП&nbsp;&nbsp;{$InvoiceModule->getModuleSettingValue('PM_UNP')},
+                <br> р/с:&nbsp;
+                <span style="font-size: 1.1em;">{$InvoiceModule->getModuleSettingValue('PM_BANK_STRING')}</span>
+                <br>
+                <br> {$InvoiceModule->getModuleSettingValue('PM_CONTACTS_STRING')}
+                <br> почтовый адрес:&nbsp;<b>{$InvoiceModule->getModuleSettingValue('PM_POSTADDRESS_STRING')}</b>
+                <br>
+            </td>
+        </tr>
+    </table>
+    <!-- конец ШАПКА -->
+    <hr style="color:red; height:0.05em; width:90%;">
+    <!-- СЧЕТ -->
+    <div style="font-size: 1.25em; padding-top:0; font-weight:bold; color:#2E448C;">{$InvoiceModule->getModuleSettingValue('PM_INVOICE_STRING')} {$order_ff4} от {$order_date_string}
+        <br> {if $contract_date neq $order_date}
+        <span style="float:right; font-size: 0.6em; font-weight:normal; color:gray;">к заказу на продажу <em>№{$order_id}</em> по договору <em>{$order_ff4} от {$contract_date}</em></span> <strong>{$ORDER.status_name}</strong> {/if}
+    </div>
+    <table class="defaultwidth">
+        <tr>
+            <td><b>Поставщик:</b></td>
+            <td><b>{$InvoiceModule->getModuleSettingValue('PM_NAME_STRING')},</b> <em>УНП {$InvoiceModule->getModuleSettingValue('PM_UNP')}, {$InvoiceModule->getModuleSettingValue('PM_ADDRESS_STRING')}</em>,
+                <br> р/с {$InvoiceModule->getModuleSettingValue('PM_BANK_STRING')}</em>
+            </td>
+        </tr>
+        <tr>
+            <td><b>Покупатель:</b></td>
+            <td><b>{$customer_shortname},</b> <em>УНП {$customer_unp}, {$customer_adress},</em>
+                <br> {$customer_phones}</td>
+        </tr>
+    </table>
+    <table cellSpacing="0" cellPadding="2" border="1" class="defaultwidth">
+        <thead>
+            <tr>
+                <th class="nw" align="center" width="0%">№</th>
+                <th class="nw" align="center" width="50%">Наименование</th>
+                <th class="nw" align="center">Кол-во</th>
+                <th class="nw" align="center">Ед.
+                    <br>изм.</th>
+                <th class="nw" align="center">Цена,
+                    <br>{$cm}</th>
+                <th class="nw" align="center">Сумма,
+                    <br>{$cm}</th>
+                <th class="nw" align="center" width="10%">Ставка&nbsp;НДС,
+                    <br>%</th>
+                <th class="nw" align="center" width="10%">Сумма&nbsp;НДС,
+                    <br>{$cm}</th>
+                <th class="nw" align="center" width="10%">Всего с НДС,
+                    <br>{$cm}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {section name=i loop=$order_content}
+            <tr>
+                <td class="nw" align="center">{$smarty.section.i.iteration}</td>
+                <td class="pw" align="left" width="80%">{$order_content[i].name}</td>
+                <td class="nw" align="right">{$order_content[i].Quantity}</td>
+                <td class="nw" align="right">шт.</td>
+                <td class="nw" align="right">{$order_content[i].PriceBYN|replace:",":"."|replace:" ":"&nbsp;"}</td>
+                <td class="nw" align="right" style="font-size: 1.0em">{$order_content[i].stoimBYN|replace:",":"."|replace:" ":"&nbsp;"}</td>
+                <td class="nw" align="right">{if $nds > 0}{$nds}%{else}Без&nbsp;НДС{/if}</td>
+                <td class="nw" align="right">{$order_content[i].ndsBYN|replace:",":"."}</td>
+                <td class="nw" align="right">{$order_content[i].Vsego_s_nds|replace:",":"."|replace:" ":"&nbsp;"}</td>
+            </tr>
+            {/section}
+        </tbody>
+        <tfooter>
+            <tr>
+                <th align="right" colspan=2 class="big">Итого</th>
+                <th align="right" class="nw">{$order_qty}</th>
+                <th align="center">x</th>
+                <th align="center" class="nw">x</th>
+                <th align="right" class="nw">{$amountNONDSsum|replace:",":"."}</th>
+                <th align="center" class="nw">x</th>
+                <th align="right" class="nw">{$NDSsum|replace:",":"."}</th>
+                <th align="right" class="nw">{$amountWithNDSsum|replace:",":"."}</th>
+            </tr>
+        </tfooter>
+    </table>
+    <!-- конец СЧЕТ -->
+    <div style="text-align:left; font-size: 1.00em; padding-top:0.30em; padding-left:2.00em; font-weight:normal; ">
+        Всего к оплате: <b>{$order_total_string}</b>.
+        <br> Сумма НДС: {$order_tax_amount_string}.
+    </div>
+    <div style="text-align:left; font-size: 1.00em; padding-top:1.00em; padding-left: 0.00em; font-weight:normal; ">{$Schet}</div>
+    <hr style="color:#2E448C; height:0.05em; width:90%;">
+    <div style="text-align:left; font-size: 1.25em; padding-top:0; padding-left: 0.00em; font-weight:bold; color:#2E448C; ">{$InvoiceModule->getModuleSettingValue('PM_CONTRACT_STRING')} <em>{$order_ff4} от {$contract_date}</em></div>
+    <div style="text-align:left; font-size: 1.00em; padding-top:0; padding-left: 0.00em; font-weight:normal; ">{$Dogovor}</div>
+    <div>
+        <table class="defaultwidth" style="text-align: left;">
+            <caption>Реквизиты сторон</caption>
+            <thead>
+                <tr>
+                    <th colspan=2>Поставщик:</th>
+                    <th colspan=2>Покупатель:</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="width: 25%"><img style="width:8em;" src="{$smarty.const.ADMIN_IMAGES_DEFAULT_PATH}/{$InvoiceModule->getModuleSettingValue('PM_STAMP_MAIN')}"></td>
+                    <td style="width: 25%">{$InvoiceModule->getModuleSettingValue('PM_DIRECTOR_NOMINATIVE')}</td>
+                    <td style="width: 25%"><img style="width:8em;" src="{$smarty.const.ADMIN_IMAGES_DEFAULT_PATH}/{$InvoiceModule->getModuleSettingValue('PM_STAMP_MAIN')}"></td>
+                    <td style="width: 25%">{$InvoiceModule->getModuleSettingValue('PM_DIRECTOR_NOMINATIVE')}</td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <div style="text-align:left; font-size: 1.00em; padding-top:0; padding-left: 0.00em; font-weight:normal; ">{$Warranty}</div>
+    <!--
+
+    <div style="text-align:left; font-size: 1.00em; padding-top:0; font-weight:bold; ">Срок оплаты:: {$order_total_string2}
+    </div>
+    <div style="text-align:left; font-size: 1.00em; padding-top:0; font-weight:bold; ">Срок оплаты:: {$order_total_string3}
+    </div>
+    order_ff4 {$order_ff4}
+    <br> order_date {$order_date}
+    <br> order_time {$order_time}
+    <br> order_time_mysql {$order_time_mysql}
+    <br> order_date_string {$order_date_string}
+    <br>
+    !!!
+    <div> {$tesTT} </div>!!!
+-->
+</body>
+
+</html>

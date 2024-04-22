@@ -1,0 +1,269 @@
+{if ($order.statusID eq 2) or ($order.status_name==" Новый") or ($order.statusID eq 3) or ($order.status_name==" Активный") }{assign var=statusOkFlag value=1}{else}{assign var=statusOkFlag value=0}{/if}
+<h4> Выставить счет </h4>
+{$invoice|@debug}
+{* {$c|@debug} *}
+{if !$invoice.invoice_time}
+{assign var=invoice_time value=$order.order_time}
+{else}
+{assign var=invoice_time value=$invoice.invoice_time}
+{/if}
+{if !$invoice.contract_time}
+{assign var=contract_time value=$order.order_time}
+{else}
+{assign var=contract_time value=$invoice.contract_time}
+{/if}
+{assign var=invoice_buyer
+value="{$c.company_name} / УНП {$c.company_unp}
+{$c.company_adress}
+{$c.company_bank}
+{$c.company_contacts}"}
+<div class="border border-4 border-secondary border-opacity-25 p-2 mb-4 shadow-lg{if !$invoice.invoiceID} visually-hidden{/if}" id="HasInvoiceContainer">
+    <DIV SUB class="row mb-3">
+        <DIV SUB class="col-12 col-xxl-7">
+            {if $invoice.buyerID eq 0}
+            <h5 data-buyerID="0">Собственные реквизиты <del class="text-muted">{$c.company_name} / УНП {$c.company_unp}</del>
+            </h5>
+            {else}
+            <h5 data-buyerID="{$order.companyID}" class="text-dark"> <span class="badge text-bg-warning">{$order.companyID}</span>&nbsp;{$c.company_name} / УНП {$c.company_unp} </h5>
+            {/if}
+        </DIV>
+        <DIV SUB class="col-12 col-xxl-5">
+            <div class="d-flex justify-content-center">
+                <button class="btn{if $order.statusID ==2 || $order.statusID ==3 } btn-outline-dark{else} btn-outline-secondary{/if} btn-lg me-2" title='Сбросить паранетры счета на "По-умолчанию"' data-action="Load" data-app="SetInvoiceDefault" name="btn_SetInvoiceDefault" data-operation="SetInvoiceDefault" data-orderID="{$MyOrderContent.orderID}" data-invoiceID="{$invoice.invoiceID}" {if !($order.statusID==2 || $order.statusID==3)} disabled{/if}> <i class="bi bi-x-lg text-danger"></i> Сбросить</button>{* status:{$order.statusID} *}
+                <button class="btn{if $order.statusID ==2 || $order.statusID ==3 } btn-outline-dark{else} btn-outline-secondary{/if} btn-lg me-2" title="Загрузить Счёт" data-action="Load" data-app="LoadInvoice" name="btn_LoadInvoice" data-operation="btn_LoadInvoice" data-orderID="{$MyOrderContent.orderID}" data-invoiceID="{$invoice.invoiceID}" {if !($order.statusID==2 || $order.statusID==3)} disabled{/if}> <i class="bi bi-arrow-clockwise"></i> Загрузить</button>{* status:{$order.statusID} *}
+                <button class="btn{if $order.statusID ==2 || $order.statusID ==3 } btn-success{else} btn-outline-success{/if} btn-lg" title="Сохранить Счёт" data-action="Save" data-app="InvoiceSimple" data-operation="SaveInvoice" name="btn_SaveInvoice" data-orderID="{$MyOrderContent.orderID}" data-invoiceID="{$invoice.invoiceID}" {if !($order.statusID==2 || $order.statusID==3)} disabled{/if}> <i class="bi bi-save"></i> СОХРАНИТЬ</button>{* status:{$order.statusID} *}
+            </div>
+        </DIV>
+    </DIV>
+    <DIV SUB class="row">
+        <DIV SUB class="col-12 col-xxl-9">
+            <div class="row mb-2">
+                <div class="col-12 col-xxl-9">
+                    <form id="invoiceCompanyForm" name="invoiceCompanyForm">
+                        <input type="hidden" id="thisInvoiceID" value="{$invoice.invoiceID}">
+                        <fieldset id="pm_fieldset">
+                            <div class="row">
+                                <div class="col-12 col-xxl-7 text-center">
+                                    <div class="form-floating">
+                                        <textarea {if $c.read_only and $invoice.buyerID} disabled readonly{/if} class="form-control input-sm pm-control mb-xs-2 mb-md-2" name="pm_requisites" id="pm_requisites" placeholder="Реквизиты" style="height:calc(calc(3.83rem + calc(var(--bs-border-width) * 2))*3);
+                                              min-height:calc(calc(3.83rem + calc(var(--bs-border-width) * 2))*3);">{$c.requisites}</textarea>
+                                        <label for="pm_requisites">Реквизиты</label>
+                                    </div>
+                                    {if $c.variants|@count >1}
+                                    <button class="btn btn-outline-danger btn-sm dropdown-toggle my-2" data-bs-toggle="dropdown" aria-expanded="false"> Для УНП <strong>{$c.company_unp}</strong> есть <span class="text-bg-danger rounded px-2 py-1 lh-1 mx-1">{$c.variants|@count}</span>{$c.variants|@count|@say_to_russian:'вариант реквизитов':'варианта реквизитов':'вариантов реквизитов'}</button>
+                                    <ul class="dropdown-menu" id="htmlCompanyVariants">
+                                        {foreach from=$c.variants item=foo}
+                                        {if $foo.companyID eq $c.companyID}
+                                        {assign var="isSelectedClass" value="dropdown-item text-bg-danger"}
+                                        {else}
+                                        {assign var="isSelectedClass" value="dropdown-item"}
+                                        {/if}
+                                        <li><a class="{$isSelectedClass}" href="{$smarty.const.ADMIN_FILE}?dpt=custord&sub=companies&company_detailed={$c.company_unp}&companyID={$foo.companyID}{if $order}&toOrderID={$order.orderID}&toInvoiceID={$invoice.invoiceID}{/if}" aria-current="page"> Вариант <span class="badge text-bg-warning">{$foo.companyID}</span> от {$foo.update_time}</a></li>
+                                        {/foreach}
+                                    </ul>
+                                    {/if}
+                                </div>
+                                <div class="col-12 col-xxl-5">
+                                    <div class="form-floating mb-2">
+                                        <input {if $c.read_only and $invoice.buyerID} disabled readonly{/if} class="form-control input-sm pm-control" type="text" name="pm_director_nominative" id="pm_director_nominative" placeholder="Директор Иванов А.Г." value="{$c.director_nominative}">
+                                        <label for="pm_director_nominative">Руководитель в именительном падеже</label>
+                                    </div>
+                                    <div class="form-floating mb-2">
+                                        <input {if $c.read_only and $invoice.buyerID} disabled readonly{/if} class="form-control input-sm pm-control" type="text" name="pm_director_genitive" id="pm_director_genitive" placeholder="Директора Иванова А.Г." value="{$c.director_genitive}">
+                                        <label for="pm_director_genitive">Договор заключается в лице</label>
+                                    </div>
+                                    <div class="form-floating">
+                                        <input {if $c.read_only and $invoice.buyerID} disabled readonly{/if} class="form-control input-sm pm-control" type="text" name="pm_director_reason" id="pm_director_reason" placeholder="Устава" value="{$c.director_reason}">
+                                        <label for="pm_director_reason">Действующего на основании</label>
+                                    </div>
+                                </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="col-12 col-xxl-3">
+                    <div class="d-grid gap-2 col-6 col-xxl-12 mx-auto">
+
+<div class="dropdown-center">
+  <button class="btn btn-secondary btn-lg my-2 my-xxl-0 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Организация
+  </button>
+  <ul class="dropdown-menu">
+    <li>
+        <a class="dropdown-item{if statusOkFlag }{else} disabled{/if}"
+        name="btn_replaceCompany"
+        title="Выбрать организацию для выставления счета"
+        href="{$smarty.const.ADMIN_FILE}?dpt=custord&sub=companies&toOrderID={$order.orderID}&toInvoiceID={$invoice.invoiceID}" data-orderID="{$order.orderID}"
+        data-invoiceID="{$invoice.invoiceID}"></i>Выбрать</a>
+    </li>
+{if $invoice.buyerID > 0}
+    <li>
+        <a class="dropdown-item{if statusOkFlag }{else} disabled{/if}"
+        name="btn_editCompany"
+        title="Редактировать реквизиты"
+        href="{$smarty.const.ADMIN_FILE}?dpt=custord&sub=companies&company_detailed={$c.company_unp}&companyID={$c.companyID}&toOrderID={$order.orderID}&toInvoiceID={$invoice.invoiceID}"
+        data-orderID="{$order.orderID}"
+        data-invoiceID="{$invoice.invoiceID}">Редактировать реквизиты</i></a>
+    </li>
+{/if}
+    <li>
+        <button type="button" class="dropdown-item" id="btn_restore_company_from_order" name="btn_restore_company_from_order" data-orderID="{$order.orderID}" data-invoiceID="{$invoice.invoiceID}"><i class="bi bi-cart"></i>Восстановить из заказа</button>
+    </li>
+  </ul>
+</div>
+
+
+
+                        <div class="form-check form-switch" title="Использовать собственные реквизиты вместо Компании">
+                            <input class="form-check-input" type="checkbox" role="switch" name="useCustomrequisites" id="useCustomrequisites" {if !$invoice.buyerID}checked="checked" {/if}> <label class="form-check-label" for="useCustomrequisites">Собственные реквизиты id:{$invoice.buyerID}:</label>
+                        </div>
+                        <div class="d-grid gap-1 col-11 mx-auto visually-hidden" id="save_requisites">
+                            <button type="button" class="text-success bg-body btn btn-outline-dark btn-sm" id="btn_save_requisites" name="btn_save_requisites" data-orderID="{$order.orderID}" data-invoiceID="{$invoice.invoiceID}"><i class="bi bi-save"></i> Сохранить Реквизиты для этого Счета</button>
+                            <button type="button" class="bg-body btn btn-outline-dark btn-sm text-danger" id="btn_cancel" form="invoiceCompanyForm" title="Отменить изменения"><i class="bi bi-arrow-counterclockwise"></i> Отменить изменения</button>
+                            <div class="form-text text-muted"><i class="bi bi-exclamation-diamond-fill text-danger"></i> Измененные на этой форме реквизиты сохраняются только именно этом выставленном счете.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 col-xxl-3">
+                    <form id="invoiceParamsForm" name="invoiceParamsForm">
+                        <fieldset id="fieldset0">
+                            <div class="form-floating mb-2">
+                                <select class="form-select" id="purposeID" name="purposeID" aria-label="purpose">
+                                    <option {if $invoice.purposeID eq "0" } selected="selected" {/if} value="0">для собственного потребления/производства</option>
+                                    <option {if $invoice.purposeID eq "1" } selected="selected" {/if} value="1">для оптовой/розничной торговли</option>
+                                    <option {if $invoice.purposeID eq "2" } selected="selected" {/if} value="2">__________________________________________</option>
+                                    <option {if $invoice.purposeID eq "3" } selected="selected" {/if} value="3">для оптовой торговли</option>
+                                    <option {if $invoice.purposeID eq "4" } selected="selected" {/if} value="4">для розничной торговли</option>
+                                    <option {if $invoice.purposeID eq "5" } selected="selected" {/if} value="5">для вывоза за пределы РБ</option>
+                                    <option {if $invoice.purposeID eq "6" } selected="selected" {/if} value="6">для мира во всем мире</option>
+                                    <option {if $invoice.purposeID eq "7" } selected="selected" {/if} value="7">для экспорта продукции за пределы Республики Беларусь</option>
+                                </select>
+                                <label for="purposeID">Цель приобретения</label>
+                            </div>
+                            <div class="form-floating mb-2">
+                                <select class="form-select" id="fundingID" name="fundingID" aria-label="funding">
+                                    <option {if $invoice.fundingID eq "0" } selected="selected" {/if} value="0">собственные средства</option>
+                                    <option {if $invoice.fundingID eq "1" } selected="selected" {/if} value="1">Республиканский бюджет</option>
+                                    <option {if $invoice.fundingID eq "2" } selected="selected" {/if} value="2">__________________________________________</option>
+                                    <option {if $invoice.fundingID eq "3" } selected="selected" {/if} value="3">Казначейство РБ</option>
+                                    <option {if $invoice.fundingID eq "4" } selected="selected" {/if} value="4">спонсорская помощь</option>
+                                    <option {if $invoice.fundingID eq "5" } selected="selected" {/if} value="5">неизвестный источник</option>
+                                    <option {if $invoice.fundingID eq "6" } selected="selected" {/if} value="6">небюджетные средства</option>
+                                </select>
+                                <label for="fundingID">Источник финансирования</label>
+                            </div>
+                        </fieldset>
+                </div>
+                <div class="col-6 col-xxl-5">
+                    <fieldset id="fieldset1">
+                        <div class="form-floating mb-2">
+                            <input type="text" class="form-control" id="deliveryFrom" placeholder="Адрес погрузки" value="{if $invoice.deliveryFrom neq ""}{$invoice.deliveryFrom}{else}{$s.company_adress}{/if}">
+                            <label for="deliveryFrom">Адрес погрузки</label>
+                        </div>
+                        <div class="form-floating mb-2">
+                            <input type="text" class="form-control" id="deliveryTo" placeholder="Адрес разгрузки" value="{if $invoice.deliveryTo neq ""}{$invoice.deliveryTo}{else}{$c.company_adress}{/if}">
+                            <label for="deliveryTo">Адрес разгрузки</label>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-12 col-xxl-4">
+                    <div class="row">
+                        <label for="fieldset2" class="form-label col-6 col-xxl-12 mb-0">Траспортировка</label>
+                        <fieldset class="btn-group col-6 col-xxl-12 mb-2 mb-xxl-0" id="fieldset2" role="group" aria-label="Transport">
+                            <input type="radio" data-bit="0" class="btn-check" name="options-transport" id="clientTransport" autocomplete="off" {if $invoice.DeliveryType=="0" } checked="checked" {/if}> <label class="btn btn-outline-dark text-nowrap" for="clientTransport">Самовывоз клиентом</label>
+                            <input type="radio" data-bit="1" class="btn-check" name="options-transport" id="hosterTransport" autocomplete="off" {if $invoice.DeliveryType=="1" } checked="checked" {/if}> <label class="btn btn-outline-dark text-nowrap" for="hosterTransport">Доставка продавцом</label>
+                        </fieldset>
+                        <label for="fieldset3" class="form-label col-6 col-xxl-12 mb-0">Оплата</label>
+                        <fieldset class="btn-group col-6 col-xxl-12 mb-2 mb-xxl-0" id="fieldset3" role="group" aria-label="Payment">
+                            <input type="radio" data-bit="0" class="btn-check" name="options-payment" id="payThenGet" autocomplete="off" {if $invoice.PaymentType=="0" } checked="checked" {/if}> <label class="btn btn-outline-dark text-nowrap" for="payThenGet">Предоплата</label>
+                            <input type="radio" data-bit="1" class="btn-check" name="options-payment" id="getThenPay" autocomplete="off" {if $invoice.PaymentType=="1" } checked="checked" {/if}> <label class="btn btn-outline-dark text-nowrap" for="getThenPay">Оплата после поставки</label>
+                        </fieldset>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </DIV>
+        <DIV SUB class="col-12 col-xxl-3 text-end">
+            <form class="row" id="invoiceDatesForm" name="invoiceDatesForm">
+                <fieldset class="col-6 col-xxl-12" id="dates_fieldset">
+                    <div class="input-group mb-2">
+                        <div class="form-floating">
+                            <input type="text" class="form-control text-center" id="invoiceDate" name="invoiceDate" placeholder="YYYY-MM-DD" data-date="{$invoice_time}" value="{$invoice_time}">
+                            <label for="invoiceDate">Дата выставления счёта</label>
+                        </div>
+                        <button type="button" id="btn_submitInvoiceDate" name="btn_submitInvoiceDate" class="btn btn-outline-dark btn-lg" title="Подтвердить изменение даты" data-app="InvoiceSimple" data-operation="SetInvoiceDate" data-orderID="{$order.orderID}"><i class="bi bi-calendar3" data-orderID="{$order.orderID}"></i></button>
+                    </div>
+                    {* <span class="form-text">Нажмите кнопку для подтверждения <i class="bi bi-calendar3"></i></span> *}
+                    <div class="input-group mb-2">
+                        <div class="form-floating shadow-lg p-1">
+                            <input type="text" class="form-control text-center" id="orderDate" name="orderDate" placeholder="YYYY-MM-DD" data-date="{$order.order_time}" value="{$order.order_time}">
+                            <label for="orderDate">Дата оформления заказа</label>
+                        </div>
+                        <button type="button" id="btn_submitOrderDate" name="btn_submitOrderDate" class="btn btn-outline-dark btn-lg" title="Подтвердить изменение даты" data-app="InvoiceSimple" data-operation="SetOrderDate" data-orderID="{$order.orderID}"><i class="bi bi-calendar3" data-orderID="{$order.orderID}"></i></button>
+                    </div>
+                    {* <span class="form-text">Нажмите кнопку для подтверждения <i class="bi bi-calendar3"></i></span> *}
+                    {* <div class="input-group mb-2"> *}
+                        {* <div class="form-floating"> *}
+                            {* <input type="text" class="form-control text-center" id="contractDate" name="contractDate" placeholder="YYYY-MM-DD" data-date="{$contract_time}" value="{$contract_time}"> *}
+                            {* <label for="contractDate">Дата долгосрочного контракта</label> *}
+                            {* </div> *}
+                        {* <button type="button" id="btn_submitContractDate" name="btn_submitContractDate" class="btn btn-outline-dark btn-lg" title="Подтвердить изменение даты" data-app="InvoiceSimple" data-operation="SetContractDate" data-orderID="{$order.orderID}"><i class="bi bi-calendar3" data-orderID="{$order.orderID}"></i></button> *}
+                        {* </div> *}
+                    {* <span class="form-text">Нажмите кнопку для подтверждения <i class="bi bi-calendar3"></i></span> *}
+                </fieldset>
+                <fieldset class="col-3 col-xxl-7" id="termines_fieldset">
+                    {if $termin_options|@count}
+                    <datalist id="termin_list">
+                        {html_options options=$termin_options}
+                    </datalist>
+                    {/if}
+                    {if $payment_options|@count}
+                    <datalist id="payment_list">
+                        {html_options options=$payment_options}
+                    </datalist>
+                    {/if}
+                    <div class="input-group mb-2">
+                        <div class="form-floating">
+                            <input type="text" class="form-control text-center" id="actuality_termin" name="actuality_termin" placeholder="Срок актуальности заказа" value="{$invoice.actuality_termin}" list="termin_list">
+                            <label class="lh-1" for="actuality_termin">Срок актуальности счета</label>
+                        </div>
+                        {* <button type="button" id="btn_actuality_termin" name="btn_actuality_termin" class="btn btn-outline-dark btn-lg" title="Подтвердить изменение" data-app="InvoiceSimple" data-operation="SetActualityTermin" data-orderID="{$order.orderID}"><i class="bi bi-floppy2" data-orderID="{$order.orderID}"></i></button> *}
+                    </div>
+                    <div class="input-group mb-2">
+                        <div class="form-floating">
+                            <input type="text" class="form-control text-center" id="delivery_termin" name="delivery_termin" placeholder="Срок поставки товара" value="{$invoice.delivery_termin}" list="termin_list">
+                            <label for="delivery_termin">Срок поставки товара</label>
+                        </div>
+                        {* <button type="button" id="btn_delivery_termin" name="btn_delivery_termin" class="btn btn-outline-dark btn-lg" title="Подтвердить изменение" data-app="InvoiceSimple" data-operation="SetDeliveryTermin" data-orderID="{$order.orderID}"><i class="bi bi-floppy2" data-orderID="{$order.orderID}"></i></button> *}
+                    </div>
+                    <div class="input-group mb-2">
+                        <div class="form-floating">
+                            <input type="text" class="form-control text-center" id="payment_termin" name="payment_termin" placeholder="Отсрочка оплаты" value="{$invoice.payment_termin}" list="termin_list">
+                            <label class="lh-1" for="payment_termin">Отсрочка оплаты товара</label>
+                        </div>
+                        {* <button type="button" id="btn_delivery_termin" name="btn_delivery_termin" class="btn btn-outline-dark btn-lg" title="Подтвердить изменение" data-app="InvoiceSimple" data-operation="SetPaymentTermin" data-orderID="{$order.orderID}"><i class="bi bi-floppy2" data-orderID="{$order.orderID}"></i></button> *}
+                    </div>
+                    <div class="input-group mb-2">
+                        <div class="form-floating">
+                            <input type="number" class="form-control text-center" id="payment_prepay" name="payment_prepay" placeholder="Процент предоплаты" value="{$invoice.payment_prepay}" list="payment_list" min="5" max="100">
+                            <label for="payment_prepay">Процент предоплаты</label>
+                        </div>
+                        {* <button type="button" id="btn_delivery_termin" name="btn_delivery_termin" class="btn btn-outline-dark btn-lg" title="Подтвердить изменение" data-app="InvoiceSimple" data-operation="SetPaymentPrepay" data-orderID="{$order.orderID}"><i class="bi bi-floppy2" data-orderID="{$order.orderID}"></i></button> *}
+                    </div>
+                </fieldset>
+                <fieldset class="col-3 col-xxl-5 text-start" id="fieldset_h">
+                    <code>
+                        [%b] - банковские дни,
+                        [%n] - дни,
+                        [%w] - рабочие дни,
+                        [==] - произвольный текст
+                    </code>
+                </fieldset>
+            </form>
+        </DIV>
+    </DIV>
+</div>
+<div class="m-5 p-5 text-bg-danger{if $invoice.invoiceID} visually-hidden{/if}" id="HasNlotInvoiceContainer">
+    <h2>Нет счёта для этого заказа <button class="btn{if $order.statusID ==2 || $order.statusID ==3 } btn-light{else} btn-outline-secondary{/if} btn-lg me-2" title="Создать Счёт" data-action="Create" data-app="InvoiceSimple" name="btn_CreateInvoice" data-operation="btn_CreateInvoice" data-orderID="{$order.orderID}" data-companyID="{$order.companyID}" {if !($order.statusID==2 || $order.statusID==3)} disabled{/if}> <i class="bi bi-magic"></i> Создать счет</button></h2>
+</div>

@@ -1,0 +1,296 @@
+{* custord_orders_edit.tpl.html *}
+<input type="hidden" name="thisOrderID" id="thisOrderID" value="{$MyOrderContent.orderID}">
+{* {$MyOrderContent|@debug} *}
+{* {$c|@debug} *}
+{if ($order.statusID eq 3) or $order.status_name=="Активный"}<h3 class="text-dark">Просмотр и редактирование заказа # {$order.orderID} от {$order.order_time}</h3>{/if}
+{if ($order.statusID neq 3) or $order.status_name !="Активный"}<h3 class="text-muted">Просмотр заказа # {$order.orderID} от {$order.order_time}</h3>{/if}
+
+
+<ul class="nav nav-underline mb-3" id="myTabOrder" role="tablist">
+    <li class="nav-item" role="presentation">
+        <a class="nav-link active" aria-current="page" data-bs-toggle="tab" data-bs-target="#order-content-tab-pane" type="button" role="tab" aria-controls="order-content-tab" aria-selected="true">Товарная часть</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" data-bs-target="#invoice-tab-pane" type="button" role="tab" aria-controls="invoice-tab" aria-selected="false">Счёт на оплату</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" data-bs-target="#history-tab-pane" type="button" role="tab" aria-controls="history-tab" aria-selected="false">История изменений</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" data-bs-target="#customer-tab-pane" type="button" role="tab" aria-controls="customer-tab" aria-selected="false">Данные заказчика</a>
+    </li>
+</ul>
+
+<div class="tab-content" id="myTabOrderContent">
+
+
+    <div class="w-100 tab-pane fade show active" id="order-content-tab-pane" role="tabpanel" aria-labelledby="order-content-tab" tabindex="0">
+        {* 1111 *}
+        <div id="app_currency">
+            {include file="admin/apps/Currency/appCurrency.tpl.html" MyOrderContent=$MyOrderContent MyCurrencies=$currencies}
+        </div>
+        <div id="app_add_product">
+            {include file="admin/apps/OrderContent/appAddProduct.tpl.html" MyOrderContent=$MyOrderContent MyCurrencies=$currencies}
+        </div>
+        <div id="app_order_content">
+            {include file="admin/apps/OrderContent/appOrderContent.tpl.html" MyOrderContent=$MyOrderContent}
+        </div>
+    </div>
+
+
+    <div class="w-100 tab-pane fade" id="invoice-tab-pane" role="tabpanel" aria-labelledby="invoice-tab" tabindex="0">
+        {* 2222 *}
+        <div id="app_invoice_simple">
+            {include file="admin/apps/InvoiceSimple/appInvoiceSimple.tpl.html" MyOrderContent=$MyOrderContent c=$c order=$order invoice=$invoice}
+        </div>
+    </div>
+
+
+    <div class="w-100 tab-pane fade" id="history-tab-pane" role="tabpanel" aria-labelledby="history-tab" tabindex="0">
+        {* 3333 *}
+            <div class="alert alert-light alert-dismissible fade show" role="alert" id="myStatusPanel">
+                <h4>Комментарии и История изменения статуса заказа</h4>
+                <div class="input-group mb-2">
+                    <div class="form-floating">
+                        <textarea class="form-control" name="status_comment" id="status_comment_n" placeholder="Leave a comment here" style="height: 80px"></textarea>
+                        <label for="status_comment_n">Добавьте комментарий к заказу при изменении статуса заказа</label>
+                    </div>
+                    <button class="btn btn-outline-secondary btn-lg" data-action="Comment" data-app="OrderContent" data-operation="AddComment" data-orderid="{$MyOrderContent.orderID}" title="Добавить комментарий"><i class="bi bi-sticky"></i></button>
+                </div>
+                {if $order.customer_email && $order.customer_email != "-"}
+                <div class="form-check form-switch mb-2">
+                    <input class="form-check-input" type="checkbox" role="switch" name="notify_customer" id="id_notify_customer" value="1">
+                    <label class="form-check-label text-danger" for="id_notify_customer">{$smarty.const.ADMIN_STRING_NOTIFY_CUSTOMER}</label>
+                </div>
+                {/if}
+
+        {if $order_status_report or $order.order_time}
+        <div class="table-responsive-xl mb-3 overflow-y-scroll" style="max-height: 20vh;">
+            <table class="table table-sm table-borderless align-baseline" id="tableComments">
+                <caption>История изменений</caption>
+                <thead class="table-primary">
+                    <tr>
+                        <th class="text-start text-nowrap">Время ( по убыванию )</th>
+                        <th class="text-start text-wrap">Комментарий админа</th>
+                        <th class="text-start text-nowrap w-25">Статус</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    {section name=i loop=$order_status_report}
+                    <tr>
+                        <th class="text-start text-wrap">{$order_status_report[i].status_change_time}</th>
+                        <td class="text-start text-wrap">{$order_status_report[i].status_comment}</td>
+                        <td class="text-start text-nowrap w-25">{if $order_status_report[i].status_name != 'STRING_CANCELED_ORDER_STATUS'}{$order_status_report[i].status_name}{else}{$smarty.const.STRING_CANCELED_ORDER_STATUS}{/if}&nbsp;</td>
+                    </tr>
+                    {/section}
+                    <tr>
+                        <th class="text-start text-wrap">{$order.order_time}</th>
+                        <td class="text-start text-wrap">{$order.admin_comment}</td>
+                        <td class="text-start text-nowrap w-25">Создан</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        {/if}
+
+
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>{* id="myStatusPanel" *}
+    </div>
+
+    <div class="tab-pane fade" id="customer-tab-pane" role="tabpanel" aria-labelledby="customer-tab" tabindex="0">
+
+        {if $order.customerID neq "11"}
+        <div class="mb-4 alert alert-light alert-dismissible fade show" role="alert" id="myOrderContentPanel">
+            <h4>Данные заказчика</h4>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    {$smarty.const.STRING_ORDER_STATUS}:
+                    <b>{$order.status_name}</b>
+                </li>
+                <li class="list-group-item">
+                    {$smarty.const.TABLE_ORDER_TIME}:
+                    <b>{$order.order_time}</b>
+                </li>
+                <li class="list-group-item">
+                    {$smarty.const.ADMIN_IP_ADDRESS}:
+                    <b>{$order.customer_ip}</b>
+                </li>
+                {if $order.customer_email}
+                <li class="list-group-item">
+                    {$smarty.const.ADMIN_ORDER_EMAIL_CUST}:
+                    <b>{$order.customer_email}</b>
+                </li>
+                {/if}
+                <li class="list-group-item">
+                    {$smarty.const.ADMIN_CUSTOMER_FIRST_NAME}:
+                    <b> {$order.customer_firstname|replace:" <":"&lt;"} </b> </li> <li class="list-group-item">
+                            {$smarty.const.ADMIN_CUSTOMER_LAST_NAME}:
+                            <b> {$order.customer_lastname|replace:" <":"&lt;"} </b> </li> {section name=i loop=$order.reg_fields_values} <li class="list-group-item">
+                                    {$order.reg_fields_values[i].reg_field_name}:
+                                    <b>{$order.reg_fields_values[i].reg_field_value}</b>
+                </li>
+                {/section}
+                <li class="list-group-item">
+                    {$smarty.const.CUSTOMER_ADRESL}:
+                    <b>{if $order.shipping_address ne ""}{$order.shipping_address}{/if}{if $order.shipping_city ne ""}, {$order.shipping_city}{/if}{if $order.shipping_state ne ""}, {$order.shipping_state}{/if}{if $order.shipping_country ne ""}, {$order.shipping_country}{/if}</b>
+                </li>
+                {if $order.shipping_type}
+                <li class="list-group-item">
+                    {$smarty.const.STRING_SHIPPING_TYPE2}:
+                    <b>{$order.shipping_type}{if $order.shippingServiceInfo} ({$order.shippingServiceInfo}){/if}</b>
+                </li>
+                {/if}
+                {if $order.payment_type}
+                <li class="list-group-item">
+                    {$smarty.const.STRING_PAYMENT_TYPE2}:
+                    <b>{$order.payment_type}</b>
+                </li>
+                {/if}
+                {if $order.cc_number || $order.cc_holdername || $order.cc_expires || $order.cc_expires}
+                {if $https_connection_flag}
+                <li class="list-group-item">
+                    {$smarty.const.ADMIN_CC_NUMBER}:
+                    <b>{$order.cc_number}</b>
+                </li>
+                <li class="list-group-item">
+                    {$smarty.const.ADMIN_CC_HOLDER_NAME}:
+                    <b>{$order.cc_holdername}</b>
+                </li>
+                <li class="list-group-item">
+                    {$smarty.const.ADMIN_CC_EXPIRES}:
+                    <b>{$order.cc_expires}</b>
+                </li>
+                <li class="list-group-item">
+                    {$smarty.const.ADMIN_CC_CVV}:
+                    <b>{$order.cc_cvv}</b>
+                </li>
+                {else}
+                <li class="list-group-item">
+                    {$smarty.const.ADMIN_INFO_CAN_BE_SHOWN_WHEN_HTTPS_IS_USED}
+                </li>
+                {/if}
+                {/if}
+                {if $order.customers_comment}
+                <li class="list-group-item">
+                    {$smarty.const.TABLE_ORDER_COMMENTS}<b>{$order.customers_comment|replace:" <":"&lt;"}</b> </li> {/if} </ul> <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {/if}
+
+
+        {if $orderedCarts}
+        <div class="mb-4 alert alert-light alert-dismissible fade show" role="alert" id="myOrderContentPanel">
+            <h4>Заказанные товары, так как видел их клиент</h4>
+            <div class="table-responsive-xl">
+                <table class="table table-hover table-bordered table-sm align-middle">
+                    <caption>Заказанные товары</caption>
+                    <thead class="table-primary">
+                        <tr>
+                            <td colspan=4>
+                                Курс $1 = {$MyOrderContent.orderCurrencyValue}{$MyOrderContent.orderCurrencyCode}&nbsp;|&nbsp;
+                                Скидка/Надбавка,%:&nbsp;{if $MyOrderContent.DiscountAndShipping.discountPercent <>0}
+                                    {$MyOrderContent.DiscountAndShipping.shippingCost}={$MyOrderContent.DiscountAndShipping.orderDiscountPercent}={$MyOrderContent.DiscountAndShipping.discountPercent}%
+                                    {else}0{/if}&nbsp;|&nbsp;
+                                    СтоимостьДоставки/Скидка:&nbsp;
+                                    {if $MyOrderContent.DiscountAndShipping.shippingCost <>0}
+                                        ${$MyOrderContent.DiscountAndShipping.shippingCost}={$MyOrderContent.DiscountAndShipping.outShippingCost}{$MyOrderContent.targetCurrencyCode}
+                                        {else}0{/if}&nbsp;|&nbsp;[{$MyOrderContent.maximalShippingDelayValue}]&nbsp;|&nbsp;
+                                        orderCurrencyRound : {$MyOrderContent.orderCurrencyRound}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-start">{$smarty.const.ADMIN_PRODUCT_NAME}</th>
+                            <th class="text-end text-wrap">{$smarty.const.TABLE_PRODUCT_QUANTITY}</th>
+                            <th class="text-end text-wrap">{$smarty.const.CURRENT_PRICE}</th>
+                            <th class="text-end text-wrap">{$smarty.const.TABLE_PRODUCT_COST_WITHOUT_TAX}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {section name=i loop=$orderedCarts}
+                        <tr>
+                            <td class="text-start text-wrap">{if $orderedCarts[i].pr_item}<a href="index.php?productID={$orderedCarts[i].pr_item}">{$orderedCarts[i].name}</a>{else}{$orderedCarts[i].name}{/if}</td>
+                            <td class="text-end text-nowrap">{$orderedCarts[i].Quantity}</td>
+                            <td class="text-end text-nowrap">{$orderedCarts[i].PriceOne}</td>
+                            <td class="text-end text-nowrap">{$orderedCarts[i].PriceToShow}</td>
+                        </tr>
+                        {/section}
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-responsive-xl mb-3">
+                <table class="table table-borderless table-sm align-middle">
+                    <tbody class="table-group-divider">
+                        {if $order.order_discount != 0 or $order.shipping_cost !=0}
+                        <tr>
+                            <td class="text-end text-wrap">{$smarty.const.STRING_PRED_TOTAL}:</td>
+                            <th class="text-end text-wrap">{$order.clear_total_priceToShow}</th>
+                        </tr>
+                        {/if}
+                        {if $order.order_discount != 0}
+                        <tr>
+                            <td class="text-end text-nowrap">{$smarty.const.ADMIN_DISCOUNT} {$order.order_discount}%:</td>
+                            <th class="text-end text-nowrap">{$order.order_discount_ToShow}</th>
+                        </tr>
+                        {/if}
+                        {if $order.shipping_cost !=0 }
+                        <tr>
+                            <td class="text-end text-nowrap">{$smarty.const.ADMIN_SHIPPING_COST}:</td>
+                            <th class="text-end text-nowrap">{$order.shipping_costToShow}</th>
+                        </tr>
+                        {/if}
+                        <tr>
+                            <td class="text-end text-nowrap"><span class="lead">{$smarty.const.TABLE_TOTAL}:</span></td>
+                            <th class="text-end text-nowrap"><span class="lead fw-bold text-primary">{$order.order_amountToShow}</span></th>
+                        </tr>
+                        <tr>
+                            <td class="text-end text-nowrap"><span class="">без учета доставки и скидки {$smarty.const.TABLE_TOTAL}:</span></td>
+                            <th class="text-end text-nowrap"><span class="text-primary">{$order.order_amountToShow_fromOrder}</span></th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {else}
+        <div class="m-5 p-5 text-bg-danger">
+            <h2>{$smarty.const.ADMIN_NO_RECORD_FOUND}</h2>
+        </div>
+        {/if}
+
+    </div>
+
+
+</div>
+
+
+<div class="mb-4 alert alert-light alert-dismissible fade show" role="alert" id="MainForm2Panel">
+
+        <form name="MainForm2" method="POST" id="MainForm2" action="">
+
+            <input name="none" value="" type="hidden" id="resultat">
+            <input type="hidden" name="orders_detailed" value="yes">
+            {if ($order.statusID eq 3) or $order.status_name=="Активный"}
+            <input type="hidden" name="order_is_active" value="yes">
+            {/if}
+            <div class="mb-4 alert alert-dark" role="alert" id="OrderStatusPanel">
+                <h4>Cтатус заказа</h4>
+                <div class="input-group flex-nowrap mb-0">
+                    <label class="input-group-text" for="status">Статус</label>
+                    <select form="MainForm2" class="form-select{*if ($order.statusID eq 3) or $order.status_name=="Активный"} text-success{/if*}" name="status" id="status">
+                        <option value="-1">{$smarty.const.ADMIN_PROMPT_TO_SELECT}</option>
+                        {section name=i loop=$order_statuses}
+                        <option value='{$order_statuses[i].statusID}' {if $order.statusID eq $order_statuses[i].statusID} selected{/if}> {$order_statuses[i].status_name} </option> {/section} </select> <button class="btn{if ($order.statusID eq 3) or $order.status_name=="Активный"} btn-success{else} btn-outline-secondary{/if}" type="button" onclick="document.getElementById('resultat').name = 'set_status'; if(document.getElementById('status').value == '-1') return false; document.getElementById('MainForm2').submit(); return false;" title="{$smarty.const.ADMIN_CHANGE_STATUS}">{$smarty.const.ADMIN_STATUS_LINK} <i class="bi bi-shield-exclamation"></i></button>
+                </div>
+                <div class="form-text mt-0 mb-2">
+                    {$smarty.const.ADMIN_DELORD_NOTICE}
+                </div>
+            </div>
+
+        </form> {* name="MainForm2" *}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+</div>
+
+
+{* {$order|@debug} *}

@@ -1,0 +1,24 @@
+<h1 class="display-2">
+    {if $smarty.const.CONF_DISP_ORDERNUM eq 1}
+    {$smarty.const.STRING_ORDER_NUMBER}: <span class="text-success fw-bolder">#{$smarty.get.quick_cart_success|@zeroFill}</span>
+    {/if}
+</h1>
+<div class="m-2 p-3 bg-success bg-gradient bg-opacity-25">
+    <h2 id="QUICK_CART">{$smarty.const.STRING_ORDER_RESULT_SUCCESS}
+    {if $isadmin eq 'yes'}
+    <small class="float-end"><a id='adminEditOrder' class='btn btn-link' href='admin.php?dpt=custord&sub=orders&orders_detailed=yes&orderID={$smarty.get.quick_cart_success}'><i class="bi bi-gear"></i></a></small>{/if}
+</h2>
+
+    <p>
+        {if $smarty.const.CONF_ACTIVATE_ORDER eq 1}
+        {$smarty.const.STRING_ORDER_PLACED_ACTIVATE}
+        {else}
+        {$smarty.const.STRING_ORDER_PLACED}
+        {/if}
+    </p>
+</div>
+<div class="p-2">
+    {if $after_processing_html}
+    {$after_processing_html}
+    {/if}
+</div>

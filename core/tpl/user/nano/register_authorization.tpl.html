@@ -1,0 +1,37 @@
+{* шаблон формы запроса регистрации/авторизации *}
+<div class="card text-center w-50 mx-auto mt-5">
+    <div class="card-header-pills">{$smarty.const.STRING_REGISTER_AUTH}</div>
+    <div class="card-body pt-1">
+        <h4>{$smarty.const.STRING_AM_NEW_CUSTOMER}</h4>
+        <hr style="margin-top: 10px">{if $smarty.const.CONF_ORDERING_REQUEST_BILLING_ADDRESS == '1'}<a href="index.php?register=yes&amp;order=yes" class="btn btn-default">{$smarty.const.STRING_REGISTER}</a>&nbsp;&nbsp;{/if}{if $smarty.const.CONF_ORDERING_REQUEST_BILLING_ADDRESS == '0'}<a href="index.php?register=yes&amp;order_without_billing_address=yes" class="btn btn-default">{$smarty.const.STRING_REGISTER}</a>&nbsp;&nbsp;{/if}{if $smarty.const.CONF_USER_SYSTEM < 2}<a href="index.php?quick_register=yes" class="btn btn-default">{$smarty.const.STRING_QUICK_ORDERING}</a>{/if}
+            <br><br>
+            <h4>{$smarty.const.STRING_I_AM_REGISTERED_CUSTOMER}</h4>
+            <hr style="margin-top: 10px">
+            <form action="index.php?register_authorization=yes" method="POST" id="regauthform" role="form">
+                <div class="form-group">
+                    <label class="form-label" for="user_logini">{$smarty.const.CUSTOMER_LOGIN}</label>
+                    <input type="text" class="form-control" name="user_login" id="user_logini" value="">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="user_pwi">{$smarty.const.CUSTOMER_PASSWORD}</label>
+                    <input type="text_password" class="form-control" name="user_pw" id="user_pwi" value="">
+                </div>
+                <button type="submit" class="btn btn-default">{$smarty.const.BUTTON_ENTER_AUTH}</button>
+                <input type="hidden" name="login" value=1>
+            </form>
+            <br>
+            <h4>{$smarty.const.PASS_USER_REMAIND}</h4>
+            <hr style="margin-top: 10px">
+            <form action="index.php?register_authorization=yes" method="POST" id="mypass" role="form">
+                {if $password_sent_notifycation eq 'yes'}
+                <div class="alert alert-success">{$smarty.const.STRING_PASSWORD_SENT}</div>
+                {elseif $password_sent_notifycation eq 'no'}
+                <div class="alert alert-danger">{$smarty.const.STRING_CANT_FIND_USER_IN_DB} ({$remind_user_login})</div>
+                {/if}
+                <div class="form-group">
+                    <label class="form-label" for="login_to_remind_passwordi"><span style="font-weight: normal">{$smarty.const.STRING_FORGOT_PASSWORD_FIX}:</span></label>
+                    <input type="text" class="form-control" name="login_to_remind_password" id="login_to_remind_passwordi" value="{$user_login}">
+                </div>
+                <button type="submit" class="btn btn-default">{$smarty.const.OK_BUTTON3}</button><input type="hidden" name="remind_password"></form>
+    </div>
+</div>

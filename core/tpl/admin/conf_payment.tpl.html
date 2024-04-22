@@ -1,0 +1,126 @@
+{* conf_payment.tpl.html *}
+<form action="{$smarty.const.ADMIN_FILE}" method="post" name="payform" id="payform">
+    {if $payment_types}
+    <div class="my-3 table-responsive">
+        <table class="table align-middle">
+            <caption>Варианты оплаты</caption>
+            <thead>
+                <tr>
+                    <td class="text-center">{$smarty.const.ADMIN_ON2}</td>
+                    <td class="text-start" width="100%">{$smarty.const.STRING_NAME} : {$smarty.const.STRING_MODULE_NAME}</td>
+                    <td class="text-start">{$smarty.const.STRING_DESCRIPTION}</td>
+                    <td class="text-start">{$smarty.const.STRING_MODULE_EMAIL_COMMENTS} <small class="text-muted">Текст почтового сообщения</small></td>
+                    {* <td class="text-start">{$smarty.const.STRING_MODULE_NAME}</td> *}
+                    {* <td class="text-start">{$smarty.const.ADMIN_SORT_ORDER}</td> *}
+                    <th class="text-center fs-5"><i class="bi bi-terminal-x"></i></th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                {section name=i loop=$payment_types}
+                <tr class="table-group-divider">
+                    <td class="text-center">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="Enabled_{$payment_types[i].PID}" {if $payment_types[i].Enabled} checked{/if} id="Enabled_{$payment_types[i].PID}">
+                            <label class="form-check-label" for="Enabled_{$payment_types[i].PID}">
+                                Вкл
+                            </label>
+                        </div>
+                    </td>
+                    <td class="text-start">
+                        <label for="name_{$payment_types[i].PID}" class="form-label">{$smarty.const.STRING_NAME} <sub class="text-muted">PID:{$payment_types[i].PID}</sub></label>
+                        <input type="text" name="name_{$payment_types[i].PID}" id="name_{$payment_types[i].PID}" value="{$payment_types[i].Name|replace:'"':' &quot;'}" class="form-control font-monospace text-start mb-3">
+                        <label for="module_{$payment_types[i].PID}" class="form-label">{$smarty.const.STRING_MODULE_NAME}</label>
+                        <select class="form-select" name='module_{$payment_types[i].PID}' id='module_{$payment_types[i].PID}'>
+                            <option value='null'> -- </option>
+                            {section name=j loop=$payment_modules}
+                            <option value='{$payment_modules[j]->get_id()}' {if $payment_modules[j]->get_id() == $payment_types[i].module_id} selected {/if} > {$payment_modules[j]->title} </option>
+                            {/section}
+                        </select>
+                    </td>
+                    <td class="text-start">
+                        <textarea class="form-control" style="height: 10em; width:20rem" name="description_{$payment_types[i].PID}">{$payment_types[i].description|replace:'"':'&quot;'}</textarea>
+                    </td>
+                    <td class="text-start">
+                        <textarea class="form-control" style="height: 10em; width:20rem" name="email_comments_text_{$payment_types[i].PID}">{$payment_types[i].email_comments_text|replace:'"':'&quot;'}</textarea>
+                    </td>
+                    <td class="text-center">
+                        <label for="sort_order_{$payment_types[i].PID}" class="form-label">{$smarty.const.ADMIN_SORT_ORDER}</label>
+                        <input type="text" name="sort_order_{$payment_types[i].PID}" id="sort_order_{$payment_types[i].PID}" value="{$payment_types[i].sort_order|replace:'"':' &quot;'}" class="form-control font-monospace text-start mb-4">
+                        <button class="btn btn-outline-danger" role="button" onclick="confirmDelete({$payment_types[i].PID},'{$smarty.const.QUESTION_DELETE_CONFIRMATION}','{$smarty.const.ADMIN_FILE}?dpt=conf&amp;sub=payment&amp;delete=');return false"><i class="bi bi-x-lg"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-nowrap"></td>
+                    <td colspan=4>
+                        Доступные варианты доставки :
+                        {section name=j loop=$payment_types[i].ShippingMethodsToAllow}
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id='ShippingMethodsToAllow_{$payment_types[i].PID}_{$payment_types[i].ShippingMethodsToAllow[j].SID}' name='ShippingMethodsToAllow_{$payment_types[i].PID}_{$payment_types[i].ShippingMethodsToAllow[j].SID}' {if $payment_types[i].ShippingMethodsToAllow[j].allow==1} checked{/if}> <label class="form-check-label" for='ShippingMethodsToAllow_{$payment_types[i].PID}_{$payment_types[i].ShippingMethodsToAllow[j].SID}'>{$payment_types[i].ShippingMethodsToAllow[j].name}</label>
+                        </div>
+                        {/section}
+                    </td>
+                </tr>
+                {/section}
+            </tbody>
+        </table>
+    </div>
+    <div class="my-3 d-grid gap-2 d-md-flex justify-content-md-end">
+        <a href="#" onclick="document.getElementById('payform').submit(); return false" class="btn btn-success btn-lg text-nowrap">{$smarty.const.SAVE_BUTTON}</a>
+    </div>
+    {/if}
+    <hr>
+    <div class="table-responsive-md">
+        <table class="mt-3 table table-sm table-borderless table-light align-middle">
+            <caption>Добавление нового варианта доставки</caption>
+            <thead>
+                <tr>
+                    <td class="text-center">{$smarty.const.ADMIN_ON2}</td>
+                    <td class="text-start" width="100%">{$smarty.const.STRING_NAME}</td>
+                    <td class="text-start">{$smarty.const.STRING_DESCRIPTION}</td>
+                    <td class="text-start">{$smarty.const.STRING_MODULE_EMAIL_COMMENTS} <small class="text-muted">Текст почтового сообщения</small></td>
+                    {* <td class="text-start">{$smarty.const.STRING_MODULE_NAME}</td> *}
+                    <th class="text-center fs-5"><i class="bi bi-plus-lg"></i></th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                <tr>
+                    <td class="text-center">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="new_Enabled" checked id="new_Enabled">
+                            <label class="form-check-label" for="new_Enabled">
+                                Вкл
+                            </label>
+                        </div>
+                    </td>
+                    <td class="text-start">
+                        <label for="new_name" class="form-label">{$smarty.const.STRING_NAME}</label>
+                        <input type="text" name="new_name" id="new_name" class="form-control font-monospace text-start">
+                        <label for="new_module" class="form-label">{$smarty.const.STRING_MODULE_NAME}</label>
+                        <select class="form-select" name='new_module' id='new_module'>
+                            <option value='null'> -- </option>
+                            {section name=j loop=$payment_modules}
+                            <option value='{$payment_modules[j]->get_id()}'> {$payment_modules[j]->title} </option>
+                            {/section}
+                        </select>
+                    </td>
+                    <td class="text-start"><textarea class="form-control" style="height: 10em; width:20rem" name="new_description"></textarea></td>
+                    <td class="text-start"><textarea class="form-control" style="height: 10em; width:20rem" name="new_email_comments_text"></textarea></td>
+                    <td>
+                        <label for="sort_order_{$payment_types[i].PID}" class="form-label">{$smarty.const.ADMIN_SORT_ORDER}</label>
+                        <input type="text" name="new_sort_order" id="new_sort_order" value="100" class="form-control font-monospace text-start mb-4">
+                        <button class="btn btn-outline-primary btn-sm text-nowrap" onclick="document.getElementById('payform').submit(); return false">{$smarty.const.ADD_BUTTON} <i class="bi bi-plus-lg"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <input type="hidden" name="dpt" value="conf">
+    <input type="hidden" name="sub" value="payment">
+    <input type="hidden" name="save_payment" value="yes">
+</form>
+
+<div class="my-5 alert alert-success alert-dismissible fade show" role="alert">
+    <span class="fw-bold">{$smarty.const.USEFUL_FOR_YOU}</span><br>{$smarty.const.ADMIN_DS2}<br>Комментарий отправляется покупателю в уведомлении о заказе на E-mail.<br><br>
+    Rem: <var>вариант оплаты</var> зависят от <var>варианта доставки</var>, который в свою очередь зависит(обычно) от <var>адреса клиента</var>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>

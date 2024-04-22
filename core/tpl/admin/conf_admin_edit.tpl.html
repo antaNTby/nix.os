@@ -1,0 +1,122 @@
+{if $edit || $add_new}
+{if $edit}
+<form action='{$smarty.const.ADMIN_FILE}?dpt=conf&amp;sub=admin_edit&amp;edit={$edit_num}' method="post" name="formaxp3" id="formaxp3">
+    {else}
+<form action='{$smarty.const.ADMIN_FILE}?dpt=conf&amp;sub=admin_edit&amp;add_new=yes' method="post" name="formaxp3" id="formaxp3">
+    {/if}
+<div class="row g-3">
+    {if $add_new}
+    <div class="col-sm-6">
+        <label for="admin_login" class="form-label">{$smarty.const.ADMIN_LOGIN}</label>
+        <input name="admin_login" type="text" value="" class="form-control form-control-sm font-monospace">
+    </div>
+    <div class="col-sm-6">
+        <label for="admin_pass" class="form-label">{$smarty.const.ADMIN_PASSWORD}</label>
+        <input name="admin_pass" type="text" value="" class="form-control form-control-sm font-monospace">
+    </div>
+    {else}
+    <h4>{$smarty.const.ADMIN_SETRIGHTS2} <span class="badge bg-dark mx-1 mx-lg-3">{$admin_edit.Login}</span></h4>
+    {/if}
+
+    <div class="col-sm-12">
+        <label class="form-label" l>{$smarty.const.ADMIN_RIGHTS}</label>
+        <select class="col-sm-12 form-select" name="actions[]" size="16" multiple="multiple">
+            <option value=1 {if in_array(1, $admin_edit[1])}selected{/if}>{$smarty.const.ADMIN_CATEGORIES_PRODUCTS} </option>
+            <option value=2 {if in_array(2, $admin_edit[1])}selected{/if}>{$smarty.const.ADMIN_SYNCHRONIZE_TOOLS} </option>
+            <option value=3 {if in_array(3, $admin_edit[1])}selected{/if}>{$smarty.const.ADMIN_PRODUCT_OPTIONS} </option>
+            <option value=4 {if in_array(4, $admin_edit[1])}selected{/if}>{$smarty.const.ADMIN_SPECIAL_OFFERS} </option>
+            <option value=5 {if in_array(5, $admin_edit[1])}selected{/if}>{$smarty.const.ADMIN_IMPORT_FROM_CSV} </option>
+            <option value=6 {if in_array(6, $admin_edit[1])}selected{/if}>{$smarty.const.ADMIN_EXPORT_TO_EXCEL} </option>
+            <option value=7 {if in_array(7, $admin_edit[1])}selected{/if}>{$smarty.const.ADMIN_NEW_ORDERS} </option>
+            <option value=8 {if in_array(8, $admin_edit[1])}selected{/if}>{$smarty.const.ADMIN_NEWS_SUBSCRIBERS} </option>
+            <option value=9 {if in_array(9, $admin_edit[1])}selected{/if}>{$smarty.const.ADMIN_ORDER_STATUES} </option>
+            <option value=10 {if in_array(10, $admin_edit[1])}selected{/if}>{$smarty.const.ADMIN_CUSTOMER_REG_FIELDS} </option>
+            <option value=11 {if in_array(11, $admin_edit[1])}selected{/if}>{$smarty.const.ADMIN_DISCOUNTS} </option>
+            <option value=12 {if in_array(12, $admin_edit[1])}selected{/if}>{$smarty.const.ADMIN_SETTINGS_GENERAL} </option>
+            <option value=13 {if in_array(13, $admin_edit[1])}selected{/if}>{$smarty.const.ADMIN_CURRENCY_TYPES} </option>
+            <option value=14 {if in_array(14, $admin_edit[1])}selected{/if}>{$smarty.const.STRING_SHIPPING_TYPE} </option>
+            <option value=15 {if in_array(15, $admin_edit[1])}selected{/if}>{$smarty.const.STRING_PAYMENT_TYPE} </option>
+            <option value=16 {if in_array(16, $admin_edit[1])}selected{/if}>{$smarty.const.ADMIN_TX7} </option>
+            <option value=17 {if in_array(17, $admin_edit[1])}selected{/if}>{$smarty.const.ADMIN_TX20} </option>
+            <option value=28 {if in_array(28, $admin_edit[1])}selected{/if}>{$smarty.const.ADMIN_CONF_ADMINS} </option>
+            <option value=18 {if in_array(18, $admin_edit[1])}selected{/if}>{$smarty.const.ADMIN_NEWS} </option>
+            <option value=19 {if in_array(19, $admin_edit[1])}selected{/if}>{$smarty.const.ADMIN_VOTING} </option>
+            <option value=20 {if in_array(20, $admin_edit[1])}selected{/if}>{$smarty.const.STRING_SHIPPING_MODULES} </option>
+            <option value=21 {if in_array(21, $admin_edit[1])}selected{/if}>{$smarty.const.STRING_PAYMENT_MODULES} </option>
+            <option value=22 {if in_array(22, $admin_edit[1])}selected{/if}>{$smarty.const.STRING_MODULES_LINKEXCHANGE} </option>
+            <option value=23 {if in_array(23, $admin_edit[1])}selected{/if}>{$smarty.const.STRING_YANDEX} </option>
+            <option value=24 {if in_array(24, $admin_edit[1])}selected{/if}>{$smarty.const.ADMIN_CATEGORY_VIEWED_TIMES} </option>
+            <option value=25 {if in_array(25, $admin_edit[1])}selected{/if}>{$smarty.const.ADMIN_CUSTOMER_LOG} </option>
+            <option value=26 {if in_array(26, $admin_edit[1])}selected{/if}>{$smarty.const.ADMIN_INFORMATION} </option>
+            <option value=27 {if in_array(27, $admin_edit[1])}selected{/if}>{$smarty.const.ADMIN_COMING} </option>
+            <option value=29 {if in_array(29, $admin_edit[1])}selected{/if}>{$smarty.const.ADMIN_SECURITY} </option>
+            <option value=30 {if in_array(30, $admin_edit[1])}selected{/if}>{$smarty.const.ADMIN_MENU_TOWNS} </option>
+            <option value=31 {if in_array(31, $admin_edit[1])}selected{/if}>{$smarty.const.ADMIN_MENU_TAXEZ} </option>
+            <option value=32 {if in_array(32, $admin_edit[1])}selected{/if}>{$smarty.const.ADMIN_CUSTGROUP} </option>
+            <option value=33 {if in_array(33, $admin_edit[1])}selected{/if}>{$smarty.const.ADMIN_CUSTOMERS} </option>
+            <option value=34 {if in_array(34, $admin_edit[1])}selected{/if}>{$smarty.const.ADMIN_DISCUSSIONS} </option>
+          </select>
+      </div>
+</div>
+      <input type=hidden value='save' name='save'>
+</form>
+
+<div class="my-3 d-grid gap-2 d-md-flex justify-content-md-end">
+    <a class="btn btn-primary btn-lg text-nowrap" href="#" onclick="document.getElementById('formaxp3').submit(); return false">{if $edit}{$smarty.const.SAVE_BUTTON}&nbsp;<i class="bi bi-save"></i>{else}{$smarty.const.ADD_BUTTON}&nbsp;<i class="bi bi-plus-lg"></i>{/if}</a>
+    <a class="btn btn-dark btn-lg text-nowrap" role="button" href="{$smarty.const.ADMIN_FILE}?dpt=conf&amp;sub=admin_edit">{$smarty.const.GOBACK_BUTTON}&nbsp;<i class="bi bi-arrow-return-left"></i></a>
+</div>
+
+    {else}
+
+<div class="table-responsive-md">
+<table class="table table-hover table-striped align-middle">
+    <thead>
+        <tr>
+            <th class="text-start">{$smarty.const.ADMIN_NAME}<sub>id</sub></th>
+            <td class="text-center">{$smarty.const.ADMIN_EDIT}</td>
+            <td class="text-center text-wrap">разрешеных действий</td>
+        </tr>
+    </thead>
+    <tbody class="table-group-divider">
+        {section name=i loop=$admin_edit}
+        <tr>
+            <td class="text-start">{$admin_edit[i][1]}<sub>{$admin_edit[i]["customerID"]}</sub></td>
+            {if $admin_edit[i][0] ne 1}
+            <td class="text-center">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a role="button" class="btn btn-outline-primary" href='{$smarty.const.ADMIN_FILE}?dpt=conf&amp;sub=admin_edit&amp;edit={$admin_edit[i][0]}'>{$smarty.const.AUX_PAGE_EDIT3}</a>
+
+
+                    <button class="btn btn-outline-danger" onclick="confirmDelete({$admin_edit[i][0]},'{$smarty.const.QUESTION_DELETE_CONFIRMATION}','{$smarty.const.ADMIN_FILE}?dpt=conf&amp;sub=admin_edit&amp;delete=');">{$smarty.const.ADMIN_DELNEWS}</button>
+
+                </div>
+            </td>
+            {else}
+            <td class="table-danger text-center text-danger">{$smarty.const.ADMIN_NOMADE2}</td>
+            {/if}
+            <td class="text-center text-dark">{$admin_edit[i]["perm_count"]}</td>
+        </tr>
+        {/section}
+    </tbody>
+</table>
+</div>
+<div class="my-3 d-grid gap-2 d-md-flex justify-content-md-end">
+    <a class="btn btn-dark btn-lg text-nowrap" href="{$smarty.const.ADMIN_FILE}?dpt=conf&amp;sub=admin_edit&amp;add_new=yes">{$smarty.const.ADD_ADMIN}</a>
+</div>
+    {/if}
+
+
+
+<div class="my-5 alert alert-success alert-dismissible fade show" role="alert">
+    <span class="fw-bold">{$smarty.const.USEFUL_FOR_YOU}</span> {$smarty.const.ALERT_ADMIN_NEW}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+
+
+    {if $nomade}<script type="text/javascript" defer>
+    alert('{$smarty.const.ADMIN_NOMADE}')
+    </script>{/if}
+    {if $setlog}<script type="text/javascript" defer>
+    alert('{$smarty.const.ADMIN_SETLOG}')
+    </script>{/if}

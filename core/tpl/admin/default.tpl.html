@@ -1,0 +1,25 @@
+<div class="m-3 row row-cols-1 row-cols-md-3 g-3">
+    {section name=dpt_index loop=$antMenu|@count}
+    {assign var="myMenu" value=$antMenu[dpt_index]}
+    <div class="col">
+        <div class="card h-100 border-dark">
+            {* <img src="..." class="card-img-top" alt="..."> *}
+            {* <div class="card-body"> *}
+                {* <h5 class="card-title"></h5> *}
+                {* <p class="card-text text-center">...</p> *}
+                <div class="card-header text-bg-secondary  h5">
+                    {$myMenu.dpt_name}<sub class="ps-2 fw-lighter text-dark text-opacity-25">{$myMenu.dpt_id}</sub>
+                </div>
+                <ul class="list-group list-group-flush">
+                    {assign var="mySubMenu" value=$myMenu}
+                    {section name=sub_index loop=$mySubMenu.sub_count}
+                    <li class="list-group-item"><a class="card-link text-start text-xl-center text-decoration-none" href="{$mySubMenu.sub_href[sub_index]}" role="button">{$mySubMenu.sub_name[sub_index]} <sub class="ps-2 fw-lighter text-dark text-opacity-25 text-decoration-none">{$mySubMenu.sub_id[sub_index]}</sub></a></li>
+                    {/section}
+                </ul>
+                {*
+            </div> *}
+        </div>
+    </div>
+    {/section}
+</div>
+

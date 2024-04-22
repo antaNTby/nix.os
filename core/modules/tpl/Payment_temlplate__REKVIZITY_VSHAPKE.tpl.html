@@ -1,0 +1,13 @@
+{*         <div style="text-align: left; font-size: 1.0em; padding-top:0.25mm; color:#222;">
+            <strong>Поставщик: </strong>{$seller.company_name} / УНП&nbsp;{$seller.company_unp}; {$seller.company_adress}; {$seller.company_bank};  {$seller.company_contacts}.
+        </div> *}
+        <div style="text-align: left; font-size: 1.0em; padding-top:0.25mm; color:#223;">
+            <strong>Покупатель: </strong>{$buyer.company_name} / УНП&nbsp;{$buyer.company_unp}. Адрес:&nbsp;{$buyer.company_adress}.
+            <br>
+            Р/с:&nbsp;{$buyer.company_bank}. <br> {$buyer.company_contacts}.
+        </div>
+{*         {if $sponsor.companyID >=1}
+        <div style="text-align: left; font-size: 1.0em; padding-top:0.25mm; color:#223;">
+            <strong>Плательщик: </strong>{$sponsor.company_name} / УНП&nbsp;{$sponsor.company_unp}; {$sponsor.company_adress}; {$sponsor.company_bank};  {$sponsor.company_contacts}.
+        </div>
+        {/if} *}

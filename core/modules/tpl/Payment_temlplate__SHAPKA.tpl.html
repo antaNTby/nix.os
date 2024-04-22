@@ -1,0 +1,40 @@
+<table class="headblock">
+    {* <caption>table title and/or explanatory text</caption> *}
+    {* <thead>
+        <tr>
+            <th>header</th>
+        </tr>
+    </thead> *}
+    <tbody>
+        <tr>
+            <td class="logocell" rowspan=4><img style="width: 25.6mm; height: 25.6mm;" src="{$pm_logo}" /></td>
+            <td align="left" style="padding-left: 20px; font-size: 1.4em; font-weight:bold; color:#ee0000;">{$seller.company_name}</td>
+            <td align="right" style="padding-right: 20px; font-size: 1.4em; font-weight:bold; color:#ee0000;">УНП&nbsp;{$seller.company_unp}&nbsp;&nbsp;&nbsp;Беларусь</td>
+            <td rowspan=4 class="barcodecell">
+                {include file="Payment_temlplate__BARCODE.tpl.html"}
+                {*
+                <barcode class="barcode" code="{$smarty.const.CONF_SHOP_URL}/index.php?do=invoice_new_proc&moduleID={$moduleID}&orderID={$orderID}" type="QR" class="barcode" size="1" /> *}
+            </td>
+        </tr>
+        <tr>
+            {* <td>data [2-1]</td> *} <td class="reqcell" colspan=2>{$seller.company_adress|replace:"\r\n":"<br>"}</td>{* <td>data [2-6]</td> *}
+        </tr>
+        <tr>
+            {* <td>data [3-1]</td> *} <td class="reqcell" colspan=2>{$seller.company_bank|replace:"\r\n":"<br>"}</td>{* <td>data [3-6]</td> *}
+        </tr>
+        <tr>
+            {* <td>data [4-1]</td> *} <td class="reqcell" colspan=2>{$seller.company_contacts|replace:"\r\n":"<br>"}</td>{* <td>data [4-6]</td> *}
+        </tr>
+        <tr>
+            <td colspan=4 class="reqcell">
+                {if $Order.statusID eq $smarty.const.CONF_NEW_ORDER_STATUS}
+                <a style="text-align:right; visibility:screenonly;" name="www" target="_blank" title="link" href="index.php?billingID={$paymethod}&quick_cart_success={$orderID}&statusID={$Order.statusID}&StatusName={$orderStatusName}">{$orderStatusName}</a>
+                {/if}
+                {if ($Order.statusID eq $smarty.const.CONF_ACTIVE_ORDER_STATUS) && ($isadmin eq "yes")}
+                <a style="text-align:right; visibility:screenonly;" name="www2" target="_blank" title="link" href="{$smarty.const.ADMIN_FILE}?dpt=custord&sub=new_orders&orders_detailed=yes&orderID={$orderID}&statusID={$Order.statusID}&StatusName={$orderStatusName}">{$orderStatusName}</a>
+                {/if}
+                {* if{$Order.statusID } eq {$smarty.const.CONF_NEW_ORDER_STATUS}:{$smarty.const.CONF_ACTIVE_ORDER_STATUS} == {$isadmin} *}
+            </td>
+        </tr>
+    </tbody>
+</table>

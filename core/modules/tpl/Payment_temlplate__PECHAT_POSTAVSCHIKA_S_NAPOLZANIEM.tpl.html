@@ -1,0 +1,52 @@
+{if $stampsBYTE >0}
+
+    {if $STAMP_EMPTY_ON}
+
+            {if $STAMP_MAIN_ON && $STAMP_AUX_ON}
+            <div style="margin-top:-30mm; margin-bottom:30mm;">
+                <img src="{$pm_stamp_empty}" style="width: 45mm; height: 45mm; opacity: 0.5;">
+                <img src="{$pm_stamp_main}" style="width: 45mm; height: 45mm; transform: rotate({$random1}deg); transform: translate(-40mm,2mm); opacity: 0.7;">
+                <img src="{$pm_stamp_aux}" style="width: 45mm; height: 45mm; transform: translate(-90mm,1mm);  opacity: 0.3;">
+            </div>
+            {elseif ($STAMP_MAIN_ON || $STAMP_AUX_ON)}
+                 {if $STAMP_MAIN_ON}
+                <div style="margin-top:-30mm; margin-bottom:30mm;">
+                <img src="{$pm_stamp_empty}" style="width: 45mm; height: 45mm; opacity: 0.5;">
+                <img src="{$pm_stamp_main}" style="width: 45mm; height: 45mm; transform: rotate({$random1}deg); transform: translate(-40mm,2mm); opacity: 0.7;">
+                </div>
+                {/if}
+                {if $STAMP_AUX_ON}
+                <div style="margin-top:-30mm; margin-bottom:-30mm;">
+                    <img src="{$pm_stamp_empty}" style="width: 45mm; height: 45mm; opacity: 0.5;">
+                    <img src="{$pm_stamp_aux}" style="width: 45mm; height: 45mm; transform: rotate({$random2}deg); transform: translate(-40mm,2mm); opacity: 0.6;">
+                </div>
+                {/if}
+            {else}
+            <div style="margin-top:-30mm; margin-bottom:30mm;">
+                <img src="{$pm_stamp_empty}" style="width: 45mm; height: 45mm; opacity: 0.5;">
+            </div>
+            {/if}
+
+    {else}
+
+            {if $STAMP_MAIN_ON && $STAMP_AUX_ON}
+            <div style="margin-top:-30mm; margin-bottom:30mm;">
+                <img src="{$pm_stamp_main}" style="width: 45mm; height: 45mm; transform: rotate({$random1}deg); opacity: 0.7;">
+                <img src="{$pm_stamp_aux}" style="width: 45mm; height: 45mm; transform: translate(-40mm,2mm);  opacity: 0.3;">
+            </div>
+            {else}
+                 {if $STAMP_MAIN_ON}
+                <div style="margin-top:-30mm; margin-bottom:30mm;">
+                    <img src="{$pm_stamp_main}" style="width: 45mm; height: 45mm; transform: rotate({$random1}deg); opacity: 0.7;">
+                </div>
+                {/if}
+                {if $STAMP_AUX_ON}
+                <div style="margin-top:-30mm; margin-bottom:-30mm;">
+                    <img src="{$pm_stamp_aux}" style="width: 45mm; height: 45mm; transform: rotate({$random2}deg); opacity: 0.6;">
+                </div>
+                {/if}
+            {/if}
+
+    {/if}
+
+{/if}

@@ -1,0 +1,36 @@
+{if $cats}
+<div id="smarty_cats">
+
+{if $cats_count<=50}
+    <div class="mb-2 d-flex justify-content-between align-items-end"><input class="form-check-input fs-4" type="checkbox" id="check-all-cats" value="1" checked aria-label="category">
+        <label for="cats_container" class="text-dark">Найдено в категориях:</label><span class="badge bg-primary">{$cats_count}</span></div>
+    <div class="table-responsive bg-white">
+        <table class="table table-sm table-hover table-borderless mb-0" id="cats_container">
+            <tbody id="cats_conttrols">
+
+                {foreach from=$cats key=key item=value name=foo}
+                {if $key >1}
+                {assign var="href" value="/category_`$key`.html"}
+                {assign var="link" value="<a href='$href' class='text-nowrap text-decoration-none fw-lighter text-primary' data-categoryID='$key'>$value</a>"}
+                {assign var="CHECKBOX" value="<div><input class=\"form-check-input me-3\" type=\"checkbox\" checked id=\"btn-check-$key\" value=\"1\" aria-label=\"category\" data-categoryID=\"$key\"></div>"}
+                {assign var="BODY" value="<tr>
+                    <td title=\"Показать/Спрятать\">$CHECKBOX </td> <td title=\"Перейти в эту категорию\">$link</td>
+                </tr>"}
+                {* {$href} *}
+                {* {$link} *}
+                {/if}
+                {$BODY}
+                {/foreach}
+            </tbody>
+        </table>
+    </div>
+{/if}
+
+{if $cats_count>50}
+<div class="mb-2 d-flex justify-content-between align-items-end"><label for="cats_container" class="text-dark">Найдено в категориях:</label><span class="badge bg-primary">{$cats_count}</span></div>
+<div class="form-text text-secondary mt-1 fs-7">Найдено, более чем в 50-ти категориях. Уточните свой запрос для отображения списка</div>
+{/if}
+
+</div>
+{/if}
+{* <b>this smarty.template is {$smarty.template}</b> *}

@@ -1,0 +1,194 @@
+{assign var="cm" value=$data.iso_3}
+{assign var="order_content" value=$data.order_content}
+{assign var="order_qty" value=$data.order_qty}
+{assign var="VAT_rate" value=$data.VAT_rate}
+{assign var="TOTALwithOutVAT" value=$data.TOTALwithOutVAT}
+{assign var="TOTALamountVAT" value=$data.TOTALamountVAT}
+{assign var="TOTALwithVAT" value=$data.TOTALwithVAT}
+{assign var="TOTALwithOutVAT_USD" value=$data.TOTALwithOutVAT_USD}
+{assign var="TOTALamountVAT_USD" value=$data.TOTALamountVAT_USD}
+{assign var="TOTALwithVAT_USD" value=$data.TOTALwithVAT_USD}
+{assign var="TOTALamountVAT_withUnit" value=$data.TOTALamountVAT_withUnit}
+{assign var="TOTALamountVAT_STRING" value=$data.strings.TOTALamountVAT_STRING}
+{assign var="TOTALwithVAT_withUnit" value=$data.TOTALwithVAT_withUnit}
+{assign var="TOTALwithVAT_STRING" value=$data.strings.TOTALwithVAT_STRING}
+{* {$Order|@debug} *}
+{* antaNT64 таблица товаров без скидок и стоимости доставки для счета на оплату *}
+{* <table style="page-break-inside:avoid"> to force the table onto one page. *}
+    <h3>Данные заказчика</h3>
+    <table class="table table-bordered border-primary">
+        <tbody>
+            <tr>
+                <th>Заказчик</th>
+                <td>{$Order.customer_firstname}</td>
+            </tr>
+            <tr>
+                <th>Контакты заказчика</th>
+                <td>{$Order.customer_lastname}
+{if $Order.reg_fields_values}
+            <br/>
+            {section name=i loop=$Order.reg_fields_values}
+            {$Order.reg_fields_values[i].reg_field_name} <b>{$Order.reg_fields_values[i].reg_field_value}</b>
+            <br/>
+            {/section}
+{/if}
+                </td>
+            </tr>
+            <tr>
+                <th>email Заказчика</th>
+                <td>{$Order.customer_email}</td>
+            </tr>
+            <tr>
+                <th>Адресс Заказчика</th>
+                <td>{$Order.shipping_address}</td>
+            </tr>
+            <tr>
+                <th>Время заказа</th>
+                <td>{$Order.order_time_mysql}</td>
+            </tr>
+            <tr>
+                <th>Статус заказа</th>
+                <td>{$Order.status_name}</td>
+            </tr>
+            <tr>
+                <th>Время выставления счета</th>
+                <td>{$Order.invoice.0.invoice_time}</td>
+            </tr>
+            <tr>
+                <th>Доставка</th>
+                <td>{$Order.shipping_type}</td>
+            </tr>
+            <tr>
+                <th>Оплата</th>
+                <td>{$Order.payment_type}: {$Order.invoice.0.invoice_string} {$Order.invoice.0.ff4} {$Order.invoice.0.invoice_time_RU}</td>
+            </tr>
+            <tr>
+                <th>Плательщик</th>
+                <td>{$Order.invoice.0.buyer_data}</td>
+            </tr>
+            {if $Order.customers_comment!=""}
+            <tr>
+                <th>Комментарий к заказу</th>
+                <td>{$Order.customers_comment}</td>
+            </tr>
+            {/if}
+            <tr>
+                <th>Скачать счет</th>
+                <td><a class="btn-link" href="{$Order.invoice.0.btnlink}"><i class="bi bi-file-pdf"></i>{$Order.invoice.0.invoice_string} {$Order.invoice.0.ff4} {$Order.invoice.0.invoice_time_RU}</a></td>
+            </tr>
+        </tbody>
+    </table>
+
+{if $order_content}
+
+    <h3>Товарная часть</h3>
+    <div class="table-responsive">
+        <span class="label label-info hidden control-debug">{$CONTROL->controlName}</span>
+        <table class="table table-condensed table-bordered ordercart">{* rotate="90" autosize="1"*}
+            <thead>
+                <tr>
+                    <th class="text-nowrap text-center">№</th>
+                    <th class="text-nowrap text-center">Наименование*</th>
+                    <th class="text-nowrap text-center">{* text-rotate="-90" *}
+                        Ед.
+                        <br />
+                        изм.&nbsp;
+                    </th>
+                    <th class="text-nowrap text-center">Кол-во</th>
+                    <th class="text-nowrap text-center">
+                        Цена,
+                        <br />
+                        {$cm}
+                    </th>
+                    <th class="text-nowrap text-center">
+                        Сумма,&nbsp;
+                        <br />
+                        {$cm}
+                    </th>
+                    <th class="text-nowrap text-center">
+                        Ставка&nbsp;НДС,&nbsp;
+                        <br />
+                        %
+                    </th>
+                    {if $VAT_rate > 0}
+                    <th class="text-nowrap text-center">
+                        Сумма&nbsp;НДС,&nbsp;
+                        <br />
+                        {$cm}
+                    </th>
+                    <th class="text-nowrap text-center">
+                        Всего с НДС,&nbsp;
+                        <br />
+                        {$cm}
+                    </th>
+                    {/if}
+                </tr>
+            </thead>
+            <tbody>
+                {section name=i loop=$order_content}
+                <tr style="border-top:none;">
+                    <td class="text-nowrap text-center">{$smarty.section.i.iteration}</td>
+                    <td class="text-start name">{$order_content[i].name}</td>
+                    <td class="text-nowrap text-center">{$order_content[i].itemUnit}</td>
+                    <td class="text-nowrap text-end">{$order_content[i].Quantity}</td>
+                    <td class="text-nowrap text-end">{$order_content[i].Price_OUT|replace:",":"."|replace:" ":"&nbsp;"}</td>
+                    <td class="text-nowrap text-end">{$order_content[i].Cost_OUT|replace:",":"."|replace:" ":"&nbsp;"}</td>
+                    <td class="text-nowrap text-end">
+                        {if $VAT_rate > 0}{$VAT_rate}{else}Без&nbsp;НДС{/if}
+                    </td>
+                    {if $VAT_rate > 0}
+                    <td class="text-nowrap text-end">{$order_content[i].VATsumm_OUT|replace:",":"."}</td>
+                    <td class="text-nowrap text-end">{$order_content[i].Total_OUT|replace:",":"."|replace:" ":"&nbsp;"}</td>
+                    {/if}
+                </tr>
+                {sectionelse}
+                {section name=nn loop=2}
+                <tr style="border-top:none;">
+                    <td class="text-nowrap text-center">{$smarty.section.nn.iteration}</td>
+                    <td class="text-start name" style="padding:2.5mm 40mm !important;">&nbsp;</td>
+                    <td class="text-nowrap text-center">&nbsp;</td>
+                    <td class="text-nowrap text-end">&nbsp;</td>
+                    <td class="text-nowrap text-end">&nbsp;</td>
+                    <td class="text-nowrap text-end">&nbsp;</td>
+                    <td class="text-nowrap text-end">&nbsp;</td>
+                    {if $VAT_rate > 0}
+                    <td class="text-nowrap text-end">&nbsp;</td>
+                    <td class="text-nowrap text-end">&nbsp;</td>
+                    {/if}
+                </tr>
+                {/section}
+                {/section}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th class="lead text-end" colspan=3 style="border-left:none;border-bottom:none;"><b>ИТОГО&nbsp;&nbsp; </b></th>
+                    {* <th align="center">x</th> *}
+                    <th class="text-nowrap text-end">{if $order_qty >0}{$order_qty}{/if}</th>
+                    <th class="text-nowrap text-center">x</th>
+                    <th class="text-nowrap text-end">{$TOTALwithOutVAT|replace:",":"."}</th>
+                    <th class="text-nowrap text-center">x</th>
+                    {if $VAT_rate > 0}
+                    <th class="text-nowrap text-end">{$TOTALamountVAT|replace:",":"."}</th>
+                    <th class="text-nowrap text-end">{$TOTALwithVAT|replace:",":"."}</th>
+                    {/if}
+                </tr>
+            </tfoot>
+        </table>
+        {if $order_qty >0}
+        {if $VAT_rate>0}
+        <div style="text-align: left; padding-top:0.25mm; color:#333;">
+            Сумма НДС: <em><strong>{$TOTALamountVAT} {$cm}</strong> ({$TOTALamountVAT_STRING}).</em>
+        </div>
+        <div style="text-align: left; font-size: 1.0em; padding-top:0.25mm; color:#333;">
+            {* <em><strong>Всего на сумму с НДС: </strong> {$TOTALwithVAT_STRING}.</em> *}
+            Всего на сумму с НДС: <em><strong>{$TOTALwithVAT} {$cm}</strong> ({$TOTALwithVAT_STRING}).</em>
+        </div>
+        {else}
+        <div style="text-align: left; font-size: 1.0em; padding-top:0.25mm; color:#333;">
+            {* <em><strong>Всего на сумму: </strong> {$TOTALwithVAT_STRING}&nbsp;без&nbsp;НДС.</em> *}
+            Всего на сумму: <em><strong>{$TOTALwithVAT} {$cm}</strong> ({$TOTALwithVAT_STRING})&nbsp;без&nbsp;НДС.</em>
+        </div>
+        {/if}
+        {/if}
+    </div>
+{/if}

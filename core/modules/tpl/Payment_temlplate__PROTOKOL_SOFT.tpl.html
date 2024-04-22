@@ -1,0 +1,41 @@
+{* antaNT64 таблица товаров без скидок и стоимости доставки для  счета на оплату *}
+{* <table style="page-break-inside:avoid"> to force the table onto one page. *}
+<table cellSpacing="0" cellPadding="2" border="1" class="producttable" autosize="1">{*  rotate="90" autosize="1"*}
+    <thead>
+        <tr>
+            <th class="nw" align="center">№</th>
+            <th class="nw" align="center">Артикул / Наименование прав</th>
+{*             <th class="nw" align="center">{*  text-rotate="-90" *}
+                Ед.
+                <br/>
+                изм.&nbsp;
+            </th> *}
+            <th class="nw" align="center">Объем партии</th>
+            <th class="nw" align="center">
+                Отпускная цена
+                <br/>
+                {$cm}
+            </th>
+            <th class="nw" align="center">
+                Размер оптовой надбавки (наценки), %,&nbsp;
+                <br/>
+                {$cm}
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        {section name=i loop=$order_content}
+        <tr style="border-top:none;">
+            <td class="nw" align="center">{$smarty.section.i.iteration}</td>
+            <td class="pw name" align="left" width="100mm">{$order_content[i].name}</td>
+            {* <td class="nw" align="center">{$order_content[i].itemUnit}</td> *}
+            <td class="nw" align="right">{$order_content[i].Quantity}</td>
+            <td class="nw" align="right">{$order_content[i].Price_OUT|replace:",":"."|replace:" ":"&nbsp;"}</td>
+            <td class="nw" align="right" style="font-size: 2.50mm;">*</td>
+        </tr>
+        {/section}
+    </tbody>
+</table>
+<p>* - цена сформирована импортером</p>
+<p>** - цена сформирована предприятием-изготовителем</p>

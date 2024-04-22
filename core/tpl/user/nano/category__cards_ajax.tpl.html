@@ -1,0 +1,83 @@
+{if $isadmin eq "yes"}
+<div class="m-1 p-1 bg-dark fs-7"><code class="hljs language-sql">{$operation_result.sql_query}</code></div>
+{/if}
+
+{if $products_to_show}
+    {if $navigatorHtml}
+    <nav aria-label="Products navigation">
+        <ul class="my-2 pt-3 pagination justify-content-center" data-navigator="card-navigator" card-count="{$navigatorLength}" card-start="{$navigatorStart}">
+            {$navigatorHtml}
+        </ul>
+    </nav>
+    {/if}
+    <div class="p-2 text-center text-secondary lh-1" id="Info_string">{$Info_string}</div>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 row-cols-xxl-6 g-1 g-md-3">
+        {section name=i loop=$products_to_show}
+        {if $smarty.const.CONF_MOD_REWRITE eq 1}
+        {assign var="_href" value="product_`$products_to_show[i].productID`.html"}
+        {else}
+        {assign var="_href" value="index.php?productID=`$products_to_show[i].productID`"}
+        {/if}
+        {assign var="goto" value="index.php?productID=`$products_to_show[i].productID`"}
+        <div class="col">
+            <div class="card px-1 pt-1 h-100 shadow hover-shadow-on">
+                    <picture class="p-0 p-md-2 card-img-top ratio ratio-1x1" aria-label="Products" height="1" onclick="let link=window.location='{$_href}'" role="button">
+                    {if $products_to_show[i].image_path neq ""}
+                        <img class="img-thumbnail" src="{$products_to_show[i].image_path}" alt="{$products_to_show[i].name}" loading="lazy" style="aspect-ratio: initial!important;">
+                    {else}
+                        <svg class="img-thumbnail bi d-block mx-auto mb-1" alt="{$products_to_show[i].name}" fill-opacity="0.3">
+                            <title>нет фото {$products_to_show[i].name}</title>
+                            <use xlink:href="#empty_images">
+                        </svg>
+                    {/if}
+                    </picture>
+                <div class="card-body">
+
+                        <h5 class="h6 fw-lighter fs-lh-1 card-title"><span class="text-danger pe-none">[{$products_to_show[i].product_code}]</span> <a href="{$_href}" class="pname">{$products_to_show[i].name}</a></h5>
+
+                </div> {*card-body*}
+                <div class="card-footer bg-transparent text-center" data-id="buttonDoLoad">
+                    {if $currencies_count ne 0}
+                    <h5 class="mb-3 h6 text-danger text-nowrap" id="optionPrice">{if $products_to_show[i].priceUSD <= 0}{$smarty.const.STRING_NOPRODUCT_IN}{else}Цена {$products_to_show[i].priceOUT}{/if} </h5> {/if} {$products_to_show[i]|@phpmakeBuyButtonSm} <span class="mt-3 pe-none badge{if $products_to_show[i].in_stock_qnt >0} bg-success{elseif $products_to_show[i].in_stock_qnt eq '0'} bg-warning{elseif $products_to_show[i].in_stock_qnt <= -500} bg-danger{else} bg-secondary{/if}" data-id="instock" title="{if $products_to_show[i].in_stock_qnt >0}Наличие на складе{else}Возможность поставки{/if}">
+                            {$products_to_show[i].in_stock_string}
+                            </span>
+                </div>
+            </div>
+        </div>
+        {/section}
+    </div>
+    <div class="p-2 text-center text-secondary lh-1" id="Info_string">{$Info_string}</div>
+    {if $navigatorHtml}
+    <nav aria-label="Category {$categoryID} Page navigation">
+        <ul class="mt-2 mb-0 pagination justify-content-center">
+            {$navigatorHtml}
+        </ul>
+    </nav>
+    {/if}
+{else}
+    <div class="m-0 alert alert-secondary text-center align-items-center" role="alert">{$PageH1} товаров не найдено.
+        {* <a href="#" class="alert-link">an example link</a> *}
+        {if $Parent.parent > 1}{if $smarty.const.CONF_MOD_REWRITE eq 1}{assign var="ahref" value="category_`$Parent.parent`.html"}{else}{assign var="ahref" value="index.php?categoryID=`$Parent.parent`"}{/if}
+        <a href="{$ahref}" class="ms-5 alert-link"> Перейти на уровень выше <i class="bi bi-arrow-up-short" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="На уровень выше"></i></a>{/if}
+    </div>
+{/if}
+
+
+{if $cats}
+{include file="category__cats.tpl.html"}
+{* ee{$cats|@count}ee *}
+{/if}
+
+
+
+
+
+{*
+<pre>
+count_of_data : {$operation_result.count_of_data}
+recordsTotal : {$operation_result.recordsTotal}
+recordsFiltered : {$operation_result.recordsFiltered}
+start : {$operation_result.start}
+length : {$operation_result.length}
+{$Info_string}
+</pre> *}

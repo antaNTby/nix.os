@@ -1,0 +1,57 @@
+{if ($main_content_template eq "category.tpl.html") || ($main_content_template eq "search_simple.tpl.html")}
+{assign var="hideFilterProducts" value=""}
+{else}
+{assign var="hideFilterProducts" value=" disabled opacity-50"}
+{/if}
+
+{* <div class="p-1 border-bottom mb-0"> *}
+    <div class="container-fluid bg-gradient" id="mainSearchBox">
+        <div class="d-flex py-1">
+            <div class="d-none d-lg-flex flex-shrink-0 me-0 me-md-2 me-xl-5 justify-content-center justify-content-md-start">
+                <div class="btn-group" role="group">
+                    <button class="btn btn-outline-primary{$hideFilterProducts}" type="button" data-action="show-filter" data-bs-toggle="offcanvas" data-bs-target="#offcanvasFilter" aria-controls="offcanvasFilter" title='Показать "Фильтр товаров"'><i class="bi bi-funnel-fill"></i></button>
+                    <button class="btn btn-outline-danger me-2{$hideFilterProducts}" type="button" data-action="reset-filter" data-bs-toggle="offcanvas" data-bs-target="#offcanvasFilter" aria-controls="offcanvasFilter" title='Сбросить "Фильтр товаров"'><i class="bi bi-x-lg"></i></button>
+                </div>
+            </div>
+            <div class="d-flex d-lg-none flex-shrink-0 me-0 me-md-2 justify-content-start">
+                <button class="btn btn-outline-primary{$hideFilterProducts}" type="button" data-action="show-filter" data-bs-toggle="offcanvas" data-bs-target="#offcanvasFilter" aria-controls="offcanvasFilter" title='Показать "Фильтр товаров"'><i class="bi bi-funnel-fill"></i></button>
+            </div>
+            <form class="w-100 me-0 me-lg-3" id="formpoisk" role="search" action="index.php" method="get">
+                {section name=sert loop=$searchstrings}
+                <input type="hidden" name='search_string_{$smarty.section.sert.index}' value='{$searchstrings[sert]}'> {/section}
+                <div class="input-group">
+                    <button class="btn btn-outline-danger" type="button" role="button" value="search" id="search-button-reset" onclick="onClearClick('input#searchstring')"><i class="bi bi-x-lg"></i></button>
+                    <input type="text" class="form-control" name="searchstring" id="searchstring" placeholder="{$smarty.const.FIND_BUTTON_PL}" value="{$searchstring}" aria-label="Main Search String">
+                    <button class="btn btn-primary" type="submit" value="search" id="search-button-main"><i class="bi bi-search"></i> <span class="d-none d-md-inline">{$smarty.const.FIND_BUTTON}</span></button>
+                </div>
+            </form>
+            <div class="d-flex flex-shrink-0 ms-1 ms-lg-3 me-0">
+                <a id="main_cart_icon" class="nav-link position-relative text-dark{if !$shopping_cart_value } text-opacity-25{/if}" href="{if $smarty.const.CONF_MOD_REWRITE eq 1}cart.html{else}index.php?shopping_cart=yes{/if}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-cart4" viewBox="0 0 16 16">
+                        <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l.5 2H5V5H3.14zM6 5v2h2V5H6zm3 0v2h2V5H9zm3 0v2h1.36l.5-2H12zm1.11 3H12v2h.61l.5-2zM11 8H9v2h2V8zM8 8H6v2h2V8zM5 8H3.89l.5 2H5V8zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z" />
+                    </svg>
+                    <span class="p-1 m-0 position-absolute top-25 start-50 translate-middle-x fs-8">
+                        <span id="main_cart_counter" class="badge bg-success bg-opacity-75 text-light align-text-bottom{if !$shopping_cart_value} visually-hidden{/if}">{if $shopping_cart_value>0}{$shopping_cart_items}{else}0{/if}</span>
+                        <span id="main_cart_value" class="visually-hidden" id="main_cart_value">{$shopping_cart_value}</span>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid collapse" id="navbarToggleContacts">
+        {include file="blocks/nanoContacts.tpl.html"}
+    </div>
+{* </div> *}
+
+{* <div class="d-flex flex-shrink-0 ms-1 me-0 me-lg-5">
+    <a class="navbar-brand" href="\">
+        <img class="d-none d-md-inline-flex p-0 m-0 rounded float-start" id="nix-logo" alt="nix.by logo" src="/core/tpl/user/nano/images/logo64.png" height="32" />
+    </a>
+    <span class="navbar-brand d-none d-xl-inline-flex px-1" id="nix-brand" onclick="window.location='http://nix.by'">nix.by</span>
+</div>
+<div class="d-none d-lg-flex flex-shrink-0 me-0 me-lg-5">
+    <span class="navbar-text lh-1" data-bs-toggle="collapse" data-bs-target="#navbarToggleContacts" aria-controls="navbarToggleContacts" aria-expanded="false" role="button" aria-label="Toggle Contacts">
+        <i class="bi bi-telephone"></i> tel. +375 (17) 2708895<br>
+        <i class="bi bi-envelope"></i> e-mail: 2842895@gmail.com
+    </span>
+</div> *}

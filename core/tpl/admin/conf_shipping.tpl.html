@@ -1,0 +1,126 @@
+{* conf_shipping.tpl.html *}
+<form action="{$smarty.const.ADMIN_FILE}" method="post" name="shipform" id="shipform">
+    {if $shipping_types}
+    <div class="my-3 table-responsive">
+        <table class="table align-middle">
+            <caption>Варианты доставки</caption>
+            <thead>
+                <tr>
+                    <td class="text-center">{$smarty.const.ADMIN_ON2}</td>
+                    <td class="text-start" width="100%">{$smarty.const.STRING_NAME} : {$smarty.const.STRING_MODULE_NAME}</td>
+                    <td class="text-start">{$smarty.const.STRING_DESCRIPTION}</td>
+                    <td class="text-start">{$smarty.const.STRING_MODULE_EMAIL_COMMENTS} <small class="text-muted">Текст почтового сообщения</small></td>
+                    {* <td class="text-start">{$smarty.const.STRING_MODULE_NAME}</td> *}
+                    {* <td class="text-start">{$smarty.const.ADMIN_SORT_ORDER}</td> *}
+                    <th class="text-center fs-5"><i class="bi bi-terminal-x"></i></th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                {section name=i loop=$shipping_types}
+                <tr class="table-group-divider">
+                    <td class="text-center">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" name="Enabled_{$shipping_types[i].SID}" {if $shipping_types[i].Enabled} checked{/if} id="Enabled_{$shipping_types[i].SID}">
+                          <label class="form-check-label" for="Enabled_{$shipping_types[i].SID}">
+                           Вкл
+                          </label>
+                        </div>
+                    </td>
+
+                    <td class="text-start">
+                        <label for="name_{$shipping_types[i].SID}" class="form-label">{$smarty.const.STRING_NAME} <sub class="text-muted">SID:{$shipping_types[i].SID}</sub></label>
+                        <input type="text" name="name_{$shipping_types[i].SID}" id="name_{$shipping_types[i].SID}" value="{$shipping_types[i].Name|replace:'"':' &quot;'}" class="form-control font-monospace text-start mb-3">
+
+                        <label for="module_{$shipping_types[i].SID}" class="form-label">{$smarty.const.STRING_MODULE_NAME}</label>
+                        <select class="form-select" name='module_{$shipping_types[i].SID}' id='module_{$shipping_types[i].SID}'>
+                            <option value='null'> -- </option>
+                            {section name=j loop=$shipping_modules}
+                            <option value='{$shipping_modules[j]->get_id()}' {if $shipping_modules[j]->get_id() == $shipping_types[i].module_id} selected {/if} > {$shipping_modules[j]->title} </option>
+                            {/section}
+                        </select>
+                    </td>
+
+                    <td class="text-start">
+                        <textarea class="form-control" style="height: 10em; width:20rem" name="description_{$shipping_types[i].SID}">{$shipping_types[i].description|replace:'"':'&quot;'}</textarea>
+                    </td>
+
+                    <td class="text-start">
+                        <textarea class="form-control" style="height: 10em; width:20rem" name="email_comments_text_{$shipping_types[i].SID}">{$shipping_types[i].email_comments_text|replace:'"':'&quot;'}</textarea>
+                    </td>
+
+
+                    <td class="text-center">
+                            <label for="sort_order_{$shipping_types[i].SID}" class="form-label">{$smarty.const.ADMIN_SORT_ORDER}</label>
+                        <input type="text" name="sort_order_{$shipping_types[i].SID}" id="sort_order_{$shipping_types[i].SID}" value="{$shipping_types[i].sort_order|replace:'"':' &quot;'}" class="form-control font-monospace text-start mb-4">
+
+                        <button class="btn btn-outline-danger" role="button" onclick="confirmDelete({$shipping_types[i].SID},'{$smarty.const.QUESTION_DELETE_CONFIRMATION}','{$smarty.const.ADMIN_FILE}?dpt=conf&amp;sub=shipping&amp;delete=');return false"><i class="bi bi-x-lg"></i></button>
+                    </td>
+
+                </tr>
+                {/section}
+            </tbody>
+        </table>
+    </div>
+<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+    <a href="#" onclick="document.getElementById('shipform').submit(); return false" class="btn btn-success btn-lg text-nowrap">{$smarty.const.SAVE_BUTTON}</a>
+</div>
+    {/if}
+<hr>
+    <div class="table-responsive-md">
+        <table class="mt-3 table table-sm table-borderless table-light align-middle">
+            <caption>Добавление нового варианта доставки</caption>
+            <thead>
+                <tr>
+                    <td class="text-center">{$smarty.const.ADMIN_ON2}</td>
+                    <td class="text-start" width="100%">{$smarty.const.STRING_NAME}</td>
+                    <td class="text-start">{$smarty.const.STRING_DESCRIPTION}</td>
+                    <td class="text-start">{$smarty.const.STRING_MODULE_EMAIL_COMMENTS} <small class="text-muted">Текст почтового сообщения</small></td>
+                    {* <td class="text-start">{$smarty.const.STRING_MODULE_NAME}</td> *}
+                     <th class="text-center fs-5"><i class="bi bi-plus-lg"></i></th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                <tr>
+                    <td class="text-center">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" name="new_Enabled" checked id="new_Enabled">
+                          <label class="form-check-label" for="new_Enabled">
+                           Вкл
+                          </label>
+                        </div>
+                    </td>
+                    <td class="text-start">
+                        <label for="new_name" class="form-label">{$smarty.const.STRING_NAME}</label>
+                        <input type="text" name="new_name" id="new_name" class="form-control font-monospace text-start">
+
+                        <label for="new_module" class="form-label">{$smarty.const.STRING_MODULE_NAME}</label>
+                        <select class="form-select" name='new_module' id='new_module'>
+                            <option value='null'> -- </option>
+                            {section name=j loop=$shipping_modules}
+                            <option value='{$shipping_modules[j]->get_id()}'> {$shipping_modules[j]->title} </option>
+                            {/section}
+                        </select>
+                    </td>
+                    <td class="text-start"><textarea class="form-control" style="height: 10em; width:20rem" name="new_description"></textarea></td>
+                    <td class="text-start"><textarea class="form-control" style="height: 10em; width:20rem" name="new_email_comments_text"></textarea></td>
+                    <td>
+                                                    <label for="sort_order_{$shipping_types[i].SID}" class="form-label">{$smarty.const.ADMIN_SORT_ORDER}</label>
+                        <input type="text" name="new_sort_order" id="new_sort_order" value="100" class="form-control font-monospace text-start mb-4">
+
+                        <button class="btn btn-outline-primary btn-sm text-nowrap" onclick="document.getElementById('shipform').submit(); return false">{$smarty.const.ADD_BUTTON} <i class="bi bi-plus-lg"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <input type="hidden" name="dpt" value="conf">
+    <input type="hidden" name="sub" value="shipping">
+    <input type="hidden" name="save_shipping" value="yes">
+</form>
+
+<div class="my-5 alert alert-success alert-dismissible fade show" role="alert">
+    <span class="fw-bold">{$smarty.const.USEFUL_FOR_YOU}</span><br>{$smarty.const.ADMIN_DS2}<br>Комментарий отправляется покупателю в уведомлении о заказе на E-mail.<br><br>
+    Rem: <var>вариант оплаты</var> зависят от <var>варианта доставки</var>, который в свою очередь зависит(обычно) от <var>адреса клиента</var>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>

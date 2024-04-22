@@ -1,0 +1,103 @@
+{* шаблона раздела 'личный аккаунт' *}
+<div class="m-3">
+    <!-- Example Code -->
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        <div class="col">
+            <div class="card h-100">
+                {* <svg></svg> *}
+                <div class="card-body">
+                    <h5 class="card-title">{$smarty.const.STRING_CONTACT_INFORMATION_DOWN_CASE}</h5>
+                    <p class="card-text">
+                        {$smarty.const.CUSTOMER_FIRST_NAME}: <b>{$first_name}</b><br>
+                        {$smarty.const.CUSTOMER_LAST_NAME}: <b>{$last_name}</b><br>
+                        {$smarty.const.CUSTOMER_EMAIL}: <b>{$Email}</b><br>
+                        {$smarty.const.CUSTOMER_LOGIN}: <b>{$login}</b><br>
+                        {section name=i loop=$additional_field_values}
+                        {$additional_field_values[i].reg_field_name}: <b>{$additional_field_values[i].reg_field_value}</b><br>
+                        {/section}
+                        {if $custgroup_name}
+                        {if $discount}{$smarty.const.STRING_DISCOUNT}: <b>{$discount}%</b><br>{/if}
+                        {if $min_discount}{$smarty.const.STRING_MIN_DISCOUNT}: <b>{$min_discount}%</b><br>{/if}
+                        {/if}
+                    </p>
+                </div>
+                <div class="card-footer justify-content-center">
+                    <a href="index.php?contact_info=yes" class="card-link">{$smarty.const.EDIT_BUTTON}</a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                {* <svg></svg> *}
+                <div class="card-body">
+                    <h5 class="card-title">{$smarty.const.STRING_ADDRESS_BOOK}</h5>
+                    <p class="card-text">
+                        {if $addressStr}<div>{$smarty.const.STRING_DEFAULT_ADDRESS}:<br><br><b>{$addressStr}</b></div>{/if}
+                    </p>
+                </div>
+                <div class="card-footer justify-content-center">
+                    <a href="index.php?address_book=yes" class="card-link">{$smarty.const.EDIT_BUTTON}</a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                {* <svg></svg> *}
+                <div class="card-body">
+                    <h5 class="card-title">{$smarty.const.STRING_ORDER_HISTORY}</h5>
+                    <p class="card-text">
+                        {section name=i loop=$status_distribution}
+                        {if $status_distribution[i].count != 0}
+                        <div>{$status_distribution[i].count} {$smarty.const.STRING_COUNT_ORDER_IN_STATUS} <b>&quot;{$status_distribution[i].status_name}&quot;</b></div>
+                        {/if}
+                        {sectionelse}
+                        {$smarty.const.STRING_NO_ORDERS}
+                        {/section}
+                    </p>
+                </div>
+                <div class="card-footer justify-content-center">
+                    <a href="index.php?order_history=yes" class="card-link">{$smarty.const.STRING_SHOPPING_HISTORY}</a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100 mb-3">
+                {* <svg></svg> *}
+                <div class="card-body">
+                    <h5 class="card-title">{$smarty.const.STRING_VISIT_LOG}</h5>
+                    <p class="card-text">
+                        <div>{$visits_count} {$smarty.const.STRING_RECORDS}</div>
+                    </p>
+                </div>
+                <div class="card-footer justify-content-center">
+                    <a href="index.php?visit_history=yes" class="card-link">{$smarty.const.STRING_VISIT_LOG}</a>
+                </div>
+            </div>
+        {if $smarty.const.CONF_AFFILIATE_PROGRAM_ENABLED eq 1}
+        {* <div class="col"> *}
+            <div class="card h-100">
+                {* <svg></svg> *}
+                <div class="card-body">
+                    <h5 class="card-title">{$smarty.const.STRING_AFFILIATE_PROGRAM}</h5>
+                    <p class="card-text">
+                        {if $affiliate_customers}{$smarty.const.STRING_AFFILIATE_CUSTOMERS}: <b>{$affiliate_customers}</b><br>{else}{$smarty.const.STRING_AFFILIATE_NO_CUSTOMERS}<br>{/if}
+                        <div class="d-flex justify-content-center py-3">
+
+                        </div>
+                    </p>
+                </div>
+                <div class="card-footer justify-content-center">
+                            <a href="index.php?affiliate=yes&amp;sub=balance" class="card-link">{$smarty.const.AFFP_USER_BALANCE}</a>
+                            <a href="index.php?affiliate=yes&amp;sub=payments_history" class="card-link">{$smarty.const.AFFP_PAYMENTS_HISTORY}</a>
+                            <a href="index.php?affiliate=yes&amp;sub=attract_guide" class="card-link">?</a>
+                            {if $smarty.const.CONF_AFFILIATE_EMAIL_NEW_COMMISSION or $smarty.const.CONF_AFFILIATE_EMAIL_NEW_PAYMENT}
+                            <a href="index.php?affiliate=yes&amp;sub=settings" class="card-link">{$smarty.const.STRING_MODULE_SETTING}</a>
+                            {/if}
+                </div>
+            </div>
+        {* </div> *}
+        </div>
+        {/if}
+    </div>
+    <!-- End Example Code -->
+</div>
