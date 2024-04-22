@@ -33,12 +33,11 @@ session_cache_expire();
 @ini_set("display_errors", 1);
 error_reporting(1);
 
-include_once "core/includes/database/mysqli.php"; // forum
 
 # кэшируем подключаемые классы и функции
 
 $far_1 = array(
-
+    
     "core/config/connect.inc.php",
     "core/config/language_list.php",
     "core/classes/class.SSP.php",
@@ -46,7 +45,7 @@ $far_1 = array(
     "core/classes/class.virtual.paymentmodule.php",
     // "core/config/paths.inc.php",  // ??????? только Админ
     // "core/classes/class.xmlnodex.php",  // только Админ
-
+    
     // "core/classes/class.ajax.php", //только клиент
     // "core/classes/class.kcaptcha.php", //только клиент
     // "core/classes/class.xml2array.php", //только клиент
@@ -73,6 +72,7 @@ $_POST   = stripslashes_deep($_POST);
 $_GET    = stripslashes_deep($_GET);
 $_COOKIE = stripslashes_deep($_COOKIE);
 
+include_once "core/includes/database/mysqli.php"; // forum
 db_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME) or die(ERROR_DB_INIT);
 db_select_db(DB_NAME) or die(db_error());
 
