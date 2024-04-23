@@ -70,7 +70,7 @@ if ( !strcmp( $sub, "invoices" ) ) {
             $smarty->assign( "DT_columnDefsJSON", json_encode( $DT_columnDefs ) );
 
             # инициализируем таблицу Таблицу
-            if (  ( isset( $_GET["init"] ) ) and ( !isset( $_GET["edit_mode"] ) ) ) {
+            if (  ( isset( $_GET["init"] ) ) && ( !isset( $_GET["edit_mode"] ) ) ) {
                 {
 
                     if ( isset( $_POST['start_date'] ) || isset( $_POST['end_date'] ) ) {
@@ -537,3 +537,4 @@ if ( !strcmp( $sub, "invoices" ) ) {
     }
 
     ?>
+    
